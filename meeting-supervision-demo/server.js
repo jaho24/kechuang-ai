@@ -169,6 +169,11 @@ function serveStatic(req, res, url) {
     res.end();
     return;
   }
+  if (path.basename(file).startsWith('.')) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Forbidden');
+    return;
+  }
   fs.readFile(file, (err, data) => {
     if (err) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -181,6 +186,10 @@ function serveStatic(req, res, url) {
 }
 
 loadEnv();
+if (typeof fetch !== 'function') {
+  console.error('需要 Node.js 18 及以上（当前无内置 fetch）');
+  process.exit(1);
+}
 const port = Number(process.env.PORT || 8787);
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://127.0.0.1');
@@ -220,7 +229,7 @@ const server = http.createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(port, '127.0.0.1', () => {
-  console.log('问答服务 http://127.0.0.1:' + port);
+server.listen(port, '0.0.0.0', () => {
+  console.log('问答服务 http://0.0.0.0:' + port);
   console.log('模型 ' + (process.env.AI_MODEL || 'deepseek-chat') + (process.env.AI_API_KEY ? ' · 已配置密钥' : ' · 未配置 AI_API_KEY'));
 });

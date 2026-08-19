@@ -528,6 +528,7 @@
     </div>
   </div>
 
+  <script src="config.js"></script>
   <script src="app.js"></script>
   <script>
     (function () {
@@ -1567,12 +1568,14 @@
           localStorage.setItem(QA_CFG_KEY, JSON.stringify(cfg));
         }
         function defaultQaUrl() {
+          if (window.KD_QA_BACKEND) return window.KD_QA_BACKEND;
           if (location.protocol === 'http:' || location.protocol === 'https:') return location.origin + '/api/qa';
           return 'http://127.0.0.1:8787/api/qa';
         }
         function qaEndpoints() {
           const saved = loadQaCfg().proxyUrl;
           const list = [];
+          if (window.KD_QA_BACKEND) list.push(window.KD_QA_BACKEND);
           if (saved) list.push(saved);
           if (location.protocol === 'http:' || location.protocol === 'https:') list.push(location.origin + '/api/qa');
           list.push('http://127.0.0.1:8787/api/qa');
@@ -1591,7 +1594,7 @@
               if (!res.ok) continue;
               const data = await res.json();
               if (data && data.ok) {
-                sub.textContent = (data.configured ? '大模型已连接' : '服务已启动但未配置密钥') + ' · 按台账与纪要作答';
+                sub.textContent = (data.configured ? ((data.model || 'DeepSeek') + ' 已连接') : '服务已启动但未配置密钥') + ' · 按台账与纪要作答';
                 return;
               }
             } catch (e) { /* try next */ }

@@ -1994,8 +1994,8 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
 }
 .qa-panel-title { font-size: 15px; font-weight: 600; line-height: 1.3; }
 .qa-panel-sub { font-size: 11px; opacity: 0.82; margin-top: 2px; }
+.qa-panel-actions { margin-left: auto; display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .qa-panel-close {
-  margin-left: auto;
   width: 28px;
   height: 28px;
   border: none;
@@ -2006,8 +2006,33 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
   cursor: pointer;
   border-radius: 4px;
   opacity: 0.85;
+  display: grid;
+  place-items: center;
 }
 .qa-panel-close:hover { background: rgba(255, 255, 255, 0.16); opacity: 1; }
+.qa-turn .bubble.is-pending { color: var(--ink-subtle); }
+.qa-turn .bubble.is-error { color: var(--error); background: var(--error-bg); }
+.qa-cfg {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.qa-cfg[hidden] { display: none !important; }
+.qa-cfg label { font-size: 12px; color: var(--ink-muted); font-weight: 600; }
+.qa-cfg input {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+.qa-cfg input:focus { border-color: var(--primary-hover); }
+.qa-cfg-hint { font-size: 12px; color: var(--ink-subtle); line-height: 1.6; }
+.qa-cfg .btn { align-self: flex-start; }
+.qa-send:disabled { opacity: 0.5; cursor: not-allowed; }
 .qa-chips {
   display: flex;
   flex-wrap: wrap;
@@ -2039,6 +2064,8 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
   font-size: 13px;
   line-height: 1.65;
   max-width: 92%;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .qa-turn.user { text-align: right; }
 .qa-turn.user .bubble {
@@ -2051,6 +2078,7 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
 .qa-turn.bot .bubble {
   background: var(--surface-1);
   border-bottom-left-radius: 4px;
+  white-space: pre-wrap;
 }
 .qa-input-row {
   display: flex;
@@ -2171,7 +2199,38 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
   .search-box { margin-left: 0; width: 100%; }
 }
 
+/* 门户 iframe 嵌入：隐藏自有顶栏，由门户提供办公室/领导端切换 */
+html.is-embedded,
+html.is-embedded body {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+html.is-embedded .app-nav,
+html.is-embedded #screen-entry {
+  display: none !important;
+}
+html.is-embedded .app-screen.is-on {
+  height: 100%;
+}
+html.is-embedded .shell {
+  min-height: 0;
+  height: 100%;
+}
+html.is-embedded .sidebar {
+  height: 100%;
+}
+html.is-embedded .main {
+  height: 100%;
+  overflow: auto;
+}
+
 </style>
+  <script>
+    if (/\bembed=1\b/.test(location.search) || window.self !== window.top) {
+      document.documentElement.classList.add("is-embedded");
+    }
+  </script>
 </head>
 <body class="entry-body">
   <!-- 身份入口 -->
@@ -2596,9 +2655,20 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
           <div class="qa-bot-mark">AI</div>
           <div>
             <div class="qa-panel-title">智能问答</div>
-            <div class="qa-panel-sub">在线 · 基于督办台账与纪要</div>
+            <div class="qa-panel-sub" id="qa-panel-sub">连接大模型 · 按台账与纪要作答</div>
           </div>
-          <button class="qa-panel-close" type="button" id="btn-qa-close" aria-label="关闭">×</button>
+          <div class="qa-panel-actions">
+            <button class="qa-panel-close" type="button" id="btn-qa-cfg" aria-label="模型设置" title="模型设置">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+            <button class="qa-panel-close" type="button" id="btn-qa-close" aria-label="关闭">×</button>
+          </div>
+        </div>
+        <div class="qa-cfg" id="qa-cfg" hidden>
+          <label for="qa-cfg-url">问答服务地址</label>
+          <input id="qa-cfg-url" placeholder="http://127.0.0.1:8787/api/qa" />
+          <p class="qa-cfg-hint">默认连接本机 <code>node server.js</code>。密钥只放在项目 <code>.env</code>，不会写入页面。</p>
+          <button class="btn btn-primary btn-sm" type="button" id="btn-qa-cfg-save">保存</button>
         </div>
         <div class="qa-chips" id="qa-chips"></div>
         <div class="qa-log" id="qa-log"></div>
@@ -2679,6 +2749,13 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
     </div>
   </div>
 
+  <script>
+// 生产环境问答后端地址（部署到 Railway 后填入，例如 https://xxx.up.railway.app/api/qa）
+// 留空则使用同源 /api/qa（本地 node server.js，或 Railway 自身访问时均可用）。
+// 在 GitHub Pages 门户里也靠这个值把「督查督办」的 AI 问答指向线上后端。
+window.KD_QA_BACKEND = "";
+
+</script>
   <script>
 /* Shared demo state — 会议纪要与督查督办联动 */
 (function (global) {
@@ -3478,19 +3555,77 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
   };
 
   const QA_PRESETS = [
-    {
-      q: '安委会第12次会议部署了哪些任务？',
-      a: '安委会〔2026〕12号共部署：① 国际陆港集结中心基坑支护隐患整改（国际港务公司，8月25日）；② 锦荣科技园危大工程专项检查整改（工程管理部，8月22日）；③ 中秋国庆安全稳定方案报送（各二级单位，8月20日）；④ 安委办周报机制与安全考核一票否决（已办结）；另明确节日不停工包保及安全生产「一张图」平台对接。',
-    },
-    {
-      q: '本月哪些督办事项超期了？',
-      a: '截至 2026-08-17，红牌（超期）3 项：①「锦荣科技园深基坑支护重大隐患挂牌销号」（安委会〔2026〕10号，工程管理部，时限 8月8日，P0）；②「国际陆港集结中心临边防护重大隐患挂牌销号」（安委会〔2026〕11号，国际港务公司，时限 8月10日，P0）；③「参控股企业专项巡察整改台账销号」（党委会〔2026〕8号，科技资本公司，时限 8月12日）。均已升级推送总经理文钊。',
-    },
-    {
-      q: '国际陆港基坑整改最新进展如何？',
-      a: '事项 T-2026-0812-01，责任单位国际港务公司，负责人赵磊。本周进展：基坑监测已加密，支护补强正在施工，完成率 62%。黄牌（临期），下一步 8月22日前自验。来源：安委会〔2026〕12号。另有同场区临边防护挂牌事项（安委会〔2026〕11号）已红牌逾期，请一并关注。',
-    },
+    { q: '安委会第12次会议部署了哪些任务？' },
+    { q: '本月哪些督办事项超期了？' },
+    { q: '国际陆港基坑整改最新进展如何？' },
   ];
+
+  function stripHtml(html) {
+    return String(html || '')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/(p|li|h\d|div|tr|ul|ol)>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function buildQaKnowledge(state) {
+    const hasPushed = !!(state && state.todos && state.todos.length);
+    const todos = hasPushed ? state.todos : SAMPLE_TODOS;
+    const lines = [];
+    lines.push('组织：' + ORG);
+    lines.push('资料基准日：' + TODAY + '。「本月」「超期」均相对此日期判断。');
+    lines.push(hasPushed
+      ? '说明：下列为当前已推送到领导端的督办台账。'
+      : '说明：领导看板当前尚未载入推送数据。下列为系统演示台账，请据此回答。');
+    lines.push('');
+    lines.push('## 督办台账（' + todos.length + ' 项）');
+    todos.forEach(function (t) {
+      const tl = (t.timeline || []).map(function (x) { return (x.when || '') + ' ' + (x.what || ''); }).join('；');
+      lines.push([
+        '- ' + (t.id || '') + '｜' + (t.title || ''),
+        '  类型：' + (t.type || '—') + '；牌态：' + (t.card || '—') + '；状态：' + (t.status || '—') + '；进度：' + (t.progress != null ? t.progress + '%' : '—'),
+        '  责任单位：' + (t.owner || '—') + '；负责人：' + (t.ownerPerson || '—') + '；分管领导：' + (t.leader || '—'),
+        '  办结时限：' + (t.deadline || '—') + '；来源：' + (t.source || t.meetingNo || '—') + '；条款：' + (t.clause || '—'),
+        '  事项说明：' + (t.desc || t.summary || ''),
+        t.originQuote ? '  纪要原文：' + t.originQuote : '',
+        '  本周进展：' + (t.weekProgress || '—') + '；下一步：' + (t.nextStep || '—') + '；问题：' + (t.issues || '—'),
+        tl ? '  时间线：' + tl : '',
+      ].filter(Boolean).join('\n'));
+    });
+    lines.push('');
+    lines.push('## 会议纪要');
+    Object.keys(MINUTES_BY_NO).forEach(function (no) {
+      const m = MINUTES_BY_NO[no];
+      lines.push('### ' + no + ' ' + (m.title || ''));
+      lines.push('时间：' + (m.date || '') + '；主持：' + (m.host || '') + '；地点：' + (m.place || '') + '；出席：' + (m.attendees || ''));
+      (m.sections || []).forEach(function (s) {
+        lines.push((s.h || '') + '\n' + stripHtml(s.html));
+      });
+      lines.push('');
+    });
+    if (OA_DOCS && OA_DOCS.length) {
+      lines.push('## OA 已发布纪要目录');
+      OA_DOCS.forEach(function (d) {
+        lines.push('- ' + (d.meetingNo || '') + '｜' + (d.title || '') + '｜' + (d.date || '') + '｜' + (d.host || '') + '｜' + (d.oaStatus || ''));
+      });
+      lines.push('');
+    }
+    lines.push('## 周报档案');
+    const reports = (WEEKLY_HISTORY || []).slice();
+    if (state && state.thisWeekReport) reports.unshift(state.thisWeekReport);
+    reports.forEach(function (r) {
+      if (!r) return;
+      lines.push((r.weekLabel || r.title || '') + '｜周期 ' + (r.period || '') + '｜' + (r.summary || ''));
+      (r.highlights || []).forEach(function (h) { lines.push('  - ' + h); });
+    });
+    return lines.join('\n');
+  }
 
   function defaultState() {
     return {
@@ -3579,6 +3714,7 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
     WEEKLY_HISTORY: WEEKLY_HISTORY,
     WEEKLY_CURRENT_META: WEEKLY_CURRENT_META,
     buildWeeklyReport: buildWeeklyReport,
+    buildQaKnowledge: buildQaKnowledge,
     QA_PRESETS: QA_PRESETS,
     load: load,
     save: save,
@@ -3603,16 +3739,19 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
         leader: '领导端 · 会议督查督办系统',
       };
 
+      const embedded = document.documentElement.classList.contains('is-embedded');
+
       function parseHash() {
         const h = (location.hash || '').replace('#', '');
         if (h === 'office') return { role: 'office' };
         if (h === 'leader') return { role: 'leader', view: 'board' };
         if (h === 'msg' || h === 'report') return { role: 'leader', view: h };
         if (h === 'qa') return { role: 'leader', view: 'board', qa: true };
-        return { role: 'entry' };
+        return { role: embedded ? 'office' : 'entry' };
       }
 
       function showRole(role, leaderView, extra) {
+        if (embedded && role === 'entry') role = 'office';
         $('#screen-entry').classList.toggle('is-on', role === 'entry');
         $('#screen-office').classList.toggle('is-on', role === 'office');
         $('#screen-leader').classList.toggle('is-on', role === 'leader');
@@ -3622,6 +3761,9 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
           ? '#' + leaderView
           : '#' + role;
         if (location.hash !== hash) history.replaceState(null, '', hash);
+        if (embedded && window.parent !== window) {
+          window.parent.postMessage({ type: 'supervision-role', role }, '*');
+        }
         state = S.load();
         if (role === 'office') Office.enter();
         if (role === 'leader') {
@@ -4049,6 +4191,9 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
         let attnTimer = null;
         let attnPaused = false;
         let drawerTaskId = '';
+        let qaBusy = false;
+        let qaHistory = [];
+        const QA_CFG_KEY = 'hkg_qa_llm_v1';
 
         function todos() { return state.todos && state.todos.length ? state.todos : []; }
         function taskSummary(t) {
@@ -4066,7 +4211,10 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
           panel.hidden = !on;
           widget.classList.toggle('is-open', !!on);
           $('#btn-qa-fab').setAttribute('aria-label', on ? '关闭智能问答' : '打开智能问答');
-          if (on) setTimeout(() => $('#qa-input').focus(), 40);
+          if (on) {
+            refreshQaStatus();
+            setTimeout(() => $('#qa-input').focus(), 40);
+          }
         }
         function toggleQa() { setQaOpen($('#qa-panel').hidden); }
 
@@ -4609,14 +4757,132 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
           $('#btn-report').textContent = state.thisWeekReport ? '重新生成本周周报' : '生成本周周报';
         }
 
-        function ask(q) {
-          const hit = S.QA_PRESETS.find((x) => x.q === q) ||
-            (/超期/.test(q) ? S.QA_PRESETS[1] : /提升|隐患|进展/.test(q) ? S.QA_PRESETS[2] : /安委会|部署/.test(q) ? S.QA_PRESETS[0] : null);
-          const a = hit ? hit.a : 'Demo 仅预置了 3 个示例问题，请点击上方示例提问。正式环境将基于督办台账与纪要做检索问答。';
-          const log = $('#qa-log');
-          log.innerHTML += '<div class="qa-turn user"><div class="who">您</div><div class="bubble">' + q + '</div></div>';
-          log.innerHTML += '<div class="qa-turn bot"><div class="who">智能问答</div><div class="bubble">' + a + '</div></div>';
-          log.scrollTop = log.scrollHeight;
+        function loadQaCfg() {
+          try { return Object.assign({ proxyUrl: '' }, JSON.parse(localStorage.getItem(QA_CFG_KEY) || '{}')); }
+          catch (e) { return { proxyUrl: '' }; }
+        }
+        function saveQaCfg(cfg) {
+          localStorage.setItem(QA_CFG_KEY, JSON.stringify(cfg));
+        }
+        function defaultQaUrl() {
+          if (window.KD_QA_BACKEND) return window.KD_QA_BACKEND;
+          if (location.protocol === 'http:' || location.protocol === 'https:') return location.origin + '/api/qa';
+          return 'http://127.0.0.1:8787/api/qa';
+        }
+        function qaEndpoints() {
+          const saved = loadQaCfg().proxyUrl;
+          const list = [];
+          if (window.KD_QA_BACKEND) list.push(window.KD_QA_BACKEND);
+          if (saved) list.push(saved);
+          if (location.protocol === 'http:' || location.protocol === 'https:') list.push(location.origin + '/api/qa');
+          list.push('http://127.0.0.1:8787/api/qa');
+          return list.filter(function (u, i, a) { return u && a.indexOf(u) === i; });
+        }
+        function healthUrl(qaUrl) {
+          return String(qaUrl || '').replace(/\/api\/qa\/?$/, '/api/health');
+        }
+        async function refreshQaStatus() {
+          const sub = $('#qa-panel-sub');
+          if (!sub) return;
+          const urls = qaEndpoints();
+          for (let i = 0; i < urls.length; i++) {
+            try {
+              const res = await fetch(healthUrl(urls[i]), { method: 'GET' });
+              if (!res.ok) continue;
+              const data = await res.json();
+              if (data && data.ok) {
+                sub.textContent = (data.configured ? ((data.model || 'DeepSeek') + ' 已连接') : '服务已启动但未配置密钥') + ' · 按台账与纪要作答';
+                return;
+              }
+            } catch (e) { /* try next */ }
+          }
+          sub.textContent = '模型未连接 · 请运行 node server.js';
+        }
+        function appendQaTurn(role, who, text) {
+          const wrap = document.createElement('div');
+          wrap.className = 'qa-turn ' + role;
+          const w = document.createElement('div');
+          w.className = 'who';
+          w.textContent = who;
+          const b = document.createElement('div');
+          b.className = 'bubble';
+          b.textContent = text;
+          wrap.appendChild(w);
+          wrap.appendChild(b);
+          $('#qa-log').appendChild(wrap);
+          $('#qa-log').scrollTop = $('#qa-log').scrollHeight;
+          return b;
+        }
+        async function streamQa(question, knowledge, history, onDelta) {
+          const urls = qaEndpoints();
+          let lastErr = '';
+          for (let i = 0; i < urls.length; i++) {
+            try {
+              const res = await fetch(urls[i], {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: question, knowledge: knowledge, history: history }),
+              });
+              const ctype = (res.headers.get('content-type') || '').toLowerCase();
+              if (!res.ok) {
+                let msg = 'HTTP ' + res.status;
+                try {
+                  const err = ctype.indexOf('json') >= 0 ? await res.json() : { error: await res.text() };
+                  msg = err.error || err.detail || msg;
+                } catch (e) { /* ignore */ }
+                lastErr = msg;
+                continue;
+              }
+              if (!res.body || !res.body.getReader) {
+                const text = await res.text();
+                if (!text.trim()) { lastErr = '空响应'; continue; }
+                onDelta(text);
+                return text;
+              }
+              const reader = res.body.getReader();
+              const dec = new TextDecoder();
+              let full = '';
+              while (true) {
+                const chunk = await reader.read();
+                if (chunk.done) break;
+                full += dec.decode(chunk.value, { stream: true });
+                onDelta(full);
+              }
+              if (!full.trim()) { lastErr = '空响应'; continue; }
+              return full;
+            } catch (e) {
+              lastErr = e.message || String(e);
+            }
+          }
+          throw new Error(lastErr || '无法连接大模型服务');
+        }
+        async function ask(q) {
+          q = String(q || '').trim();
+          if (!q || qaBusy) return;
+          qaBusy = true;
+          $('#btn-qa').disabled = true;
+          appendQaTurn('user', '您', q);
+          const bubble = appendQaTurn('bot', '智能问答', '正在根据督办台账与纪要作答…');
+          bubble.classList.add('is-pending');
+          try {
+            const knowledge = S.buildQaKnowledge(state);
+            const answer = await streamQa(q, knowledge, qaHistory.slice(-6), function (text) {
+              bubble.classList.remove('is-pending');
+              bubble.textContent = text;
+              $('#qa-log').scrollTop = $('#qa-log').scrollHeight;
+            });
+            bubble.classList.remove('is-pending');
+            bubble.textContent = answer;
+            qaHistory.push({ role: 'user', content: q });
+            qaHistory.push({ role: 'assistant', content: answer });
+          } catch (err) {
+            bubble.classList.remove('is-pending');
+            bubble.classList.add('is-error');
+            bubble.textContent = '未能调用大模型：' + (err.message || err) + '\n请在项目目录运行 node server.js，并确保 .env 中已配置 AI_API_KEY。';
+          }
+          qaBusy = false;
+          $('#btn-qa').disabled = false;
+          $('#qa-log').scrollTop = $('#qa-log').scrollHeight;
         }
 
         function bind() {
@@ -4717,7 +4983,8 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
             S.save(state);
             renderReportView();
           });
-          $('#qa-log').innerHTML = '<div class="qa-turn bot"><div class="who">智能问答</div><div class="bubble">您好，文钊。我可以按会议查任务、按月查超期事项，或查看某项最新进展。点上方示例即可提问。</div></div>';
+          $('#qa-log').innerHTML = '';
+          appendQaTurn('bot', '智能问答', '您好，文钊。我会根据当前督办台账、会议纪要和周报作答。点上方示例，或直接输入问题。');
           $('#qa-chips').innerHTML = S.QA_PRESETS.map((x, i) =>
             '<button class="filter-chip" type="button" data-qi="' + i + '">' + x.q + '</button>'
           ).join('');
@@ -4736,6 +5003,19 @@ table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 
           $('#qa-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#btn-qa').click(); });
           $('#btn-qa-fab').addEventListener('click', toggleQa);
           $('#btn-qa-close').addEventListener('click', () => setQaOpen(false));
+          $('#qa-cfg-url').value = loadQaCfg().proxyUrl || defaultQaUrl();
+          $('#btn-qa-cfg').addEventListener('click', () => {
+            const box = $('#qa-cfg');
+            box.hidden = !box.hidden;
+            if (!box.hidden) $('#qa-cfg-url').focus();
+          });
+          $('#btn-qa-cfg-save').addEventListener('click', () => {
+            const url = $('#qa-cfg-url').value.trim();
+            saveQaCfg({ proxyUrl: url });
+            $('#qa-cfg').hidden = true;
+            refreshQaStatus();
+            S.toast('已保存问答服务地址', 'success');
+          });
           document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !$('#qa-panel').hidden) setQaOpen(false);
           });

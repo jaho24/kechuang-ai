@@ -1,0 +1,12 @@
+{
+  "name": "kechuang-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "科创集团智能决策门户 · 督查督办 AI 问答后端 (Railway deploy)",
+  "scripts": {
+    "start": "node meeting-supervision-demo/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
