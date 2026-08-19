@@ -360,6 +360,7 @@
 
   function loadChinaMap() {
     const urls = [
+      "vendor/china.json",
       "https://geo.datav.aliyun.com/areas_v3/bound/100000.json",
       "https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/json/china.json",
     ];
