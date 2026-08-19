@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI安全隐患智能管控 · 航空港科创投资集团</title>
+  <style>
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Rajdhani:wght@500;600;700&display=swap");
+
+:root {
+  --sky-0: #cfe8f8;
+  --sky-1: #e8f4fc;
+  --sky-2: #f5fbff;
+  --panel: #ffffff;
+  --ink: #16324f;
+  --ink-muted: #4a6a86;
+  --ink-subtle: #7a97ae;
+  --line: #c5dff0;
+  --blue: #2f7de1;
+  --blue-deep: #0b5cad;
+  --cyan: #1aa6b8;
+  --ok: #2ba471;
+  --warn: #f08a24;
+  --danger: #e23d3d;
+  --font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --num: "Rajdhani", "Noto Sans SC", sans-serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body.show-report { height: auto; }
+.view-report { display: none; }
+body.show-report .view-board { display: none; }
+body.show-report .view-report { display: block; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--sky-1);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+
+.shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 16px;
+  background:
+    radial-gradient(900px 380px at 12% -8%, rgba(47, 125, 225, 0.16), transparent 55%),
+    radial-gradient(700px 320px at 92% 0%, rgba(26, 166, 184, 0.12), transparent 50%),
+    linear-gradient(180deg, #d7eef9 0%, var(--sky-1) 28%, #eef7fc 100%);
+  position: relative;
+}
+.shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(47, 125, 225, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 125, 225, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.badge-demo {
+  position: fixed;
+  top: 10px;
+  right: 12px;
+  z-index: 20;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(11, 92, 173, 0.78);
+  padding: 3px 10px;
+  letter-spacing: 0.06em;
+}
+
+/* ——— header ——— */
+.head {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) auto minmax(260px, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.btn-report {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 8px 14px;
+  background: #fff;
+  color: var(--blue-deep);
+  border: 1px solid #9ec9ef;
+  box-shadow: 0 4px 14px rgba(15, 76, 129, 0.08);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.btn-report:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(15, 76, 129, 0.12);
+}
+.btn-report svg { flex-shrink: 0; }
+
+.title-block { text-align: center; padding-top: 2px; }
+.title-block h1 {
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #0a4a86;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.slogan {
+  margin-top: 6px;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  color: var(--ink-muted);
+}
+.title-deco {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.title-deco i {
+  height: 1px;
+  width: 72px;
+  background: linear-gradient(90deg, transparent, var(--blue));
+}
+.title-deco i:last-child { background: linear-gradient(90deg, var(--blue), transparent); }
+.title-deco span {
+  width: 6px;
+  height: 6px;
+  background: var(--blue);
+  transform: rotate(45deg);
+}
+
+.spec { justify-self: end; text-align: right; }
+.spec-label {
+  font-size: 11px;
+  color: var(--ink-subtle);
+  letter-spacing: 0.16em;
+  margin-bottom: 8px;
+}
+.spec-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: 0.18s var(--ease);
+}
+.chip:hover, .chip.is-on {
+  border-color: var(--blue);
+  color: var(--blue-deep);
+  background: #fff;
+}
+.chip b {
+  width: 7px;
+  height: 7px;
+  background: var(--blue);
+}
+.chip[data-key="dust"] b { background: var(--blue); }
+.chip[data-key="heat"] b { background: var(--warn); }
+.chip[data-key="fire"] b { background: var(--danger); }
+.chip[data-key="flood"] b { background: var(--cyan); }
+.chip[data-key="resume"] b { background: var(--ok); }
+
+.meta-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin: -4px 0 10px;
+  font-size: 12px;
+  color: var(--ink-subtle);
+}
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ok);
+}
+.live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pulse 1.8s infinite;
+}
+@keyframes pulse {
+  70% { box-shadow: 0 0 0 8px rgba(43, 164, 113, 0); }
+}
+#clock { font-family: var(--num); font-size: 14px; letter-spacing: 0.04em; }
+.ingest-bar {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  background: #e8f8f0;
+  border: 1px solid #b7e0c8;
+  color: #1f6b45;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.ingest-bar[hidden] { display: none; }
+.ingest-bar button {
+  border: 1px solid #2ba471;
+  background: #fff;
+  color: #1f6b45;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* ——— layout ——— */
+.main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 268px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.panel {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #b7d7ee;
+  box-shadow: 0 10px 28px rgba(15, 76, 129, 0.06);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+  animation: rise 0.5s var(--ease) both;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.panel::before, .panel::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--blue);
+  pointer-events: none;
+}
+.panel::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.panel::after { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+.corners {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+.corners i {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--blue);
+}
+.corners i:nth-child(1) { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+.corners i:nth-child(2) { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+.panel-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.panel-h h2 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #0a4a86;
+}
+.panel-h h2::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 13px;
+  background: var(--blue);
+  margin-right: 8px;
+  vertical-align: -1px;
+}
+.stamp { font-size: 11px; color: var(--ink-subtle); }
+.panel-actions { display: flex; gap: 8px; align-items: center; }
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #9ec9ef;
+  background: #fff;
+  color: var(--blue-deep);
+}
+.btn-sm.primary { background: var(--blue-deep); color: #fff; border-color: var(--blue-deep); }
+.kpi, .val, .alert { cursor: pointer; }
+.kpi:hover, .val:hover { border-color: var(--blue); }
+.panel-b {
+  flex: 1;
+  min-height: 0;
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  flex-shrink: 0;
+}
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #f7fbfe, #eef6fc);
+  border: 1px solid var(--line);
+}
+.kpi-ico {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.kpi-ico svg { width: 22px; height: 22px; }
+.kpi.total .kpi-ico { color: var(--blue); background: #e8f2ff; }
+.kpi.rate .kpi-ico { color: var(--ok); background: #e8f8f0; }
+.kpi.over .kpi-ico { color: var(--warn); background: #fff4e8; }
+.kpi.major .kpi-ico { color: var(--danger); background: #ffecec; }
+.kpi-val {
+  font-family: var(--num);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.kpi.major .kpi-val { color: var(--danger); }
+.kpi.over .kpi-val { color: var(--warn); }
+.kpi.rate .kpi-val { color: var(--ok); }
+.kpi-label { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+
+.charts {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.12fr 1fr 0.92fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+.box {
+  background: #f8fcff;
+  border: 1px solid var(--line);
+  padding: 8px 10px 6px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.box.map { grid-row: span 2; }
+.box-h {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.chart-mount {
+  flex: 1;
+  min-height: 120px;
+  width: 100%;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 2px 0 4px;
+  font-size: 11px;
+  color: var(--ink-subtle);
+  flex-shrink: 0;
+}
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 8px; height: 8px; display: inline-block; }
+
+/* ——— alerts ——— */
+.alerts .panel-b {
+  padding: 12px 12px 14px;
+  gap: 0;
+  align-items: center;
+}
+.alert {
+  width: 100%;
+  text-align: center;
+  padding: 16px 12px 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.alert.warn { background: linear-gradient(180deg, #eaf4ff, #f7fbff); border-color: #b9d6f5; }
+.alert.esc { background: linear-gradient(180deg, #fff6ea, #fffbf5); border-color: #f3d0a6; }
+.alert.crit {
+  background: linear-gradient(180deg, #ffecec, #fff8f8);
+  border-color: #f5b4b4;
+  box-shadow: 0 0 18px rgba(226, 61, 61, 0.18);
+}
+.alert .ico { margin-bottom: 6px; }
+.alert h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.alert p { font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
+.arrow-down {
+  color: var(--ink-subtle);
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px 0;
+}
+
+/* ——— footer ——— */
+.foot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.flow {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #b7d7ee;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  animation: rise 0.65s var(--ease) both;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 64px;
+}
+.step-ico {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: #eaf4ff;
+  border: 1px solid #b9d6f5;
+  color: var(--blue-deep);
+}
+.step span { font-size: 12px; color: var(--ink-muted); }
+.flow-arr { color: #9ec0d8; font-size: 16px; padding-bottom: 16px; }
+.values { display: flex; gap: 10px; }
+.val {
+  appearance: none;
+  font: inherit;
+  text-align: left;
+  min-width: 168px;
+  background: #fff;
+  border: 1px solid #b7d7ee;
+  padding: 12px 16px;
+}
+.val .l { font-size: 12px; color: var(--ink-subtle); margin-bottom: 4px; }
+.val .m { font-size: 14px; font-weight: 700; color: var(--ink); }
+.val em { font-style: normal; color: var(--blue-deep); font-size: 16px; }
+
+/* ——— report ——— */
+.report-wrap { max-width: 740px; margin: 24px auto 0; position: relative; z-index: 1; }
+.back {
+  display: inline-flex;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--ink-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.back:hover { color: var(--blue-deep); }
+.permit {
+  background: #fff;
+  border: 1px solid #b7d7ee;
+  box-shadow: 0 12px 32px rgba(15, 76, 129, 0.08);
+  padding: 28px;
+  position: relative;
+}
+.permit h1 {
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  color: #0a4a86;
+  margin-bottom: 8px;
+}
+.hint { font-size: 13px; color: var(--ink-muted); line-height: 1.65; margin-bottom: 20px; max-width: 58ch; }
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+.field label {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-subtle);
+  margin-bottom: 6px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  background: #f7fbfe;
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 0;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: 2px solid rgba(47, 125, 225, 0.35);
+  border-color: var(--blue);
+}
+.field.full { grid-column: 1 / -1; }
+.actions { margin-top: 20px; display: flex; gap: 10px; }
+.btn {
+  border: 0;
+  cursor: pointer;
+  padding: 8px 18px;
+  font-size: 13px;
+}
+.btn-primary { background: var(--blue-deep); color: #fff; }
+.btn-ghost { background: #fff; border: 1px solid var(--line); color: var(--ink-muted); }
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0b5cad;
+  color: #fff;
+  padding: 12px 16px;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: 0.25s var(--ease);
+  z-index: 30;
+  pointer-events: none;
+}
+.toast.on { opacity: 1; transform: none; }
+
+/* ——— overlays ——— */
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 40, 70, 0.38);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s var(--ease);
+}
+.mask.is-open { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(560px, 96vw);
+  height: 100%;
+  background: #f7fbfe;
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 0.28s var(--ease);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #b7d7ee;
+  box-shadow: -12px 0 32px rgba(15, 76, 129, 0.12);
+}
+.drawer.is-open { transform: none; }
+.drawer-h, .modal-h {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.crumbs { font-size: 12px; color: var(--ink-subtle); margin-bottom: 4px; }
+.crumbs button {
+  border: 0;
+  background: none;
+  color: var(--blue-deep);
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+}
+.drawer-h h3, .modal-h h3 { font-size: 16px; color: #0a4a86; }
+.icon-x {
+  border: 1px solid var(--line);
+  background: #fff;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+.drawer-b, .modal-b { flex: 1; overflow: auto; padding: 16px 18px 24px; }
+
+.hint-bar {
+  font-size: 12px;
+  color: var(--ink-subtle);
+  margin-bottom: 12px;
+}
+.hz-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.hz-item, .proj-item {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 12px;
+  cursor: pointer;
+}
+.hz-item:hover, .proj-item:hover { border-color: var(--blue); }
+.proj-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.hz-top, .proj-main { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hz-id { font-family: var(--num); font-size: 13px; font-weight: 600; }
+.tag {
+  font-size: 11px;
+  padding: 1px 6px;
+  border: 1px solid currentColor;
+}
+.tag.ok { color: var(--ok); }
+.tag.warn { color: var(--warn); }
+.tag.danger { color: var(--danger); }
+.tag.blue { color: var(--blue-deep); }
+.hz-meta { margin-top: 6px; font-size: 12px; color: var(--ink-muted); }
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+.detail-grid div {
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+}
+.detail-grid .k { font-size: 11px; color: var(--ink-subtle); }
+.detail-grid .v { font-size: 13px; margin-top: 2px; }
+.timeline { list-style: none; border-left: 2px solid var(--line); margin: 8px 0 0 8px; padding-left: 14px; }
+.timeline li { margin-bottom: 12px; font-size: 13px; }
+.timeline .when { font-size: 11px; color: var(--ink-subtle); }
+
+.modal {
+  position: fixed;
+  z-index: 50;
+  top: 50%;
+  left: 50%;
+  width: min(760px, 94vw);
+  max-height: 86vh;
+  transform: translate(-50%, -46%) scale(0.98);
+  opacity: 0;
+  pointer-events: none;
+  background: #fff;
+  border: 1px solid #b7d7ee;
+  box-shadow: 0 18px 48px rgba(15, 76, 129, 0.18);
+  display: flex;
+  flex-direction: column;
+  transition: 0.22s var(--ease);
+}
+.modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+.modal-qa { width: min(640px, 94vw); }
+.report-sec { margin-bottom: 18px; }
+.report-sec h4 {
+  font-size: 14px;
+  color: #0a4a86;
+  margin-bottom: 8px;
+  padding-left: 8px;
+  border-left: 3px solid var(--blue);
+}
+.report-sec p { font-size: 13px; color: var(--ink-muted); line-height: 1.65; }
+.report-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 180px; }
+.report-charts .chart-mount { min-height: 160px; background: #f8fcff; border: 1px solid var(--line); }
+.qa-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.qa-chip {
+  border: 1px solid #9ec9ef;
+  background: #eaf4ff;
+  color: var(--blue-deep);
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+.qa-log { min-height: 180px; max-height: 320px; overflow: auto; }
+.qa-turn { margin-bottom: 12px; }
+.qa-turn .who { font-size: 11px; color: var(--ink-subtle); margin-bottom: 4px; }
+.qa-turn .bubble {
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  background: #f4f8fc;
+  border: 1px solid var(--line);
+}
+.qa-turn.user .bubble { background: #eaf4ff; }
+.qa-input-row { display: flex; gap: 8px; margin-top: 12px; }
+.qa-input-row input {
+  flex: 1;
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  background: #f7fbfe;
+}
+body.lock { overflow: hidden; }
+
+@media (max-width: 1180px) {
+  html, body { height: auto; }
+  .shell { min-height: 100vh; }
+  .head { grid-template-columns: 1fr; }
+  .spec, .title-block { text-align: left; justify-self: start; }
+  .spec-row { justify-content: flex-start; }
+  .main { grid-template-columns: 1fr; }
+  .charts { grid-template-columns: 1fr 1fr; grid-template-rows: 240px 220px 220px; }
+  .box.map { grid-row: span 1; min-height: 240px; }
+  .foot { grid-template-columns: 1fr; }
+  .flow { flex-wrap: wrap; }
+}
+@media (max-width: 720px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .charts { grid-template-columns: 1fr; grid-template-rows: none; }
+  .form { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+</style>
+</head>
+<body>
+  <span class="badge-demo">框架演示 · 模拟数据</span>
+  <div class="shell view-board">
+    <header class="head">
+      <button class="btn-report" type="button" id="btn-go-report">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        安全隐患排查上报
+      </button>
+      <div class="title-block">
+        <div class="title-deco"><i></i><span></span><i></i></div>
+        <h1>AI安全隐患智能管控</h1>
+        <p class="slogan">统一监测 · 分级预警 · 整改闭环 · 态势洞察</p>
+      </div>
+      <div class="spec">
+        <div class="spec-label">专项巡检</div>
+        <div class="spec-row" id="chips">
+          <button type="button" class="chip" data-key="dust"><b></b>防尘</button>
+          <button type="button" class="chip" data-key="heat"><b></b>高温</button>
+          <button type="button" class="chip" data-key="fire"><b></b>消防</button>
+          <button type="button" class="chip" data-key="flood"><b></b>防汛</button>
+          <button type="button" class="chip" data-key="resume"><b></b>复工复产</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="meta-row">
+      <span class="live"><i></i>监测中</span>
+      <span id="clock">2026-08-18 11:35</span>
+    </div>
+    <div class="ingest-bar" id="ingest-bar" hidden></div>
+
+    <div class="main">
+      <section class="panel">
+        <span class="corners" aria-hidden="true"><i></i><i></i></span>
+        <div class="panel-h">
+          <h2>集团安全态势总览</h2>
+          <div class="panel-actions">
+            <span class="stamp">点地图 / 排名 / KPI 可下钻</span>
+            <button class="btn-sm" type="button" id="btn-qa">智能问答</button>
+            <button class="btn-sm primary" type="button" id="btn-month">生成本月报告</button>
+          </div>
+        </div>
+        <div class="panel-b">
+          <div class="kpis">
+            <article class="kpi total" data-filter="all">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-total">1,286</div>
+                <div class="kpi-label">隐患总数</div>
+                <div class="kpi-note" id="kpi-total-note">本月新增 86</div>
+              </div>
+            </article>
+            <article class="kpi rate" data-filter="rate">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-rate">94.6%</div>
+                <div class="kpi-label">整改完成率</div>
+                <div class="kpi-note" id="kpi-rate-note">环比 +2.1 pt</div>
+              </div>
+            </article>
+            <article class="kpi over" data-filter="逾期">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-over">18</div>
+                <div class="kpi-label">逾期隐患</div>
+                <div class="kpi-note" id="kpi-over-note">超期率 1.4%</div>
+              </div>
+            </article>
+            <article class="kpi major" data-filter="重大">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 16.5h.01"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-major">3</div>
+                <div class="kpi-label">重大隐患</div>
+                <div class="kpi-note" id="kpi-major-note">即时预警已推送</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="charts">
+            <div class="box map">
+              <div class="box-h">项目分布</div>
+              <div class="chart-mount" id="chart-map"></div>
+              <div class="legend">
+                <span><i style="background:#2f7de1"></i>正常</span>
+                <span><i style="background:#1aa6b8"></i>一般隐患</span>
+                <span><i style="background:#f08a24"></i>逾期隐患</span>
+                <span><i style="background:#e23d3d"></i>重大隐患</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-h">隐患趋势 <span>05-15 — 06-12</span></div>
+              <div class="chart-mount" id="chart-trend"></div>
+            </div>
+            <div class="box">
+              <div class="box-h">专项分布</div>
+              <div class="chart-mount" id="chart-pie"></div>
+            </div>
+            <div class="box">
+              <div class="box-h">待整改分布 <span>未闭环 · 按专项</span></div>
+              <div class="chart-mount" id="chart-pending"></div>
+            </div>
+            <div class="box">
+              <div class="box-h">项目整改排名</div>
+              <div class="chart-mount" id="chart-rank"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel alerts">
+        <span class="corners" aria-hidden="true"><i></i><i></i></span>
+        <div class="panel-h"><h2>自动化预警推送</h2></div>
+        <div class="panel-b">
+          <div class="alert warn" data-filter="临期">
+            <div class="ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2f7de1" stroke-width="1.7"><path d="M6 9a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+            </div>
+            <h3>到期前提醒</h3>
+            <p>按整改时限自动跟踪<br/>到期前推送整改责任人</p>
+          </div>
+          <div class="arrow-down">↓</div>
+          <div class="alert esc" data-filter="逾期">
+            <div class="ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f08a24" stroke-width="1.7"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M12 2v2"/><path d="M16 4l2 3"/></svg>
+            </div>
+            <h3>逾期升级</h3>
+            <p>逾期后逐级升级<br/>项目安全负责人 → 集团分管领导</p>
+          </div>
+          <div class="arrow-down">↓</div>
+          <div class="alert crit" data-filter="重大">
+            <div class="ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e23d3d" stroke-width="1.7"><path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 16.5h.01"/></svg>
+            </div>
+            <h3>重大隐患即时预警</h3>
+            <p>重大隐患入库即推送<br/>不按普通时限等待</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="foot">
+      <div class="flow">
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+          <span>巡检发现</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <span>隐患填报</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3"/><path d="M5 20c1.5-4 12.5-4 14 0"/></svg></div>
+          <span>责任到人</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="1"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div>
+          <span>时限跟踪</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M8.5 12l2.5 2.5L16 10"/></svg></div>
+          <span>整改闭环</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9l5 3 6-6 5 4v9H4z"/></svg></div>
+          <span>看板月报</span>
+        </div>
+      </div>
+      <div class="values">
+        <button class="val" type="button" id="btn-month-2">
+          <div class="l">月报</div>
+          <div class="m"><em>3 天</em> → 自动生成</div>
+        </button>
+        <div class="val">
+          <div class="l">跨项目</div>
+          <div class="m">实时 <em>横向对比</em></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="view-report">
+    <div class="report-wrap">
+      <button class="back" type="button" id="btn-back-board">← 返回安全态势看板</button>
+      <article class="permit">
+        <h1>安全隐患排查上报</h1>
+        <p class="hint">
+          提交后写入浏览器本地模拟库。返回看板可看到隐患总数与下钻列表更新。正式建设可自研本页或对接简道云 / fireport。
+        </p>
+        <form class="form" id="form">
+          <div class="field">
+            <label>所属项目</label>
+            <select name="project">
+              <option value="A">项目A · 港区仓储一期</option>
+              <option value="B">项目B · 物流枢纽扩建</option>
+              <option value="C">项目C · 智能制造厂房</option>
+              <option value="D">项目D · 配套市政工程</option>
+              <option value="E">项目E · 综合办公楼</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>专项领域</label>
+            <select name="type">
+              <option>日常排查</option>
+              <option>防尘</option>
+              <option>高温</option>
+              <option selected>消防</option>
+              <option>防汛</option>
+              <option>复工复产</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>隐患等级</label>
+            <select name="level">
+              <option>一般隐患</option>
+              <option>重大隐患</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>整改责任人</label>
+            <input name="owner" type="text" placeholder="如：张安全" value="张安全" />
+          </div>
+          <div class="field">
+            <label>整改时限</label>
+            <input name="due" type="date" />
+          </div>
+          <div class="field">
+            <label>发现位置</label>
+            <input name="loc" type="text" placeholder="如：3号塔吊作业面" />
+          </div>
+          <div class="field full">
+            <label>隐患描述</label>
+            <textarea name="desc" rows="3" placeholder="简要描述隐患情况…"></textarea>
+          </div>
+        </form>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" id="submit">提交入库</button>
+          <button class="btn btn-ghost" type="button" id="btn-cancel-report">取消</button>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="toast" id="toast">已写入统一库</div>
+
+  <div class="mask" id="mask"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-h">
+      <div>
+        <div class="crumbs" id="crumbs"></div>
+        <h3 id="drawer-title">下钻</h3>
+      </div>
+      <button class="icon-x" type="button" id="drawer-close" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-b" id="drawer-body"></div>
+  </aside>
+
+  <div class="modal" id="modal-report" aria-hidden="true">
+    <div class="modal-h">
+      <div>
+        <div class="crumbs">自动报表 · 模拟生成</div>
+        <h3>安全隐患排查整改报告 · 2026年8月</h3>
+      </div>
+      <button class="icon-x" type="button" data-close="report" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-b" id="report-body">
+      <p class="hint-bar">点击生成后展示预置月报（非正式模型）。</p>
+    </div>
+  </div>
+
+  <div class="modal modal-qa" id="modal-qa" aria-hidden="true">
+    <div class="modal-h">
+      <div>
+        <div class="crumbs">基于统一库的自然语言查询 · 预置问答</div>
+        <h3>智能问答</h3>
+      </div>
+      <button class="icon-x" type="button" data-close="qa" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-b">
+      <div class="qa-chips" id="qa-chips"></div>
+      <div class="qa-log" id="qa-log"></div>
+      <div class="qa-input-row">
+        <input id="qa-input" placeholder="输入问题，或点上方示例" />
+        <button class="btn btn-primary" type="button" id="qa-ask">询问</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script>
+/* 安全生产 Demo · 本地统一库（模拟入库，非真实数据库） */
+(function (global) {
+  const KEY = "pm_safety_demo_v1";
+  const SAFETY = { A: "吴安", B: "黄安", C: "马安", D: "刘安全", E: "周安" };
+
+  function empty() {
+    return { extras: [], closedIds: [] };
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return empty();
+      const s = JSON.parse(raw);
+      if (!s || !Array.isArray(s.extras)) return empty();
+      return { extras: s.extras, closedIds: Array.isArray(s.closedIds) ? s.closedIds : [] };
+    } catch (e) {
+      return empty();
+    }
+  }
+
+  function save(s) {
+    localStorage.setItem(KEY, JSON.stringify(s));
+  }
+
+  function pad(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  function nowStr() {
+    const d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
+      " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  function nextId() {
+    const d = new Date();
+    return "YH-" + d.getFullYear() + "-" + pad(d.getMonth() + 1) + pad(d.getDate()) +
+      pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()).slice(-2);
+  }
+
+  function dueStatus(due, level) {
+    if (!due) return "待整改";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const end = new Date(due + "T00:00:00");
+    const days = Math.round((end - today) / 86400000);
+    if (days < 0) return "逾期";
+    if (days <= 3) return "临期";
+    return "待整改";
+  }
+
+  function addFromForm(form) {
+    const project = form.project.value;
+    const type = form.type.value;
+    const level = form.level.value === "重大隐患" ? "重大" : "一般";
+    const owner = (form.owner.value || "张安全").trim();
+    const due = form.due.value;
+    const loc = (form.loc.value || "现场待补充").trim();
+    const desc = (form.desc.value || "（未填写描述）").trim();
+    const status = dueStatus(due, level);
+    const id = nextId();
+    const when = nowStr();
+    const timeline = [{ when: when, what: "手工填报入库（Demo 本地库），项目信息表锚定 " + project }];
+    if (level === "重大") {
+      timeline.push({ when: when, what: "重大隐患即时预警已模拟推送集团分管领导王建国" });
+    } else if (status === "临期") {
+      timeline.push({ when: when, what: "距整改时限不足 3 天，已模拟提醒整改责任人" + owner });
+    } else if (status === "逾期") {
+      timeline.push({ when: when, what: "已逾期，模拟升级项目安全负责人" + (SAFETY[project] || "") });
+    }
+    const row = {
+      id: id,
+      project: project,
+      type: type,
+      level: level,
+      status: status,
+      owner: owner,
+      safety: SAFETY[project] || "项目安全负责人",
+      leader: "王建国",
+      due: due || "未设",
+      loc: loc,
+      desc: desc,
+      fromReport: true,
+      timeline: timeline,
+    };
+    const s = load();
+    s.extras.unshift(row);
+    save(s);
+    return row;
+  }
+
+  function closeHazard(id) {
+    const s = load();
+    if (s.closedIds.indexOf(id) < 0) s.closedIds.push(id);
+    s.extras.forEach(function (e) {
+      if (e.id === id) {
+        e.status = "已闭环";
+        e.timeline = (e.timeline || []).concat([{ when: nowStr(), what: "整改完成，录入闭环" }]);
+      }
+    });
+    save(s);
+  }
+
+  function latestExtra() {
+    const s = load();
+    return s.extras[0] || null;
+  }
+
+  global.PMSafetyStore = {
+    load: load,
+    addFromForm: addFromForm,
+    closeHazard: closeHazard,
+    latestExtra: latestExtra,
+    SAFETY: SAFETY,
+  };
+})(window);
+
+</script>
+<script>
+/* 安全生产看板 · ECharts 科技蓝 + 下钻 / 月报 / 问答 */
+(function () {
+  const PALETTE = ["#2f7de1", "#f08a24", "#e23d3d", "#1aa6b8", "#2ba471"];
+  const PIE = [
+    { name: "防尘", key: "dust", value: 28 },
+    { name: "高温", key: "heat", value: 22 },
+    { name: "消防", key: "fire", value: 18 },
+    { name: "防汛", key: "flood", value: 17 },
+    { name: "复工复产", key: "resume", value: 15 },
+  ];
+  const PROJECTS = [
+    { id: "A", name: "项目A", full: "港区仓储一期", rate: 98.2, total: 218, monthNew: 12, status: "normal", color: "#2f7de1", value: [113.84, 34.53] },
+    { id: "B", name: "项目B", full: "物流枢纽扩建", rate: 96.5, total: 252, monthNew: 18, status: "general", color: "#1aa6b8", value: [113.96, 34.62] },
+    { id: "C", name: "项目C", full: "智能制造厂房", rate: 93.1, total: 268, monthNew: 22, status: "overdue", color: "#f08a24", value: [114.08, 34.48] },
+    { id: "D", name: "项目D", full: "配套市政工程", rate: 89.4, total: 274, monthNew: 15, status: "major", color: "#e23d3d", value: [113.72, 34.40] },
+    { id: "E", name: "项目E", full: "综合办公楼", rate: 86.3, total: 274, monthNew: 19, status: "overdue", color: "#f08a24", value: [113.88, 34.70] },
+  ];
+  const STATUS_MAP = { normal: "正常", general: "一般隐患", overdue: "逾期隐患", major: "重大隐患" };
+  const SEED_HAZARDS = [
+    { id: "YH-2026-0801", project: "D", type: "防汛", level: "重大", status: "待整改", owner: "赵强", safety: "刘安全", leader: "王建国", due: "2026-08-20", loc: "基坑降水井 #3", desc: "基坑降水系统备用泵未就位，汛期存在淹槽风险。", timeline: [
+      { when: "2026-08-12 09:20", what: "巡检发现并填报，判定重大隐患，即时预警已推送集团分管领导" },
+      { when: "2026-08-12 09:22", what: "升级：王建国（集团分管领导）已签收" },
+    ]},
+    { id: "YH-2026-0806", project: "D", type: "消防", level: "重大", status: "临期", owner: "陈涛", safety: "刘安全", leader: "王建国", due: "2026-08-21", loc: "临建区配电房", desc: "临时用电未做等电位联结，消防验收资料缺失。", timeline: [
+      { when: "2026-08-08 14:00", what: "填报入库，设定整改时限 8 月 21 日" },
+      { when: "2026-08-18 08:00", what: "到期前 3 天，已提醒整改责任人陈涛" },
+    ]},
+    { id: "YH-2026-0744", project: "E", type: "消防", level: "一般", status: "逾期", owner: "李工", safety: "周安", leader: "王建国", due: "2026-08-10", loc: "地下车库消防通道", desc: "消防通道被材料占用，应急车辆无法通过。", timeline: [
+      { when: "2026-07-28 10:10", what: "填报，责任人李工，时限 8 月 10 日" },
+      { when: "2026-08-07 09:00", what: "临期提醒已推送整改责任人" },
+      { when: "2026-08-10 18:00", what: "逾期，升级项目安全负责人周安" },
+      { when: "2026-08-13 09:00", what: "仍未闭环，升级集团分管领导王建国" },
+    ]},
+    { id: "YH-2026-0752", project: "E", type: "高温", level: "一般", status: "逾期", owner: "吴磊", safety: "周安", leader: "王建国", due: "2026-08-09", loc: "屋面钢构作业面", desc: "高温时段未落实轮换休息与防暑药品。", timeline: [
+      { when: "2026-08-09 18:00", what: "逾期，已升级项目安全负责人" },
+    ]},
+    { id: "YH-2026-0811", project: "C", type: "防尘", level: "一般", status: "临期", owner: "孙敏", safety: "马安", leader: "王建国", due: "2026-08-21", loc: "土方运输便道", desc: "出门冲洗装置故障，扬尘超标。", timeline: [
+      { when: "2026-08-18 08:00", what: "到期前提醒已推送孙敏" },
+    ]},
+    { id: "YH-2026-0815", project: "C", type: "防汛", level: "一般", status: "逾期", owner: "钱峰", safety: "马安", leader: "王建国", due: "2026-08-12", loc: "场地排水沟", desc: "排水沟淤堵，暴雨后积水倒灌临建。", timeline: [
+      { when: "2026-08-12 18:00", what: "逾期升级项目安全负责人马安" },
+    ]},
+    { id: "YH-2026-0820", project: "B", type: "复工复产", level: "一般", status: "待整改", owner: "郑洁", safety: "黄安", leader: "王建国", due: "2026-08-25", loc: "2# 仓库", desc: "停工后特种设备未复检即准备复工。", timeline: [
+      { when: "2026-08-16 11:00", what: "填报入库，跟踪中" },
+    ]},
+    { id: "YH-2026-0702", project: "A", type: "防尘", level: "一般", status: "已闭环", owner: "周平", safety: "吴安", leader: "王建国", due: "2026-08-05", loc: "砂石堆场", desc: "裸土未覆盖，已完成密目网全覆盖并验收。", timeline: [
+      { when: "2026-08-04 16:40", what: "整改完成，录入闭环" },
+    ]},
+    { id: "YH-2026-0818", project: "D", type: "防汛", level: "重大", status: "待整改", owner: "赵强", safety: "刘安全", leader: "王建国", due: "2026-08-22", loc: "边坡监测点", desc: "边坡位移预警值接近阈值，监测频次不足。", timeline: [
+      { when: "2026-08-17 07:50", what: "重大隐患即时预警已推送" },
+    ]},
+  ];
+  const PROJECT_BASE = PROJECTS.map(function (p) {
+    return { id: p.id, total: p.total, monthNew: p.monthNew, rate: p.rate, closed: Math.round(p.total * p.rate / 100) };
+  });
+  const BASE_KPI = { total: 1286, closed: 1217, overdue: 18, major: 3, monthNew: 86 };
+  const PIE_COUNTS = { 防尘: 360, 高温: 283, 消防: 231, 防汛: 219, 复工复产: 193 };
+  const PENDING_BASE = { 防尘: 42, 高温: 35, 消防: 28, 防汛: 31, 复工复产: 22 };
+  let PENDING_LIVE = [];
+  let HAZARDS = [];
+  let STATS = { total: 1286, rate: 94.6, overdue: 18, major: 3, monthNew: 86 };
+  let PIE_LIVE = PIE.slice();
+
+  function applyLive() {
+    const s = (window.PMSafetyStore && PMSafetyStore.load()) || { extras: [], closedIds: [] };
+    HAZARDS = JSON.parse(JSON.stringify(s.extras || [])).concat(JSON.parse(JSON.stringify(SEED_HAZARDS)));
+    HAZARDS.forEach(function (h) {
+      if (s.closedIds.indexOf(h.id) >= 0) h.status = "已闭环";
+    });
+    PROJECTS.forEach(function (p) {
+      const b = PROJECT_BASE.find(function (x) { return x.id === p.id; });
+      p.total = b.total;
+      p.monthNew = b.monthNew;
+      p.closed = b.closed;
+    });
+    (s.extras || []).forEach(function (e) {
+      const p = projectById(e.project);
+      if (!p) return;
+      p.total += 1;
+      p.monthNew += 1;
+      const closed = e.status === "已闭环" || s.closedIds.indexOf(e.id) >= 0;
+      if (closed) p.closed += 1;
+    });
+    PROJECTS.forEach(function (p) {
+      p.rate = +(p.closed / p.total * 100).toFixed(1);
+    });
+    const extraN = (s.extras || []).length;
+    const extraClosed = (s.extras || []).filter(function (e) {
+      return e.status === "已闭环" || s.closedIds.indexOf(e.id) >= 0;
+    }).length;
+    const seedClosedExtra = SEED_HAZARDS.filter(function (h) {
+      return h.status !== "已闭环" && s.closedIds.indexOf(h.id) >= 0;
+    }).length;
+    const extraOpenMajor = HAZARDS.filter(function (h) {
+      return h.fromReport && h.level === "重大" && h.status !== "已闭环";
+    }).length;
+    const extraOverdue = (s.extras || []).filter(function (e) {
+      const st = s.closedIds.indexOf(e.id) >= 0 ? "已闭环" : e.status;
+      return st === "逾期";
+    }).length;
+    const seedOverdueClosed = SEED_HAZARDS.filter(function (h) {
+      return h.status === "逾期" && s.closedIds.indexOf(h.id) >= 0;
+    }).length;
+    STATS.total = BASE_KPI.total + extraN;
+    STATS.monthNew = BASE_KPI.monthNew + extraN;
+    STATS.closed = BASE_KPI.closed + extraClosed + seedClosedExtra;
+    STATS.overdue = BASE_KPI.overdue + extraOverdue - seedOverdueClosed;
+    STATS.major = BASE_KPI.major + extraOpenMajor - SEED_HAZARDS.filter(function (h) {
+      return h.level === "重大" && h.status !== "已闭环" && s.closedIds.indexOf(h.id) >= 0;
+    }).length;
+    STATS.rate = +(STATS.closed / STATS.total * 100).toFixed(1);
+
+    const counts = Object.assign({}, PIE_COUNTS);
+    (s.extras || []).forEach(function (e) {
+      if (counts[e.type] != null) counts[e.type] += 1;
+    });
+    PIE_LIVE = PIE.map(function (d) {
+      return { name: d.name, key: d.key, value: +(counts[d.name] / STATS.total * 100).toFixed(1) };
+    });
+
+    const pend = Object.assign({}, PENDING_BASE);
+    (HAZARDS || []).forEach(function (h) {
+      if (h.status === "已闭环") return;
+      if (pend[h.type] != null) pend[h.type] = (pend[h.type] || 0) + 1;
+    });
+    PENDING_LIVE = PIE.map(function (d) {
+      return { name: d.name, value: pend[d.name] || 0 };
+    });
+  }
+
+  function paintKpis() {
+    if ($("kpi-total")) $("kpi-total").textContent = STATS.total.toLocaleString("en-US");
+    if ($("kpi-total-note")) $("kpi-total-note").textContent = "本月新增 " + STATS.monthNew;
+    if ($("kpi-rate")) $("kpi-rate").textContent = STATS.rate + "%";
+    if ($("kpi-over")) $("kpi-over").textContent = String(STATS.overdue);
+    if ($("kpi-over-note")) $("kpi-over-note").textContent = "超期率 " + (STATS.total ? (STATS.overdue / STATS.total * 100).toFixed(1) : "0") + "%";
+    if ($("kpi-major")) $("kpi-major").textContent = String(STATS.major);
+    if ($("kpi-major-note")) {
+      $("kpi-major-note").textContent = STATS.major ? "即时预警已推送" : "无在办重大隐患";
+    }
+  }
+
+  function paintBanner() {
+    const bar = $("ingest-bar");
+    if (!bar || !window.PMSafetyStore) return;
+    const latest = PMSafetyStore.latestExtra();
+    if (!latest) {
+      bar.hidden = true;
+      return;
+    }
+    bar.hidden = false;
+    bar.innerHTML = "<span>统一库已更新：刚入库 <b>" + latest.id + "</b> · " +
+      (projectById(latest.project) ? projectById(latest.project).name : "") + " · " +
+      latest.level + " / " + latest.type + "，看板数字已重算。</span>" +
+      '<button type="button" id="btn-see-new">查看该条</button>';
+    const btn = $("btn-see-new");
+    if (btn) btn.addEventListener("click", function () {
+      const h = HAZARDS.find(function (x) { return x.id === latest.id; });
+      if (h) openHazard(h);
+    });
+  }
+
+  const QA = [
+    { q: "本月项目C新增隐患多少条", a: "项目C（智能制造厂房）本月新增 <b>22</b> 条。集团本月合计新增 86 条。可从看板点项目C下钻查看条目。" },
+    { q: "哪些项目整改完成率最低", a: "完成率最低为 <b>项目E 综合办公楼 86.3%</b>，其次为 <b>项目D 配套市政工程 89.4%</b>。点排名条可下钻到具体隐患。" },
+    { q: "消防类隐患占比多少", a: "消防类占集团隐患总量的 <b>18%</b>（约 231 条）。右上专项标签或环形图可高亮消防分布。" },
+  ];
+
+  const charts = [];
+  let pieChart = null;
+  let rankChart = null;
+  let mapChart = null;
+  let reportCharts = [];
+
+  function $(id) { return document.getElementById(id); }
+  function projectById(id) { return PROJECTS.find(function (p) { return p.id === id; }); }
+  function projectByName(name) { return PROJECTS.find(function (p) { return p.name === name; }); }
+  function hazardsOf(pid) { return HAZARDS.filter(function (h) { return h.project === pid; }); }
+  function tagClass(status, level) {
+    if (level === "重大" || status === "逾期") return "danger";
+    if (status === "临期") return "warn";
+    if (status === "已闭环") return "ok";
+    return "blue";
+  }
+
+  function tickClock() {
+    const el = $("clock");
+    if (!el) return;
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    el.textContent =
+      d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) +
+      " " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+  }
+
+  function initChart(el, option, track) {
+    const existing = echarts.getInstanceByDom(el);
+    if (existing) existing.dispose();
+    const chart = echarts.init(el, null, { renderer: "canvas" });
+    chart.setOption(option);
+    if (track !== false) charts.push(chart);
+    return chart;
+  }
+
+  function commonText() {
+    return { fontFamily: "Noto Sans SC, Microsoft YaHei, sans-serif", color: "#4a6a86" };
+  }
+
+  function renderTrend() {
+    const el = $("chart-trend");
+    if (!el) return;
+    initChart(el, {
+      color: PALETTE,
+      textStyle: commonText(),
+      tooltip: { trigger: "axis", confine: true },
+      legend: { data: ["隐患总量", "逾期数"], right: 0, top: 0, itemWidth: 12, textStyle: { color: "#7a97ae", fontSize: 11 } },
+      grid: { left: 36, right: 12, top: 28, bottom: 24 },
+      xAxis: { type: "category", data: ["05-15", "05-22", "05-29", "06-01", "06-05", "06-08", "06-12"], boundaryGap: false, axisLine: { lineStyle: { color: "#c5dff0" } }, axisLabel: { color: "#7a97ae", fontSize: 10 } },
+      yAxis: { type: "value", splitLine: { lineStyle: { color: "#e8f1f8", type: "dashed" } }, axisLabel: { color: "#7a97ae", fontSize: 10 } },
+      series: [
+        { name: "隐患总量", type: "line", smooth: true, symbol: "circle", symbolSize: 6, areaStyle: { color: "rgba(47,125,225,0.12)" }, data: [1348, 1332, 1318, 1306, 1298, 1290, STATS.total] },
+        { name: "逾期数", type: "line", smooth: true, symbol: "circle", symbolSize: 6, lineStyle: { type: "dashed" }, data: [46, 41, 36, 30, 24, 20, STATS.overdue] },
+      ],
+    });
+  }
+
+  function renderPie() {
+    const el = $("chart-pie");
+    if (!el) return;
+    pieChart = initChart(el, {
+      color: PALETTE,
+      textStyle: commonText(),
+      tooltip: { trigger: "item", confine: true, formatter: "{b} {c}%" },
+      legend: { show: false },
+      series: [{
+        type: "pie",
+        radius: ["48%", "72%"],
+        center: ["32%", "52%"],
+        itemStyle: { borderColor: "#f8fcff", borderWidth: 2 },
+        label: { show: false },
+        data: PIE_LIVE.map((d, i) => ({ name: d.name, value: d.value, key: d.key, itemStyle: { color: PALETTE[i] } })),
+      }],
+      graphic: PIE_LIVE.map((d, i) => ({
+        type: "text", right: 12, top: 18 + i * 22,
+        style: { text: d.name + "  " + d.value + "%", fill: "#4a6a86", font: "12px Noto Sans SC, Microsoft YaHei, sans-serif" },
+      })),
+    });
+    pieChart.off("click");
+    pieChart.on("click", function (p) {
+      openHazardList({ type: p.name, title: p.name + "类隐患" });
+    });
+  }
+
+  function renderRank() {
+    const el = $("chart-rank");
+    if (!el) return;
+    rankChart = initChart(el, {
+      color: ["#2f7de1"],
+      textStyle: commonText(),
+      tooltip: { trigger: "axis", confine: true, axisPointer: { type: "shadow" }, valueFormatter: (v) => v + "%" },
+      grid: { left: 72, right: 44, top: 8, bottom: 8 },
+      xAxis: { type: "value", max: 100, splitLine: { show: false }, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false } },
+      yAxis: { type: "category", inverse: true, data: PROJECTS.map((p) => p.name), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#4a6a86", fontSize: 12 } },
+      series: [{
+        type: "bar",
+        barWidth: 8,
+        data: PROJECTS.map((p, i) => ({ value: p.rate, id: p.id, itemStyle: { color: i === 4 ? "#f08a24" : "#2f7de1" } })),
+        label: { show: true, position: "right", formatter: "{c}%", color: "#2f7de1", fontFamily: "Rajdhani, sans-serif", fontSize: 12 },
+      }],
+    });
+    rankChart.off("click");
+    rankChart.on("click", function (p) {
+      const proj = PROJECTS[p.dataIndex];
+      if (proj) openProject(proj.id);
+    });
+  }
+
+  function renderPending() {
+    const el = $("chart-pending");
+    if (!el) return;
+    const data = PENDING_LIVE.slice().sort((a, b) => b.value - a.value);
+    const max = Math.max(1, ...data.map((d) => d.value));
+    const colors = ["#2f7de1", "#1aa6b8", "#f08a24", "#e23d3d", "#2ba471"];
+    initChart(el, {
+      textStyle: commonText(),
+      tooltip: { trigger: "axis", confine: true, axisPointer: { type: "shadow" }, valueFormatter: (v) => v + " 条" },
+      grid: { left: 64, right: 48, top: 8, bottom: 8 },
+      xAxis: { type: "value", max: Math.ceil(max * 1.2), splitLine: { show: false }, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false } },
+      yAxis: { type: "category", inverse: true, data: data.map((d) => d.name), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#4a6a86", fontSize: 12 } },
+      series: [{
+        type: "bar",
+        barWidth: 8,
+        data: data.map((d, i) => ({ value: d.value, name: d.name, itemStyle: { color: colors[i % colors.length] } })),
+        label: { show: true, position: "right", formatter: "{c}", color: "#16324f", fontFamily: "Rajdhani, sans-serif", fontSize: 12 },
+      }],
+    }).on("click", function (p) {
+      const item = data[p.dataIndex];
+      if (item) openHazardList({ type: item.name, title: item.name + "类待整改隐患" });
+    });
+  }
+
+  function mapOption() {
+    return {
+      tooltip: {
+        trigger: "item",
+        confine: true,
+        formatter: function (p) {
+          if (!p.data) return p.name;
+          return p.data.name + " · " + p.data.full + "<br/>状态：" + STATUS_MAP[p.data.status] + "<br/>点击下钻";
+        },
+      },
+      geo: {
+        map: "china", roam: false, zoom: 1.15, layoutCenter: ["50%", "55%"], layoutSize: "118%",
+        itemStyle: { areaColor: "#d4eaf8", borderColor: "#7eb6dc", borderWidth: 1 },
+        emphasis: { itemStyle: { areaColor: "#c3e0f4" }, label: { show: false } },
+      },
+      series: [{
+        type: "effectScatter",
+        coordinateSystem: "geo",
+        rippleEffect: { scale: 3.2, brushType: "stroke" },
+        symbolSize: function (val, p) { return p.data.status === "major" ? 16 : 11; },
+        itemStyle: { color: function (p) { return p.data.color; } },
+        data: PROJECTS.map(function (p) {
+          return { id: p.id, name: p.name, full: p.full, status: p.status, color: p.color, value: p.value };
+        }),
+      }],
+    };
+  }
+
+  function bindMapClick(chart) {
+    mapChart = chart;
+    chart.off("click");
+    chart.on("click", function (p) {
+      if (p.data && p.data.id) openProject(p.data.id);
+    });
+  }
+
+  function renderMapFallback() {
+    const el = $("chart-map");
+    if (!el) return;
+    bindMapClick(initChart(el, {
+      title: { text: "地图加载失败 · 点击右侧项目点下钻", left: "center", top: 8, textStyle: { fontSize: 12, color: "#7a97ae", fontWeight: 400 } },
+      xAxis: { show: false },
+      yAxis: { show: false },
+      series: [{
+        type: "scatter",
+        symbolSize: 16,
+        data: PROJECTS.map((p, i) => ({ value: [20 + i * 18, 50], id: p.id, name: p.name, itemStyle: { color: p.color } })),
+        label: { show: true, formatter: "{b}", position: "bottom", color: "#4a6a86", fontSize: 11 },
+      }],
+    }));
+  }
+
+  function renderMap(geo) {
+    const el = $("chart-map");
+    if (!el) return;
+    echarts.registerMap("china", geo);
+    bindMapClick(initChart(el, mapOption()));
+  }
+
+  function loadChinaMap() {
+    const urls = [
+      "https://geo.datav.aliyun.com/areas_v3/bound/100000.json",
+      "https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/json/china.json",
+    ];
+    function tryUrl(i) {
+      if (i >= urls.length) { renderMapFallback(); return; }
+      fetch(urls[i]).then(function (res) {
+        if (!res.ok) throw new Error("bad");
+        return res.json();
+      }).then(renderMap).catch(function () { tryUrl(i + 1); });
+    }
+    tryUrl(0);
+  }
+
+  function bindChips() {
+    const root = $("chips");
+    if (!root || !pieChart) return;
+    root.addEventListener("click", function (e) {
+      const btn = e.target.closest(".chip");
+      if (!btn) return;
+      const on = btn.classList.contains("is-on");
+      root.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("is-on"); });
+      const idx = PIE.findIndex(function (d) { return d.key === btn.dataset.key; });
+      pieChart.dispatchAction({ type: "downplay", seriesIndex: 0 });
+      if (!on && idx >= 0) {
+        btn.classList.add("is-on");
+        pieChart.dispatchAction({ type: "highlight", seriesIndex: 0, dataIndex: idx });
+        openHazardList({ type: PIE[idx].name, title: PIE[idx].name + "类隐患" });
+      }
+    });
+  }
+
+  /* ——— overlay ——— */
+  const mask = $("mask");
+  const drawer = $("drawer");
+  const modalReport = $("modal-report");
+  const modalQa = $("modal-qa");
+
+  function closeAll() {
+    [drawer, modalReport, modalQa].forEach(function (el) {
+      if (!el) return;
+      el.classList.remove("is-open");
+      el.setAttribute("aria-hidden", "true");
+    });
+    mask.classList.remove("is-open");
+    document.body.classList.remove("lock");
+    reportCharts.forEach(function (c) { c.dispose(); });
+    reportCharts = [];
+  }
+
+  function openMask() {
+    mask.classList.add("is-open");
+    document.body.classList.add("lock");
+  }
+
+  function openDrawer() {
+    closeAll();
+    openMask();
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+  }
+
+  function crumb(parts) {
+    return parts.map(function (p, i) {
+      if (p.fn) return '<button type="button" data-crumb="' + i + '">' + p.label + "</button>";
+      return "<span>" + p.label + "</span>";
+    }).join(" / ");
+  }
+
+  function bindCrumbs(parts) {
+    $("crumbs").querySelectorAll("[data-crumb]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const fn = parts[Number(btn.dataset.crumb)].fn;
+        if (fn) fn();
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]; });
+  }
+
+  function renderHazardRows(list) {
+    if (!list.length) return '<p class="hint-bar">该筛选下暂无演示条目（全量 1,286 条为汇总，下钻展示典型样本）。</p>';
+    return '<ul class="hz-list">' + list.map(function (h) {
+      const p = projectById(h.project);
+      return '<li><button type="button" class="hz-item" data-hid="' + h.id + '">' +
+        '<div class="hz-top"><span class="hz-id">' + h.id + '</span>' +
+        '<span class="tag ' + tagClass(h.status, h.level) + '">' + h.level + " · " + h.status + "</span>" +
+        '<span class="tag blue">' + h.type + "</span></div>" +
+        '<div class="hz-meta">' + (p ? p.name + " · " : "") + escapeHtml(h.loc) + " · 责任人 " + h.owner + " · 时限 " + h.due + "</div>" +
+        "</button></li>";
+    }).join("") + "</ul>";
+  }
+
+  function openProjectList() {
+    openDrawer();
+    $("drawer-title").textContent = "选择项目";
+    const parts = [{ label: "集团总览" }];
+    $("crumbs").innerHTML = crumb(parts);
+    $("drawer-body").innerHTML =
+      '<p class="hint-bar">集团 → 项目 → 隐患条目。下列为 5 个施工项目（示意样本）。</p>' +
+      PROJECTS.map(function (p) {
+        return '<button type="button" class="proj-item" data-pid="' + p.id + '"><div class="proj-main">' +
+          "<strong>" + p.name + "</strong> " + p.full +
+          '</div><span class="tag ' + (p.rate < 90 ? "warn" : "ok") + '">完成率 ' + p.rate + "%</span></button>";
+      }).join("");
+    $("drawer-body").querySelectorAll("[data-pid]").forEach(function (btn) {
+      btn.addEventListener("click", function () { openProject(btn.dataset.pid); });
+    });
+  }
+
+  function openProject(pid) {
+    const p = projectById(pid);
+    if (!p) return;
+    openDrawer();
+    $("drawer-title").textContent = p.name + " · " + p.full;
+    const parts = [
+      { label: "集团总览", fn: openProjectList },
+      { label: p.name },
+    ];
+    $("crumbs").innerHTML = crumb(parts);
+    bindCrumbs(parts);
+    const list = hazardsOf(pid);
+    $("drawer-body").innerHTML =
+      '<p class="hint-bar">完成率 ' + p.rate + "% · 台账 " + p.total + " 条 · 本月新增 " + p.monthNew + " 条。下列为可演示的典型条目。</p>" +
+      renderHazardRows(list);
+    bindHazardClicks(list, function () { openProject(pid); });
+  }
+
+  function openHazardList(filter) {
+    openDrawer();
+    const title = filter.title || "隐患列表";
+    $("drawer-title").textContent = title;
+    const parts = [
+      { label: "集团总览", fn: openProjectList },
+      { label: title },
+    ];
+    $("crumbs").innerHTML = crumb(parts);
+    bindCrumbs(parts);
+    let list = HAZARDS.slice();
+    if (filter.type) list = list.filter(function (h) { return h.type === filter.type; });
+    if (filter.status) list = list.filter(function (h) { return h.status === filter.status || (filter.status === "重大" && h.level === "重大"); });
+    if (filter.level) list = list.filter(function (h) { return h.level === filter.level; });
+    $("drawer-body").innerHTML = '<p class="hint-bar">集团汇总下钻到条目（演示样本，非正式全量库）。</p>' + renderHazardRows(list);
+    bindHazardClicks(list, function () { openHazardList(filter); });
+  }
+
+  function bindHazardClicks(list, back) {
+    $("drawer-body").querySelectorAll("[data-hid]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const h = list.find(function (x) { return x.id === btn.dataset.hid; }) || HAZARDS.find(function (x) { return x.id === btn.dataset.hid; });
+        if (h) openHazard(h, back);
+      });
+    });
+  }
+
+  function openHazard(h, back) {
+    const p = projectById(h.project);
+    openDrawer();
+    $("drawer-title").textContent = h.id;
+    const parts = [
+      { label: "集团总览", fn: openProjectList },
+      { label: p ? p.name : "项目", fn: function () { openProject(h.project); } },
+      { label: h.id },
+    ];
+    $("crumbs").innerHTML = crumb(parts);
+    bindCrumbs(parts);
+    $("drawer-body").innerHTML =
+      '<div class="hz-top"><span class="tag ' + tagClass(h.status, h.level) + '">' + h.level + " · " + h.status + "</span>" +
+      '<span class="tag blue">' + h.type + "</span></div>" +
+      "<p style='margin:12px 0;font-size:14px'>" + escapeHtml(h.desc) + "</p>" +
+      '<div class="detail-grid">' +
+      "<div><div class='k'>项目</div><div class='v'>" + (p ? p.name + " · " + p.full : "") + "</div></div>" +
+      "<div><div class='k'>位置</div><div class='v'>" + escapeHtml(h.loc) + "</div></div>" +
+      "<div><div class='k'>整改责任人</div><div class='v'>" + h.owner + "</div></div>" +
+      "<div><div class='k'>项目安全负责人</div><div class='v'>" + h.safety + "</div></div>" +
+      "<div><div class='k'>集团分管领导</div><div class='v'>" + h.leader + "</div></div>" +
+      "<div><div class='k'>整改时限</div><div class='v'>" + h.due + "</div></div>" +
+      "</div>" +
+      "<div class='report-sec'><h4>跟踪与升级</h4><ul class='timeline'>" +
+      h.timeline.map(function (t) { return "<li><div class='when'>" + t.when + "</div>" + escapeHtml(t.what) + "</li>"; }).join("") +
+      "</ul></div>" +
+      (h.status === "已闭环"
+        ? "<p class='hint-bar'>该条已闭环，看板完成率已计入。</p>"
+        : '<button class="btn btn-primary" type="button" id="btn-close-hz">整改完成，录入闭环</button>');
+    const closeBtn = $("btn-close-hz");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        if (window.PMSafetyStore) PMSafetyStore.closeHazard(h.id);
+        refreshDashboard();
+        const updated = HAZARDS.find(function (x) { return x.id === h.id; });
+        if (updated) openHazard(updated);
+      });
+    }
+  }
+
+  /* ——— report ——— */
+  function openReport() {
+    closeAll();
+    openMask();
+    modalReport.classList.add("is-open");
+    modalReport.setAttribute("aria-hidden", "false");
+    $("report-body").innerHTML = '<p class="hint-bar">正在按统一库汇总趋势、完成率、高发问题与项目排名…</p>';
+    setTimeout(fillReport, 500);
+  }
+
+  function fillReport() {
+    $("report-body").innerHTML =
+      '<p class="hint-bar">已自动生成并模拟推送集团分管领导（原人工约 3 天）。</p>' +
+      '<div class="report-sec"><h4>隐患数量趋势</h4><p>近一月隐患总量由 1,348 降至当前 <b>' + STATS.total.toLocaleString("en-US") + '</b>，逾期 <b>' + STATS.overdue + '</b> 条。</p></div>' +
+      '<div class="report-charts"><div class="chart-mount" id="rpt-trend"></div><div class="chart-mount" id="rpt-rank"></div></div>' +
+      '<div class="report-sec"><h4>整改完成率</h4><p>集团完成率 <b>' + STATS.rate + '%</b>。项目E、项目D仍低于 90%，需重点盯办。</p></div>' +
+      '<div class="report-sec"><h4>高发问题分析</h4><p>专项中防尘占 28%、高温 22%、<b>消防 18%</b>。消防通道占用、临时用电不规范在项目D/E 重复出现。</p></div>' +
+      '<div class="report-sec"><h4>各项目排名</h4><p>' + PROJECTS.map(function (p, i) {
+        return (i + 1) + " " + p.name + " " + p.rate + "%";
+      }).join(" · ") + "。点击看板排名条可下钻条目。</p></div>";
+    const t = $("rpt-trend");
+    const r = $("rpt-rank");
+    if (t) {
+      reportCharts.push(initChart(t, {
+        grid: { left: 28, right: 8, top: 24, bottom: 22 },
+        tooltip: { trigger: "axis", confine: true },
+        xAxis: { type: "category", data: ["05-15", "06-01", "06-12"], axisLabel: { fontSize: 10 } },
+        yAxis: { splitLine: { lineStyle: { type: "dashed", color: "#e8f1f8" } } },
+        series: [{ type: "line", smooth: true, data: [1348, 1306, STATS.total], areaStyle: { color: "rgba(47,125,225,.12)" }, itemStyle: { color: "#2f7de1" } }],
+      }, false));
+    }
+    if (r) {
+      reportCharts.push(initChart(r, {
+        grid: { left: 56, right: 36, top: 8, bottom: 8 },
+        xAxis: { type: "value", max: 100, show: false },
+        yAxis: { type: "category", inverse: true, data: PROJECTS.map((p) => p.name), axisTick: { show: false }, axisLine: { show: false } },
+        series: [{ type: "bar", barWidth: 8, data: PROJECTS.map((p) => p.rate), itemStyle: { color: "#2f7de1" }, label: { show: true, position: "right", formatter: "{c}%" } }],
+      }, false));
+    }
+  }
+
+  /* ——— QA ——— */
+  function openQa() {
+    closeAll();
+    openMask();
+    modalQa.classList.add("is-open");
+    modalQa.setAttribute("aria-hidden", "false");
+  }
+
+  function ask(q) {
+    const hit = QA.find(function (x) { return q.replace(/\s/g, "").indexOf(x.q.replace(/\s/g, "").slice(0, 8)) >= 0 || x.q.indexOf(q.replace(/\s/g, "").slice(0, 6)) >= 0 || q.indexOf("消防") >= 0 && x.q.indexOf("消防") >= 0 || q.indexOf("完成率") >= 0 && x.q.indexOf("完成率") >= 0 || (q.indexOf("新增") >= 0 && x.q.indexOf("新增") >= 0); });
+    const a = hit ? hit.a : "Demo 预置了 3 个问题：本月某项目新增多少条、完成率最低的项目、消防类占比。正式环境将按统一库检索。";
+    const log = $("qa-log");
+    log.innerHTML += '<div class="qa-turn user"><div class="who">您</div><div class="bubble">' + escapeHtml(q) + "</div></div>";
+    log.innerHTML += '<div class="qa-turn bot"><div class="who">智能问答</div><div class="bubble">' + a + "</div></div>";
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function observeResize() {
+    const ro = new ResizeObserver(function () { charts.forEach(function (c) { try { c.resize(); } catch (e) {} }); });
+    ["chart-map", "chart-trend", "chart-pie", "chart-pending", "chart-rank"].forEach(function (id) {
+      const el = $(id);
+      if (el) ro.observe(el);
+    });
+  }
+
+  function refreshDashboard() {
+    applyLive();
+    paintKpis();
+    paintBanner();
+    renderTrend();
+    renderPie();
+    renderPending();
+    renderRank();
+  }
+
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  window.addEventListener("load", function () {
+    applyLive();
+    paintKpis();
+    renderTrend();
+    renderPie();
+    renderPending();
+    renderRank();
+    loadChinaMap();
+    bindChips();
+    observeResize();
+    paintBanner();
+
+    $("qa-chips").innerHTML = QA.map(function (x) {
+      return '<button type="button" class="qa-chip">' + x.q + "</button>";
+    }).join("");
+    $("qa-chips").addEventListener("click", function (e) {
+      const b = e.target.closest(".qa-chip");
+      if (b) ask(b.textContent);
+    });
+    $("qa-ask").addEventListener("click", function () {
+      const q = $("qa-input").value.trim();
+      if (!q) return;
+      ask(q);
+      $("qa-input").value = "";
+    });
+    $("qa-input").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") $("qa-ask").click();
+    });
+
+    $("btn-qa").addEventListener("click", openQa);
+    $("btn-month").addEventListener("click", openReport);
+    $("btn-month-2").addEventListener("click", openReport);
+
+    document.querySelectorAll(".kpi").forEach(function (el) {
+      el.addEventListener("click", function () {
+        const f = el.dataset.filter;
+        if (f === "all" || f === "rate") openProjectList();
+        else if (f === "重大") openHazardList({ level: "重大", status: "重大", title: "重大隐患" });
+        else openHazardList({ status: f, title: f + "隐患" });
+      });
+    });
+    document.querySelectorAll(".alert").forEach(function (el) {
+      el.addEventListener("click", function () {
+        const f = el.dataset.filter;
+        if (f === "重大") openHazardList({ level: "重大", title: "重大隐患即时预警" });
+        else openHazardList({ status: f, title: f + "跟踪" });
+      });
+    });
+
+    $("drawer-close").addEventListener("click", closeAll);
+    document.querySelectorAll("[data-close]").forEach(function (b) {
+      b.addEventListener("click", closeAll);
+    });
+    mask.addEventListener("click", closeAll);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAll(); });
+
+    function showBoard() {
+      document.body.classList.remove("show-report");
+      refreshDashboard();
+    }
+    function showReportForm() {
+      closeAll();
+      document.body.classList.add("show-report");
+      var due = document.querySelector("#form [name=due]");
+      if (due && !due.value) {
+        var t = new Date();
+        t.setDate(t.getDate() + 7);
+        due.value = t.toISOString().slice(0, 10);
+      }
+    }
+    $("btn-go-report").addEventListener("click", showReportForm);
+    $("btn-back-board").addEventListener("click", showBoard);
+    $("btn-cancel-report").addEventListener("click", showBoard);
+    $("submit").addEventListener("click", function () {
+      if (!window.PMSafetyStore) return;
+      var row = PMSafetyStore.addFromForm($("form"));
+      var toast = $("toast");
+      toast.textContent = "已入库 " + row.id + " · 看板已更新";
+      toast.classList.add("on");
+      setTimeout(function () { toast.classList.remove("on"); }, 2200);
+      showBoard();
+      setTimeout(function () {
+        var h = HAZARDS.find(function (x) { return x.id === row.id; });
+        if (h) openHazard(h);
+      }, 200);
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

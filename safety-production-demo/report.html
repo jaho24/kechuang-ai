@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>安全隐患排查上报 · Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <span class="badge-demo">框架演示 · 本地模拟库</span>
+  <div class="shell">
+    <div class="report-wrap">
+      <a class="back" href="index.html">← 返回安全态势看板</a>
+      <article class="permit">
+        <h1>安全隐患排查上报</h1>
+        <p class="hint">
+          提交后写入浏览器本地模拟库（非正式数据库）。返回看板可看到隐患总数、专项分布与下钻列表更新。
+          正式建设可自研本页或对接简道云 / fireport。
+        </p>
+        <form class="form" id="form">
+          <div class="field">
+            <label>所属项目</label>
+            <select name="project">
+              <option value="A">项目A · 港区仓储一期</option>
+              <option value="B">项目B · 物流枢纽扩建</option>
+              <option value="C">项目C · 智能制造厂房</option>
+              <option value="D">项目D · 配套市政工程</option>
+              <option value="E">项目E · 综合办公楼</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>专项领域</label>
+            <select name="type">
+              <option>日常排查</option>
+              <option>防尘</option>
+              <option>高温</option>
+              <option selected>消防</option>
+              <option>防汛</option>
+              <option>复工复产</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>隐患等级</label>
+            <select name="level">
+              <option>一般隐患</option>
+              <option>重大隐患</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>整改责任人</label>
+            <input name="owner" type="text" placeholder="如：张安全" value="张安全" />
+          </div>
+          <div class="field">
+            <label>整改时限</label>
+            <input name="due" type="date" />
+          </div>
+          <div class="field">
+            <label>发现位置</label>
+            <input name="loc" type="text" placeholder="如：3号塔吊作业面" />
+          </div>
+          <div class="field full">
+            <label>隐患描述</label>
+            <textarea name="desc" rows="3" placeholder="简要描述隐患情况…"></textarea>
+          </div>
+        </form>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" id="submit">提交入库</button>
+          <a class="btn btn-ghost" href="index.html">取消</a>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="toast" id="toast">已写入统一库，正在返回看板…</div>
+  <script src="store.js"></script>
+  <script>
+    (function () {
+      var due = document.querySelector("[name=due]");
+      var t = new Date();
+      t.setDate(t.getDate() + 7);
+      due.value = t.toISOString().slice(0, 10);
+      document.getElementById("submit").addEventListener("click", function () {
+        var row = PMSafetyStore.addFromForm(document.getElementById("form"));
+        var toast = document.getElementById("toast");
+        toast.textContent = "已入库 " + row.id + " · 返回看板查看更新";
+        toast.classList.add("on");
+        setTimeout(function () {
+          location.href = "index.html?from=report&id=" + encodeURIComponent(row.id);
+        }, 700);
+      });
+    })();
+  </script>
+</body>
+</html>

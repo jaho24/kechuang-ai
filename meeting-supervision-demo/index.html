@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>会议督查督办系统 · 郑州郑州航空港科创投资集团</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    if (/\bembed=1\b/.test(location.search) || window.self !== window.top) {
+      document.documentElement.classList.add("is-embedded");
+    }
+  </script>
+</head>
+<body class="entry-body">
+  <!-- 身份入口 -->
+  <div class="app-screen is-on" id="screen-entry">
+    <nav class="app-nav">
+      <div class="brand" style="cursor:default">
+        <div class="brand-mark">督</div>
+        <span>郑州航空港科创投资集团 · 会议督查督办系统</span>
+        <span class="badge-demo">DEMO</span>
+      </div>
+    </nav>
+    <main class="entry-main">
+      <div class="entry-head">
+        <h1>请选择登录身份</h1>
+        <p>办公室与领导使用不同入口，演示时可分别体验「材料汇聚分发」与「督办看板决策」。</p>
+      </div>
+      <div class="role-cards">
+        <button class="role-card" type="button" data-go="office">
+          <div class="role-icon office">办</div>
+          <h2>办公室端</h2>
+          <p class="role-user">张璇 · 办公室</p>
+          <ul>
+            <li>上传 PDF / 转录稿 / 图片</li>
+            <li>Agent 识别并整理待办</li>
+            <li>按领导分发并转入督办</li>
+          </ul>
+          <span class="btn btn-primary">进入办公室端</span>
+        </button>
+        <button class="role-card" type="button" data-go="leader">
+          <div class="role-icon leader">领</div>
+          <h2>领导端</h2>
+          <p class="role-user">文钊 · 总经理</p>
+          <ul>
+            <li>红黄绿牌督办看板</li>
+            <li>临期提醒与逾期升级</li>
+            <li>督查周报与智能问答</li>
+          </ul>
+          <span class="btn btn-secondary">进入领导端</span>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- 办公室端 -->
+  <div class="app-screen" id="screen-office">
+    <nav class="app-nav">
+      <button class="brand" type="button" data-go="entry">
+        <div class="brand-mark">督</div>
+        <span>郑州航空港科创投资集团 · 会议督查督办系统</span>
+        <span class="badge-demo">DEMO</span>
+      </button>
+      <div class="nav-right">
+        <button class="nav-switch" type="button" data-go="leader">切换至领导端</button>
+        <button class="nav-icon" type="button" title="消息">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <div class="nav-user">
+          <div class="avatar">张</div>
+          <span>张璇 · 办公室</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="shell">
+      <aside class="sidebar" id="office-sidebar">
+        <button class="side-link active" type="button" data-office="material">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          会议材料
+        </button>
+        <button class="side-link" type="button" data-office="dispatch">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          待办分发
+        </button>
+        <button class="side-link" type="button" data-office="history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          转入记录
+        </button>
+        <button class="side-link" type="button" data-office="inbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          站内信
+        </button>
+      </aside>
+
+      <main class="main">
+        <div class="welcome">欢迎您，张璇！<span>办公室 · 多材料识别与待办分发</span></div>
+        <div class="page-header">
+          <div>
+            <h1 id="office-title">会议材料汇聚</h1>
+            <p class="sub" id="office-sub">上传 PDF / 文字转录稿 / 图片 → Agent 识别 → 结构化提取 → 转入督办</p>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-secondary btn-sm" type="button" id="btn-load-sample">载入示例材料</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="btn-reset">重置 Demo 数据</button>
+          </div>
+        </div>
+
+        <div class="steps" id="steps-bar">
+          <div class="step active" data-step="1"><div class="n">STEP 01</div>上传材料</div>
+          <div class="step" data-step="2"><div class="n">STEP 02</div>Agent 识别</div>
+          <div class="step" data-step="3"><div class="n">STEP 03</div>结构化提取</div>
+          <div class="step" data-step="4"><div class="n">STEP 04</div>转入督办</div>
+        </div>
+
+        <div id="office-workflow">
+          <section class="view active" id="view-1">
+            <div class="panel">
+              <div class="panel-title">上传会议材料</div>
+              <p class="panel-desc">支持同时上传多种来源。Agent 将跨材料对齐同一场会议的决议与任务。</p>
+              <div class="upload-types">
+                <span class="type-chip">PDF 纪要 / 材料</span>
+                <span class="type-chip">文字转录稿 TXT / DOCX</span>
+                <span class="type-chip">图片 JPG / PNG（白板、截图）</span>
+              </div>
+              <div class="upload-zone" id="upload-zone">
+                <div class="icon">↑</div>
+                <h3>拖拽文件到此处，或点击选择</h3>
+                <p>演示可点「载入示例材料」一次加入 PDF、转录稿、白板照片、微信截图</p>
+              </div>
+              <input type="file" id="file-input" multiple accept=".pdf,.txt,.doc,.docx,.jpg,.jpeg,.png,.webp" hidden />
+              <div class="file-list" id="file-list"></div>
+              <div class="btn-group" style="margin-top:20px">
+                <button class="btn btn-primary" type="button" id="btn-to-extract" disabled>下一步：Agent 识别</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-2">
+            <div class="panel">
+              <div class="panel-title">Agent 多模态识别</div>
+              <p class="panel-desc">分别解析 PDF 正文、转录稿语义、图片 OCR，再汇聚为同一场会议的完整信息。</p>
+              <div class="ai-pipeline" id="ai-pipeline">
+                <div class="pipe-node" data-p="0"><div class="dot"></div><div class="t">PDF 解析</div><div class="d">纪要正文</div></div>
+                <div class="pipe-node" data-p="1"><div class="dot"></div><div class="t">转录理解</div><div class="d">发言与表态</div></div>
+                <div class="pipe-node" data-p="2"><div class="dot"></div><div class="t">图片 OCR</div><div class="d">白板 / 截图</div></div>
+                <div class="pipe-node" data-p="3"><div class="dot"></div><div class="t">交叉对齐</div><div class="d">去重汇聚</div></div>
+              </div>
+              <div class="log-console" id="ai-log" style="display:none"></div>
+              <div class="evidence-list" id="evidence-list" style="display:none"></div>
+              <div class="btn-group" style="margin-top:16px">
+                <button class="btn btn-primary" type="button" id="btn-run-ai">开始识别</button>
+                <button class="btn btn-secondary" type="button" data-back="1">返回</button>
+                <button class="btn btn-primary" type="button" id="btn-after-ai" data-next="3" style="display:none">下一步：结构化提取</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-3">
+            <div class="panel">
+              <div class="card-head">
+                <div>
+                  <div class="panel-title" style="margin:0">结构化提取结果</div>
+                  <p class="panel-desc" style="margin:4px 0 0">从会议材料中抽取决议与工作任务，核对后转入督办</p>
+                </div>
+                <span class="tag tag-green">Agent 已整理</span>
+              </div>
+              <div class="panel-title" style="font-size:13px;color:var(--ink-muted);font-weight:400;margin-bottom:8px">会议要素</div>
+              <dl class="kv extract-kv" id="extract-meta"></dl>
+              <div class="panel-title" style="font-size:13px;color:var(--ink-muted);font-weight:400;margin-bottom:8px">核心决议</div>
+              <div class="resolve-list" id="resolve-list"></div>
+              <div class="panel-title" style="font-size:13px;color:var(--ink-muted);font-weight:400;margin-bottom:8px">工作任务</div>
+              <div class="table-wrap">
+                <table class="data" id="task-table">
+                  <thead>
+                    <tr>
+                      <th>事项名称</th>
+                      <th>督办类型</th>
+                      <th>任务分解</th>
+                      <th>责任单位</th>
+                      <th>负责人</th>
+                      <th>分管领导</th>
+                      <th>办结时限</th>
+                      <th>初评牌态</th>
+                      <th>纪要条款</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="btn-group" style="margin-top:16px">
+                <button class="btn btn-primary" type="button" data-next="4">下一步：转入督查督办</button>
+                <button class="btn btn-secondary" type="button" data-back="2">返回</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-4">
+            <div class="panel">
+              <div class="panel-title">转入督查督办</div>
+              <p class="panel-desc">勾选要转入的事项和推送对象，确认后写入督办台账。</p>
+              <div class="card-head" style="margin-top:8px">
+                <div class="panel-title" style="margin:0">推送事项</div>
+                <button class="btn btn-secondary btn-sm" type="button" id="btn-toggle-tasks">全选 / 取消</button>
+              </div>
+              <div class="table-wrap">
+                <table class="data" id="transfer-table">
+                  <thead>
+                    <tr>
+                      <th class="check"><input type="checkbox" id="check-all-tasks" /></th>
+                      <th>事项名称</th>
+                      <th>责任单位</th>
+                      <th>分管领导</th>
+                      <th>办结时限</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="card-head" style="margin-top:20px">
+                <div class="panel-title" style="margin:0">推送领导</div>
+                <button class="btn btn-secondary btn-sm" type="button" id="btn-toggle-leaders">全选 / 取消</button>
+              </div>
+              <div class="leader-grid" id="leader-packs"></div>
+              <div class="btn-group" style="margin-top:20px">
+                <button class="btn btn-primary" type="button" id="btn-push">确认转入并推送</button>
+                <button class="btn btn-secondary" type="button" data-back="3">返回</button>
+              </div>
+              <div id="push-result" style="display:none;margin-top:16px">
+                <span class="tag tag-green">已转入</span>
+                <p id="push-result-text" style="font-size:13px;color:var(--ink-muted);margin-top:12px;line-height:1.6"></p>
+                <button class="btn btn-primary btn-sm" type="button" data-go="leader" style="margin-top:12px">前往领导端查看</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="view" id="view-history">
+          <div class="panel">
+            <div class="panel-title">转入记录</div>
+            <p class="panel-desc">办公室推送至督查督办系统的历史记录（Demo 模拟）。</p>
+            <div id="history-box" class="empty">暂无转入记录。完成「待办分发」推送后将在此显示。</div>
+          </div>
+        </section>
+
+        <section class="view" id="view-inbox">
+          <div class="panel">
+            <div class="panel-title">站内信</div>
+            <p class="panel-desc">领导签收、责任单位回执等消息（Demo 占位）。</p>
+            <div class="msg-item">
+              <div class="meta"><span class="tag tag-green">已读</span> 文钊 · 2026-08-12 17:45</div>
+              <div class="body">已收到安委会〔2026〕12号督办事项包。</div>
+            </div>
+            <div class="msg-item">
+              <div class="meta"><span class="tag tag-blue">回执</span> 赵磊 · 2026-08-13 09:20</div>
+              <div class="body">国际港务公司已接收基坑支护隐患整改事项并反馈整改计划。</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- 领导端 -->
+  <div class="app-screen" id="screen-leader">
+    <nav class="app-nav">
+      <button class="brand" type="button" data-go="entry">
+        <div class="brand-mark">督</div>
+        <span>郑州航空港科创投资集团 · 会议督查督办系统</span>
+        <span class="badge-demo">DEMO</span>
+      </button>
+      <div class="nav-right">
+        <button class="nav-switch" type="button" data-go="office">切换至办公室端</button>
+        <button class="nav-icon" type="button" title="消息" id="btn-bell">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="nav-user">
+          <div class="avatar">文</div>
+          <span>文钊 · 总经理</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="shell">
+      <aside class="sidebar" id="leader-sidebar">
+        <button class="side-link active" type="button" data-view="board">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          任务清单
+        </button>
+        <button class="side-link" type="button" data-view="report">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          督查周报
+        </button>
+        <button class="side-link" type="button" data-view="msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          站内信
+        </button>
+      </aside>
+
+      <main class="main">
+        <div class="welcome">欢迎您，文钊！<span id="sync-hint">总经理 · 督办事项总览</span></div>
+
+        <section class="view active" id="view-board">
+          <div class="attention-rail" id="attention" hidden>
+            <div class="attention-rail-head">
+              <div class="attn-live">
+                <span class="live-dot"></span>
+                <div>
+                  <div class="attention-kicker">AUTO PUSH</div>
+                  <div class="attention-title">需关注推送</div>
+                </div>
+              </div>
+              <div class="attn-spacer"></div>
+              <div class="attention-nav">
+                <button class="attn-nav" type="button" id="attn-prev" aria-label="上一组">‹</button>
+                <span class="attn-index" id="attn-index">1 / 1</span>
+                <button class="attn-nav" type="button" id="attn-next" aria-label="下一组">›</button>
+              </div>
+            </div>
+            <div class="attn-viewport">
+              <div class="attn-track" id="attention-track"></div>
+            </div>
+            <div class="attn-scan" aria-hidden="true"></div>
+          </div>
+
+          <div class="stat-row tech-stats">
+            <div class="stat-card">
+              <h3>红黄绿牌</h3>
+              <div class="stat-inline">
+                <button class="stat-item" type="button" data-filter-card="绿"><span class="dot-green"></span>绿牌 <span class="num" id="s-green">0</span></button>
+                <button class="stat-item" type="button" data-filter-card="黄"><span class="dot-yellow"></span>黄牌 <span class="num" id="s-yellow">0</span></button>
+                <button class="stat-item" type="button" data-filter-card="红"><span class="dot-red"></span>红牌 <span class="num" id="s-red">0</span></button>
+              </div>
+            </div>
+            <div class="stat-card">
+              <h3>进度统计</h3>
+              <div class="stat-inline">
+                <button class="stat-item" type="button" data-filter-status="all"><span class="dot-black"></span>事项总数 <span class="num" id="s-total">0</span></button>
+                <button class="stat-item" type="button" data-filter-status="未开始"><span class="dot-black"></span>未开始 <span class="num" id="s-todo">0</span></button>
+                <button class="stat-item" type="button" data-filter-status="进行中"><span class="dot-black"></span>进行中 <span class="num" id="s-doing">0</span></button>
+                <button class="stat-item" type="button" data-filter-status="已完成"><span class="dot-black"></span>已完成 <span class="num" id="s-done">0</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel todo-panel">
+            <div class="card-head">
+              <div>
+                <h3>办公室推送 · 待办事项</h3>
+                <p class="panel-desc" style="margin:4px 0 0" id="push-from-hint">来自办公室转入的督办事项，可按类型、时间、责任单位筛选</p>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-secondary btn-sm" type="button" id="btn-seed">载入演示数据</button>
+                <button class="btn btn-primary btn-sm" type="button" id="btn-refresh">刷新</button>
+              </div>
+            </div>
+
+            <div class="todo-filters">
+              <label class="filter-field">
+                <span>类型</span>
+                <select class="filter-select" id="filter-type"></select>
+              </label>
+              <label class="filter-field">
+                <span>时间</span>
+                <select class="filter-select" id="filter-time">
+                  <option value="">全部时间</option>
+                  <option value="overdue">已逾期</option>
+                  <option value="due7">7 日内到期</option>
+                  <option value="month">本月到期</option>
+                  <option value="later">本月之后</option>
+                </select>
+              </label>
+              <label class="filter-field">
+                <span>责任单位</span>
+                <select class="filter-select" id="filter-owner"></select>
+              </label>
+            </div>
+
+            <div class="todo-tabs">
+              <div class="tab-row">
+                <span class="tab-label">状态</span>
+                <div class="tab-group" id="tab-status">
+                  <button class="todo-tab active" type="button" data-status="">全部</button>
+                  <button class="todo-tab" type="button" data-status="未开始">未开始</button>
+                  <button class="todo-tab" type="button" data-status="进行中">进行中</button>
+                  <button class="todo-tab" type="button" data-status="已完成">已完成</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="todo-cards" id="todo-cards"></div>
+            <div class="empty" id="empty-state" style="display:none">
+              暂无推送事项。请先在办公室端完成转入，或点击「载入演示数据」。
+            </div>
+            <div class="pager">
+              <span id="pager-total">共 0 条</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-msg">
+          <div class="panel">
+            <div class="panel-title">自动化提醒与升级</div>
+            <p class="panel-desc">按办结时限监测：临期推送负责人，逾期自动升级分管领导，并评定红黄绿牌。</p>
+            <div id="msg-list"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-report">
+          <div class="panel">
+            <div class="card-head">
+              <div>
+                <div class="panel-title" style="margin:0">自动报表生成</div>
+                <p class="panel-desc" style="margin:4px 0 0">每周自动汇总各督办事项进展，生成督查周报并推送集团领导，替代人工逐项收集</p>
+              </div>
+              <button class="btn btn-primary btn-sm" type="button" id="btn-report">生成本周周报</button>
+            </div>
+            <div class="report-layout">
+              <aside class="report-hist">
+                <div class="report-hist-title">周报档案</div>
+                <div id="report-hist"></div>
+              </aside>
+              <div id="report-box" class="empty">请选择左侧历史周报，或点击「生成本周周报」按当前督办台账自动汇总。</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="qa-widget" id="qa-widget">
+      <div class="qa-panel" id="qa-panel" hidden>
+        <div class="qa-panel-head">
+          <div class="qa-bot-mark">AI</div>
+          <div>
+            <div class="qa-panel-title">智能问答</div>
+            <div class="qa-panel-sub" id="qa-panel-sub">连接大模型 · 按台账与纪要作答</div>
+          </div>
+          <div class="qa-panel-actions">
+            <button class="qa-panel-close" type="button" id="btn-qa-cfg" aria-label="模型设置" title="模型设置">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+            <button class="qa-panel-close" type="button" id="btn-qa-close" aria-label="关闭">×</button>
+          </div>
+        </div>
+        <div class="qa-cfg" id="qa-cfg" hidden>
+          <label for="qa-cfg-url">问答服务地址</label>
+          <input id="qa-cfg-url" placeholder="http://127.0.0.1:8787/api/qa" />
+          <p class="qa-cfg-hint">默认连接本机 <code>node server.js</code>。密钥只放在项目 <code>.env</code>，不会写入页面。</p>
+          <button class="btn btn-primary btn-sm" type="button" id="btn-qa-cfg-save">保存</button>
+        </div>
+        <div class="qa-chips" id="qa-chips"></div>
+        <div class="qa-log" id="qa-log"></div>
+        <div class="qa-input-row">
+          <input id="qa-input" placeholder="输入问题，或点上方示例…" />
+          <button class="qa-send" type="button" id="btn-qa" aria-label="发送">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="qa-fab" type="button" id="btn-qa-fab" aria-label="打开智能问答">
+        <span class="qa-fab-icon qa-fab-chat">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span class="qa-fab-icon qa-fab-x">×</span>
+      </button>
+    </div>
+
+    <div class="drawer-overlay" id="overlay"></div>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="tag tag-blue" id="d-id" style="margin-bottom:8px">—</div>
+          <h2 id="d-title">—</h2>
+        </div>
+        <button class="btn btn-secondary btn-sm" type="button" id="btn-close">关闭</button>
+      </div>
+      <div class="drawer-body">
+        <div class="push-banner" id="d-push-meta">办公室推送</div>
+        <dl class="kv">
+          <dt>责任单位</dt><dd id="d-owner">—</dd>
+          <dt>负责人</dt><dd id="d-person">—</dd>
+          <dt>分管领导</dt><dd id="d-leader">—</dd>
+          <dt>办结时限</dt><dd id="d-deadline">—</dd>
+          <dt>红黄绿牌</dt><dd id="d-card">—</dd>
+          <dt>任务状态</dt><dd id="d-status">—</dd>
+          <dt>督办类型</dt><dd id="d-type">—</dd>
+          <dt>纪要来源</dt><dd id="d-source">—</dd>
+          <dt>纪要条款</dt><dd id="d-clause">—</dd>
+          <dt>知会范围</dt><dd id="d-notify">—</dd>
+          <dt>报送节奏</dt><dd id="d-cycle">—</dd>
+        </dl>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">完成进度</div>
+        <div class="progress" id="d-progress-bar"><i style="width:0%"></i></div>
+        <div style="font-size:13px;margin-bottom:20px" id="d-progress-text">0%</div>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">事项说明</div>
+        <p style="font-size:14px;line-height:1.6;margin-bottom:16px" id="d-desc">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">纪要原文摘录</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--ink-muted)" id="d-quote">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">任务分解</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--ink-muted)" id="d-nodes">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">本周进展</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px" id="d-week">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">识别来源</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--ink-muted)" id="d-evidence">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">关联纪要</div>
+        <p style="margin-bottom:20px"><button class="btn-link" type="button" id="d-minutes-link">查看关联会议纪要</button></p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">办理时间线</div>
+        <div class="timeline" id="d-timeline"></div>
+      </div>
+      <div class="drawer-foot">
+        <button class="btn btn-secondary" type="button" id="btn-close-2">关闭</button>
+      </div>
+    </aside>
+
+    <div class="minutes-modal" id="minutes-modal" hidden>
+      <div class="minutes-dialog">
+        <div class="minutes-head">
+          <div>
+            <div class="tag tag-blue" id="m-no">—</div>
+            <h2 id="m-title">—</h2>
+            <p class="panel-desc" id="m-meta" style="margin-top:6px"></p>
+          </div>
+          <button class="btn btn-secondary btn-sm" type="button" id="btn-close-minutes">关闭</button>
+        </div>
+        <div class="minutes-body" id="m-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const S = DemoStore;
+      let state = S.load();
+      const $ = (sel, root) => (root || document).querySelector(sel);
+      const $$ = (sel, root) => (root || document).querySelectorAll(sel);
+      const titles = {
+        entry: '会议督查督办系统 · 郑州航空港科创投资集团',
+        office: '办公室端 · 会议督查督办系统',
+        leader: '领导端 · 会议督查督办系统',
+      };
+
+      const embedded = document.documentElement.classList.contains('is-embedded');
+
+      function parseHash() {
+        const h = (location.hash || '').replace('#', '');
+        if (h === 'office') return { role: 'office' };
+        if (h === 'leader') return { role: 'leader', view: 'board' };
+        if (h === 'msg' || h === 'report') return { role: 'leader', view: h };
+        if (h === 'qa') return { role: 'leader', view: 'board', qa: true };
+        return { role: embedded ? 'office' : 'entry' };
+      }
+
+      function showRole(role, leaderView, extra) {
+        if (embedded && role === 'entry') role = 'office';
+        $('#screen-entry').classList.toggle('is-on', role === 'entry');
+        $('#screen-office').classList.toggle('is-on', role === 'office');
+        $('#screen-leader').classList.toggle('is-on', role === 'leader');
+        document.body.classList.toggle('entry-body', role === 'entry');
+        document.title = titles[role] || titles.entry;
+        const hash = role === 'leader' && leaderView && leaderView !== 'board'
+          ? '#' + leaderView
+          : '#' + role;
+        if (location.hash !== hash) history.replaceState(null, '', hash);
+        if (embedded && window.parent !== window) {
+          window.parent.postMessage({ type: 'supervision-role', role }, '*');
+        }
+        state = S.load();
+        if (role === 'office') Office.enter();
+        if (role === 'leader') {
+          $('#drawer').classList.remove('open');
+          $('#overlay').classList.remove('open');
+          Leader.enter(leaderView || 'board', extra && extra.qa);
+        }
+      }
+
+      const Office = (function () {
+        let running = false;
+        let officeSection = 'material';
+        const meetingTodos = () => S.SAMPLE_TODOS.filter((t) => t.source === '安委会〔2026〕12号');
+        const pick = { tasks: new Set(), leaders: new Set(), ready: false };
+
+        function ensurePick() {
+          if (pick.ready) return;
+          meetingTodos().forEach((t) => pick.tasks.add(t.id));
+          S.LEADER_PACKS.forEach((p) => pick.leaders.add(p.leader));
+          pick.ready = true;
+        }
+
+        function resetPick() {
+          pick.tasks.clear();
+          pick.leaders.clear();
+          pick.ready = false;
+        }
+
+        function selectedTasks() {
+          return meetingTodos().filter((t) => pick.tasks.has(t.id));
+        }
+
+        function switchOfficeSection(section) {
+          officeSection = section;
+          $$('#office-sidebar .side-link[data-office]').forEach((el) => {
+            el.classList.toggle('active', el.dataset.office === section);
+          });
+          const showWorkflow = section === 'material' || section === 'dispatch';
+          $('#steps-bar').style.display = showWorkflow ? '' : 'none';
+          $('#office-workflow').style.display = showWorkflow ? '' : 'none';
+          $('#office-title').textContent =
+            section === 'material' ? '会议材料汇聚' :
+            section === 'dispatch' ? '待办分发' :
+            section === 'history' ? '转入记录' : '站内信';
+          $('#office-sub').textContent =
+            section === 'material' ? '上传 PDF / 文字转录稿 / 图片 → Agent 识别 → 结构化提取 → 转入督办' :
+            section === 'dispatch' ? '勾选推送事项和推送领导，确认后转入督办' :
+            section === 'history' ? '查看本次及历史推送至督查督办的转入结果（Demo 模拟）' :
+            '领导签收、责任单位回执等消息（Demo 占位）';
+          $$('#screen-office .view').forEach((v) => v.classList.remove('active'));
+          if (showWorkflow) {
+            goStep(section === 'material' ? (state.extracted ? 2 : 1) : (state.pushed ? 4 : 3));
+          } else if (section === 'history') {
+            $('#view-history').classList.add('active');
+            renderHistory();
+          } else {
+            $('#view-inbox').classList.add('active');
+          }
+        }
+
+        function goStep(n) {
+          if (officeSection !== 'material' && officeSection !== 'dispatch') return;
+          $$('#office-workflow .view').forEach((v) => v.classList.remove('active'));
+          $('#view-' + n).classList.add('active');
+          $$('#steps-bar .step').forEach((el) => {
+            const s = Number(el.dataset.step);
+            el.classList.toggle('active', s === n);
+            el.classList.toggle('done', s < n);
+          });
+          if (n <= 2) officeSection = 'material';
+          if (n >= 3) officeSection = 'dispatch';
+          $$('#office-sidebar .side-link[data-office]').forEach((el) => {
+            const key = el.dataset.office;
+            el.classList.toggle('active', (key === 'material' && n <= 2) || (key === 'dispatch' && n >= 3));
+          });
+          if (n === 3) renderExtract();
+          if (n === 4) renderPacks();
+        }
+
+        function renderHistory() {
+          const box = $('#history-box');
+          if (!state.pushed || !state.lastPushAt) {
+            box.className = 'empty';
+            box.innerHTML = '暂无转入记录。完成「待办分发」推送后将在此显示。';
+            return;
+          }
+          box.className = '';
+          const when = new Date(state.lastPushAt).toLocaleString('zh-CN', { hour12: false });
+          const pushed = (state.todos || []).filter((t) => t.source === '安委会〔2026〕12号');
+          const leaders = state.lastPushLeaders && state.lastPushLeaders.length
+            ? state.lastPushLeaders.join('、')
+            : '—';
+          const rows = pushed.map((t) => `
+            <tr>
+              <td style="font-weight:500">${t.title}</td>
+              <td>${t.owner}</td>
+              <td>${t.leader}</td>
+              <td>${t.deadline}</td>
+            </tr>
+          `).join('');
+          box.innerHTML = `
+            <div class="msg-item">
+              <div class="meta"><span class="tag tag-green">已转入</span> ${when} · ${pushed.length} 项 · 推送 ${leaders}</div>
+            </div>
+            <div class="table-wrap" style="margin-top:12px">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>事项名称</th>
+                    <th>责任单位</th>
+                    <th>分管领导</th>
+                    <th>办结时限</th>
+                  </tr>
+                </thead>
+                <tbody>${rows || '<tr><td colspan="4" class="cell-muted">无事项</td></tr>'}</tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        function renderFiles() {
+          const list = $('#file-list');
+          $('#btn-to-extract').disabled = !state.files.length;
+          if (!state.files.length) { list.innerHTML = ''; return; }
+          list.innerHTML = state.files.map((f) => `
+            <div class="file-chip" data-id="${f.id}">
+              <div class="ftype">${f.type}</div>
+              <div class="meta">
+                <div class="name">${f.name}</div>
+                <div class="size">${f.size} · ${f.source} · ${f.kind === 'image' ? '图片识别' : f.kind === 'transcript' ? '文字转录' : '文档解析'}</div>
+              </div>
+              <button class="remove" type="button">×</button>
+            </div>
+          `).join('');
+          list.querySelectorAll('.remove').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const id = btn.closest('.file-chip').dataset.id;
+              state.files = state.files.filter((x) => x.id !== id);
+              S.save(state);
+              renderFiles();
+            });
+          });
+        }
+
+        function loadSamples() {
+          state.files = S.SAMPLE_MATERIALS.map((x) => Object.assign({}, x));
+          S.save(state);
+          renderFiles();
+          S.toast('已载入 PDF、转录稿、白板照片、微信截图', 'success');
+        }
+
+        function addDroppedFiles(fileList) {
+          const arr = Array.from(fileList || []);
+          if (!arr.length) { loadSamples(); return; }
+          arr.forEach((file) => {
+            const name = file.name.toLowerCase();
+            let kind = 'pdf';
+            let type = 'FILE';
+            if (/\.(png|jpe?g|webp|gif)$/.test(name)) { kind = 'image'; type = name.split('.').pop().toUpperCase(); }
+            else if (/\.(txt|docx?)$/.test(name)) { kind = 'transcript'; type = name.split('.').pop().toUpperCase(); }
+            else if (/\.pdf$/.test(name)) { kind = 'pdf'; type = 'PDF'; }
+            state.files.push({
+              id: 'u-' + Date.now() + '-' + Math.random().toString(16).slice(2),
+              name: file.name,
+              type: type,
+              kind: kind,
+              size: file.size > 1048576 ? (file.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(file.size / 1024)) + ' KB',
+              source: '本地上传',
+              evidence: kind === 'image' ? '图片已接收，演示按 OCR 样例识别。' : kind === 'transcript' ? '转录稿已接收，演示按语义抽取样例。' : '文档已接收，演示按 PDF 解析样例。',
+            });
+          });
+          S.save(state);
+          renderFiles();
+          S.toast('已加入 ' + arr.length + ' 个文件（识别结果为演示样例）', 'info');
+        }
+
+        function renderEvidence() {
+          const box = $('#evidence-list');
+          box.style.display = 'flex';
+          box.innerHTML = (state.files.length ? state.files : S.SAMPLE_MATERIALS).map((f) => `
+            <div class="evidence-row">
+              <div class="ftype">${f.type}</div>
+              <div>
+                <div style="font-weight:500">${f.name}</div>
+                <div style="color:var(--ink-muted);margin-top:4px">${f.evidence || '已纳入汇聚'}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function renderExtract() {
+          const m = S.SAMPLE_MINUTES;
+          const oa = S.OA_DOCS[0];
+          $('#extract-meta').innerHTML = [
+            ['会议名称', m.title],
+            ['纪要文号', m.meetingNo],
+            ['会议日期', m.date],
+            ['主持人', m.host],
+            ['地点 / 出席', m.place + ' · ' + m.attendees],
+            ['OA 状态', oa.oaStatus + ' · ' + oa.publishTime],
+            ['发起人', oa.initiator],
+            ['原抄送范围', oa.ccCount + ' 人（将按任务匹配精简）'],
+          ].map((row) => '<dt>' + row[0] + '</dt><dd>' + row[1] + '</dd>').join('');
+          $('#resolve-list').innerHTML = S.RESOLUTIONS.map((t, i) =>
+            '<div class="resolve-item">' + (i + 1) + '. ' + t + '</div>'
+          ).join('');
+          $('#task-table tbody').innerHTML = meetingTodos().map((t) => `
+            <tr>
+              <td style="font-weight:500;min-width:160px">${t.title}</td>
+              <td>${t.type}</td>
+              <td class="cell-muted">${t.timeNodes}</td>
+              <td>${t.owner}</td>
+              <td>${t.ownerPerson || '—'}</td>
+              <td>${t.leader}</td>
+              <td style="white-space:nowrap">${t.deadline}</td>
+              <td>${S.cardTag(t.card)}</td>
+              <td class="cell-muted">${t.clause || t.meetingNo || '—'}</td>
+            </tr>
+          `).join('');
+        }
+
+        function renderPacks() {
+          ensurePick();
+          const list = meetingTodos();
+          $('#transfer-table tbody').innerHTML = list.map((t) => `
+            <tr>
+              <td class="check"><input type="checkbox" data-task="${t.id}" ${pick.tasks.has(t.id) ? 'checked' : ''} /></td>
+              <td style="font-weight:500">${t.title}</td>
+              <td>${t.owner}</td>
+              <td>${t.leader}</td>
+              <td style="white-space:nowrap">${t.deadline}</td>
+            </tr>
+          `).join('');
+          const allOn = list.length && list.every((t) => pick.tasks.has(t.id));
+          $('#check-all-tasks').checked = allOn;
+          $('#leader-packs').innerHTML = S.LEADER_PACKS.map((p) => {
+            const n = (p.taskIds || []).filter((id) => pick.tasks.has(id)).length;
+            const on = pick.leaders.has(p.leader);
+            return `
+            <button class="leader-pack${on ? ' selected' : ''}" type="button" data-leader="${p.leader}">
+              <div class="who">
+                <input type="checkbox" tabindex="-1" ${on ? 'checked' : ''} />
+                ${p.leader} <span class="tag tag-blue">${n} 项</span>
+              </div>
+              <div class="role">${p.role}</div>
+              <div class="hint">${p.hint}</div>
+            </button>`;
+          }).join('');
+          if (state.pushed) {
+            $('#push-result').style.display = 'block';
+            const n = (state.todos || []).filter((t) => t.source === '安委会〔2026〕12号').length;
+            const names = (state.lastPushLeaders || []).join('、') || '—';
+            $('#push-result-text').textContent = '已转入 ' + n + ' 项，推送至 ' + names + '。';
+          }
+        }
+
+        async function runAI() {
+          if (running) return;
+          if (!state.files.length) { S.toast('请先上传或载入会议材料', 'info'); return; }
+          running = true;
+          $('#btn-run-ai').disabled = true;
+          $('#btn-after-ai').style.display = 'none';
+          const log = $('#ai-log');
+          log.style.display = 'block';
+          log.innerHTML = '';
+          const nodes = $$('#ai-pipeline .pipe-node');
+          nodes.forEach((n) => n.classList.remove('active', 'done'));
+          const logs = [
+            { p: 0, msg: '<span class="info">[PDF]</span> 解析会议纪要正文，抽取议定事项条款…' },
+            { p: 0, msg: '<span class="ok">[PDF]</span> 识别 4 条议定事项、主持人总经理文钊' },
+            { p: 1, msg: '<span class="info">[转录]</span> 对齐发言人与口头布置…' },
+            { p: 1, msg: '<span class="ok">[转录]</span> 补全责任到国际港务、工程管理部、安委办' },
+            { p: 2, msg: '<span class="info">[图片]</span> OCR 白板手写日期；识别微信群确认回复…' },
+            { p: 2, msg: '<span class="ok">[图片]</span> 时限 8/25、8/22、8/20 与纪要一致；三人已回复收到' },
+            { p: 3, msg: '<span class="ok">[汇聚]</span> 已结构化：决议 3 条、任务已对齐（类型/单位/领导/时限/牌态/来源）' },
+          ];
+          let cur = -1;
+          for (const item of logs) {
+            if (item.p !== cur) {
+              if (cur >= 0) { nodes[cur].classList.remove('active'); nodes[cur].classList.add('done'); }
+              cur = item.p;
+              nodes[cur].classList.add('active');
+            }
+            log.innerHTML += item.msg + '<br/>';
+            log.scrollTop = log.scrollHeight;
+            await S.sleep(420);
+          }
+          nodes[cur].classList.remove('active');
+          nodes[cur].classList.add('done');
+          state.extracted = true;
+          S.save(state);
+          renderEvidence();
+          $('#btn-after-ai').style.display = 'inline-flex';
+          S.toast('已识别全部材料并完成交叉对齐', 'success');
+          $('#btn-run-ai').disabled = false;
+          $('#btn-run-ai').textContent = '重新识别';
+          running = false;
+        }
+
+        function bind() {
+          $$('#steps-bar .step').forEach((el) => el.addEventListener('click', () => goStep(Number(el.dataset.step))));
+          $$('#screen-office [data-next]').forEach((el) => el.addEventListener('click', () => goStep(Number(el.dataset.next))));
+          $$('#screen-office [data-back]').forEach((el) => el.addEventListener('click', () => goStep(Number(el.dataset.back))));
+          $$('#office-sidebar .side-link[data-office]').forEach((el) => {
+            el.addEventListener('click', () => switchOfficeSection(el.dataset.office));
+          });
+          $('#btn-load-sample').addEventListener('click', loadSamples);
+          $('#btn-to-extract').addEventListener('click', () => goStep(2));
+          $('#btn-run-ai').addEventListener('click', runAI);
+
+          const zone = $('#upload-zone');
+          const input = $('#file-input');
+          zone.addEventListener('click', () => input.click());
+          input.addEventListener('change', (e) => {
+            addDroppedFiles(e.target.files);
+            e.target.value = '';
+          });
+          ['dragenter', 'dragover'].forEach((ev) => {
+            zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+          });
+          ['dragleave', 'drop'].forEach((ev) => {
+            zone.addEventListener(ev, (e) => {
+              e.preventDefault();
+              zone.classList.remove('dragover');
+              if (ev === 'drop') addDroppedFiles(e.dataTransfer.files);
+            });
+          });
+
+          $('#btn-push').addEventListener('click', () => {
+            if (!state.extracted) { S.toast('请先完成 Agent 识别', 'info'); goStep(2); return; }
+            ensurePick();
+            const tasks = selectedTasks();
+            const leaders = S.LEADER_PACKS.filter((p) => pick.leaders.has(p.leader)).map((p) => p.leader);
+            if (!tasks.length) { S.toast('请至少选择一项推送事项', 'info'); return; }
+            if (!leaders.length) { S.toast('请至少选择一位推送领导', 'info'); return; }
+            const pushedAt = new Date().toISOString();
+            state.todos = tasks.map((t) => Object.assign({}, t, {
+              pushedBy: '办公室 张璇',
+              pushedAt: pushedAt,
+              summary: t.summary || t.weekProgress || t.desc || t.originQuote || '',
+            }));
+            state.pushed = true;
+            state.lastPushAt = pushedAt;
+            state.lastPushLeaders = leaders;
+            S.save(state);
+            $('#push-result').style.display = 'block';
+            $('#push-result-text').textContent = '已转入 ' + tasks.length + ' 项，推送至 ' + leaders.join('、') + '。';
+            renderHistory();
+            S.toast('已转入 ' + tasks.length + ' 项，推送 ' + leaders.length + ' 人', 'success');
+          });
+          $('#check-all-tasks').addEventListener('change', (e) => {
+            ensurePick();
+            pick.tasks.clear();
+            if (e.target.checked) meetingTodos().forEach((t) => pick.tasks.add(t.id));
+            renderPacks();
+          });
+          $('#btn-toggle-tasks').addEventListener('click', () => {
+            ensurePick();
+            const all = meetingTodos();
+            const on = all.every((t) => pick.tasks.has(t.id));
+            pick.tasks.clear();
+            if (!on) all.forEach((t) => pick.tasks.add(t.id));
+            renderPacks();
+          });
+          $('#btn-toggle-leaders').addEventListener('click', () => {
+            ensurePick();
+            const all = S.LEADER_PACKS;
+            const on = all.every((p) => pick.leaders.has(p.leader));
+            pick.leaders.clear();
+            if (!on) all.forEach((p) => pick.leaders.add(p.leader));
+            renderPacks();
+          });
+          $('#transfer-table').addEventListener('change', (e) => {
+            const box = e.target.closest('[data-task]');
+            if (!box) return;
+            if (box.checked) pick.tasks.add(box.dataset.task);
+            else pick.tasks.delete(box.dataset.task);
+            renderPacks();
+          });
+          $('#leader-packs').addEventListener('click', (e) => {
+            const card = e.target.closest('[data-leader]');
+            if (!card) return;
+            const name = card.dataset.leader;
+            if (pick.leaders.has(name)) pick.leaders.delete(name);
+            else pick.leaders.add(name);
+            renderPacks();
+          });
+          $('#btn-reset').addEventListener('click', () => {
+            if (confirm('确定重置全部 Demo 数据？')) {
+              state = S.reset();
+              $('#push-result').style.display = 'none';
+              $('#evidence-list').style.display = 'none';
+              $('#ai-log').style.display = 'none';
+              $('#btn-after-ai').style.display = 'none';
+              $('#btn-run-ai').textContent = '开始识别';
+              resetPick();
+              renderFiles();
+              renderHistory();
+              switchOfficeSection('material');
+              S.toast('Demo 数据已重置', 'info');
+            }
+          });
+        }
+
+        function enter() {
+          renderFiles();
+          if (state.extracted) {
+            $('#btn-after-ai').style.display = 'inline-flex';
+            renderEvidence();
+          }
+          if (state.pushed) {
+            $('#push-result').style.display = 'block';
+            renderHistory();
+          }
+          switchOfficeSection(officeSection || (state.pushed ? 'dispatch' : 'material'));
+        }
+
+        bind();
+        return { enter };
+      })();
+
+      const Leader = (function () {
+        const filters = { card: '', type: '', status: '', time: '', owner: '' };
+        let attnIndex = 0;
+        let attnTimer = null;
+        let attnPaused = false;
+        let drawerTaskId = '';
+        let qaBusy = false;
+        let qaHistory = [];
+        const QA_CFG_KEY = 'hkg_qa_llm_v1';
+
+        function todos() { return state.todos && state.todos.length ? state.todos : []; }
+        function taskSummary(t) {
+          return t.summary || t.weekProgress || t.desc || t.originQuote || '办公室推送事项，点击查看完整字段。';
+        }
+        function typePri(t) {
+          const map = S.TYPE_PRIORITY || {};
+          return map[t.type] != null ? map[t.type] : 9;
+        }
+
+        function setQaOpen(on) {
+          const widget = $('#qa-widget');
+          const panel = $('#qa-panel');
+          if (!widget || !panel) return;
+          panel.hidden = !on;
+          widget.classList.toggle('is-open', !!on);
+          $('#btn-qa-fab').setAttribute('aria-label', on ? '关闭智能问答' : '打开智能问答');
+          if (on) {
+            refreshQaStatus();
+            setTimeout(() => $('#qa-input').focus(), 40);
+          }
+        }
+        function toggleQa() { setQaOpen($('#qa-panel').hidden); }
+
+        function showView(name) {
+          if (name === 'qa') {
+            name = 'board';
+            setQaOpen(true);
+          }
+          const viewEl = $('#view-' + name);
+          if (!viewEl) name = 'board';
+          $$('#screen-leader .view').forEach((v) => v.classList.remove('active'));
+          $('#view-' + name).classList.add('active');
+          $$('#leader-sidebar .side-link[data-view]').forEach((el) => {
+            el.classList.toggle('active', el.dataset.view === name);
+          });
+          if (name === 'msg') renderMsg();
+          if (name === 'report') renderReportView();
+        }
+
+        function daysUntil(deadline) {
+          const a = new Date(S.TODAY + 'T00:00:00');
+          const b = new Date((deadline || S.TODAY) + 'T00:00:00');
+          return Math.round((b - a) / 86400000);
+        }
+        function isOverdue(t) {
+          return t.card === '红' || daysUntil(t.deadline) < 0;
+        }
+        function isDueSoon(t) {
+          if (isOverdue(t) || t.status === '已完成') return false;
+          const d = daysUntil(t.deadline);
+          return t.card === '黄' || (d >= 0 && d <= 7);
+        }
+        function ranked(list) {
+          return list.slice().sort((a, b) => {
+            const cardRank = (t) => (t.card === '红' ? 0 : t.card === '黄' ? 1 : 2);
+            const r = cardRank(a) - cardRank(b);
+            if (r) return r;
+            const tp = typePri(a) - typePri(b);
+            if (tp) return tp;
+            return (a.deadline || '').localeCompare(b.deadline || '');
+          });
+        }
+        function watchItems() {
+          return ranked(todos().filter((t) => t.status !== '已完成' && (isOverdue(t) || isDueSoon(t))));
+        }
+
+        function matchTimeFilter(t) {
+          if (!filters.time) return true;
+          const d = daysUntil(t.deadline);
+          if (filters.time === 'overdue') return d < 0;
+          if (filters.time === 'due7') return d >= 0 && d <= 7;
+          if (filters.time === 'month') {
+            const today = new Date(S.TODAY + 'T00:00:00');
+            const due = new Date((t.deadline || S.TODAY) + 'T00:00:00');
+            return due.getFullYear() === today.getFullYear() && due.getMonth() === today.getMonth();
+          }
+          if (filters.time === 'later') {
+            const today = new Date(S.TODAY + 'T00:00:00');
+            const due = new Date((t.deadline || S.TODAY) + 'T00:00:00');
+            return due.getFullYear() > today.getFullYear() ||
+              (due.getFullYear() === today.getFullYear() && due.getMonth() > today.getMonth());
+          }
+          return true;
+        }
+
+        function filtered() {
+          return ranked(todos().filter((t) => {
+            if (filters.status && t.status !== filters.status) return false;
+            if (filters.card && t.card !== filters.card) return false;
+            if (filters.type && t.type !== filters.type) return false;
+            if (filters.owner && t.owner !== filters.owner) return false;
+            if (!matchTimeFilter(t)) return false;
+            return true;
+          }));
+        }
+
+        function scrollToList() {
+          const panel = document.querySelector('#view-board .todo-panel');
+          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function applyCardFilter(card) {
+          filters.card = filters.card === card ? '' : card;
+          renderBoard();
+          scrollToList();
+        }
+        function applyStatusFilter(status) {
+          if (status === 'all') {
+            filters.status = '';
+            filters.card = '';
+          } else {
+            filters.status = filters.status === status ? '' : status;
+          }
+          renderBoard();
+          scrollToList();
+        }
+        function applyTypeFilter(type) {
+          filters.type = filters.type === type ? '' : type;
+          renderBoard();
+          scrollToList();
+        }
+
+        function syncStatActive() {
+          $$('#view-board .stat-item[data-filter-card]').forEach((el) => {
+            el.classList.toggle('is-on', el.dataset.filterCard === filters.card);
+          });
+          $$('#view-board .stat-item[data-filter-status]').forEach((el) => {
+            const v = el.dataset.filterStatus;
+            if (v === 'all') el.classList.toggle('is-on', !filters.status && !filters.card);
+            else el.classList.toggle('is-on', v === filters.status);
+          });
+          $$('#tab-status .todo-tab').forEach((el) => {
+            el.classList.toggle('active', (el.dataset.status || '') === (filters.status || ''));
+          });
+          const typeSel = $('#filter-type');
+          const timeSel = $('#filter-time');
+          const ownerSel = $('#filter-owner');
+          if (typeSel) typeSel.value = filters.type || '';
+          if (timeSel) timeSel.value = filters.time || '';
+          if (ownerSel) ownerSel.value = filters.owner || '';
+        }
+
+        function fillSelect(sel, options, allLabel, current) {
+          if (!sel) return;
+          const keep = current || '';
+          const valid = keep && options.some((o) => o.value === keep);
+          const cur = valid ? keep : '';
+          sel.innerHTML =
+            '<option value="">' + allLabel + '</option>' +
+            options.map((o) =>
+              '<option value="' + o.value + '"' + (o.value === cur ? ' selected' : '') + '>' +
+              o.label + '</option>'
+            ).join('');
+          if (!valid && keep) {
+            if (sel.id === 'filter-type') filters.type = '';
+            if (sel.id === 'filter-owner') filters.owner = '';
+          }
+        }
+
+        function renderFilterSelects() {
+          const all = todos();
+          const typeMap = {};
+          const ownerMap = {};
+          all.forEach((t) => {
+            if (t.type) typeMap[t.type] = (typeMap[t.type] || 0) + 1;
+            if (t.owner) ownerMap[t.owner] = (ownerMap[t.owner] || 0) + 1;
+          });
+          const types = Object.keys(typeMap)
+            .sort((a, b) => typePri({ type: a }) - typePri({ type: b }))
+            .map((k) => ({ value: k, label: k + '（' + typeMap[k] + '）' }));
+          const owners = Object.keys(ownerMap)
+            .sort((a, b) => a.localeCompare(b, 'zh-CN'))
+            .map((k) => ({ value: k, label: k + '（' + ownerMap[k] + '）' }));
+          fillSelect($('#filter-type'), types, '全部类型', filters.type);
+          fillSelect($('#filter-owner'), owners, '全部单位', filters.owner);
+          const timeSel = $('#filter-time');
+          if (timeSel) timeSel.value = filters.time || '';
+        }
+
+        function watchGroups() {
+          const list = watchItems();
+          const groups = [];
+          const reds = list.filter((t) => t.card === '红');
+          if (reds.length) {
+            groups.push({ pri: 0, type: '红牌逾期', kind: '逾期升级', items: reds });
+          }
+          const map = new Map();
+          list.filter((t) => t.card !== '红').forEach((t) => {
+            const pri = typePri(t) + 1;
+            if (!map.has(pri)) {
+              map.set(pri, {
+                pri: pri,
+                type: t.type || '事项',
+                kind: isDueSoon(t) ? '临期提醒' : '关注',
+                items: [],
+              });
+            }
+            map.get(pri).items.push(t);
+          });
+          return groups.concat(Array.from(map.values()).sort((a, b) => a.pri - b.pri));
+        }
+
+        function stopAttnAuto() {
+          if (attnTimer) { clearTimeout(attnTimer); attnTimer = null; }
+        }
+
+        function goAttnSlide(i, restart) {
+          const groups = watchGroups();
+          if (!groups.length) return;
+          attnIndex = ((i % groups.length) + groups.length) % groups.length;
+          const track = $('#attention-track');
+          track.style.transform = 'translateX(-' + (attnIndex * 100) + '%)';
+          $$('#attention-track .attn-slide').forEach((el, idx) => {
+            el.classList.toggle('is-active', idx === attnIndex);
+          });
+          const g = groups[attnIndex];
+          $('#attn-index').textContent = (attnIndex + 1) + ' / ' + groups.length;
+          if (restart !== false && !attnPaused) startAttnAuto();
+        }
+
+        function startAttnAuto() {
+          stopAttnAuto();
+          const groups = watchGroups();
+          if (groups.length < 2) return;
+          attnTimer = setTimeout(() => {
+            goAttnSlide(attnIndex + 1, true);
+          }, 4200);
+        }
+
+        function renderAttention() {
+          const box = $('#attention');
+          const list = watchItems();
+          if (!todos().length || !list.length) {
+            box.hidden = true;
+            stopAttnAuto();
+            return;
+          }
+          box.hidden = false;
+          const groups = watchGroups();
+          if (attnIndex >= groups.length) attnIndex = 0;
+          $('#attention-track').innerHTML = groups.map((g, i) => `
+            <div class="attn-slide pri-${g.pri}${i === attnIndex ? ' is-active' : ''}" data-pri="${g.pri}">
+              <div class="attn-hud">
+                <span class="attn-hud-pri">P${g.pri}</span>
+                <span class="attn-hud-type">${g.type}</span>
+                <span class="attn-hud-kind">${g.kind}</span>
+                <span class="attn-hud-count">${g.items.length} SIGNAL</span>
+              </div>
+              <div class="attn-card-row n-${Math.min(g.items.length, 3)}">
+                ${g.items.map((t) => {
+                  const kind = isOverdue(t) ? '逾期升级' : '临期提醒';
+                  const red = t.card === '红' ? ' is-red' : '';
+                  return `
+                    <button class="attn-card${red}" type="button" data-open="${t.id}">
+                      <div class="attn-card-top">
+                        ${S.cardTag(t.card)}
+                        <span class="attn-kind">${kind}</span>
+                        <span class="attn-type">${t.type || ''}</span>
+                      </div>
+                      <div class="ttl">${t.title}</div>
+                      <div class="sum">${taskSummary(t)}</div>
+                      <div class="attn-foot">
+                        <span>${t.owner}</span>
+                        <span>${t.deadline}</span>
+                      </div>
+                    </button>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('');
+          goAttnSlide(attnIndex, true);
+        }
+
+        function renderStats() {
+          const all = todos();
+          $('#s-total').textContent = all.length;
+          $('#s-todo').textContent = all.filter((t) => t.status === '未开始').length;
+          $('#s-doing').textContent = all.filter((t) => t.status === '进行中').length;
+          $('#s-done').textContent = all.filter((t) => t.status === '已完成').length;
+          $('#s-green').textContent = all.filter((t) => t.card === '绿').length;
+          $('#s-yellow').textContent = all.filter((t) => t.card === '黄').length;
+          $('#s-red').textContent = all.filter((t) => t.card === '红').length;
+          if (state.pushed && state.lastPushAt) {
+            $('#sync-hint').textContent = '办公室已推送 · ' + new Date(state.lastPushAt).toLocaleString('zh-CN');
+            $('#push-from-hint').textContent = '来自办公室转入的督办事项（' + (state.lastPushLeaders || []).join('、') + '），可按类型、时间、责任单位筛选';
+          } else if (all.length) {
+            $('#sync-hint').textContent = '演示预置推送 · 可与办公室端转入联动';
+            $('#push-from-hint').textContent = '来自办公室转入的督办事项，可按类型、时间、责任单位筛选';
+          } else {
+            $('#sync-hint').textContent = '总经理 · 暂无推送，可载入演示数据';
+            $('#push-from-hint').textContent = '暂无推送事项。请先在办公室端完成转入，或点击「载入演示数据」';
+          }
+          syncStatActive();
+        }
+
+        function handleActionLabel(t) {
+          if (t.status === '未开始') return '一键启动';
+          if (t.status === '进行中') return '一键办结';
+          return '已办结';
+        }
+
+        function quickHandle(id, e) {
+          if (e) e.stopPropagation();
+          const list = state.todos || [];
+          const t = list.find((x) => x.id === id);
+          if (!t || t.status === '已完成') return;
+          const now = new Date().toLocaleString('zh-CN', { hour12: false }).replace(/\//g, '-');
+          if (t.status === '未开始') {
+            t.status = '进行中';
+            t.progress = Math.max(t.progress || 0, 10);
+            t.timeline = (t.timeline || []).concat([{ when: now, what: '领导端一键启动办理' }]);
+            S.toast('已启动：' + t.title, 'success');
+          } else {
+            t.status = '已完成';
+            t.progress = 100;
+            t.card = '绿';
+            t.timeline = (t.timeline || []).concat([{ when: now, what: '领导端一键办结' }]);
+            S.toast('已办结：' + t.title, 'success');
+          }
+          t.updateTime = now;
+          S.save(state);
+          renderBoard();
+        }
+
+        function renderCards() {
+          const rows = filtered();
+          const box = $('#todo-cards');
+          $('#pager-total').textContent = '共 ' + rows.length + ' 条';
+          if (!todos().length) {
+            box.innerHTML = '';
+            $('#empty-state').style.display = 'block';
+            return;
+          }
+          $('#empty-state').style.display = 'none';
+          if (!rows.length) {
+            box.innerHTML = '<div class="empty" style="display:block">无匹配结果，请调整类型 / 时间 / 责任单位或状态筛选</div>';
+            return;
+          }
+          box.innerHTML = rows.map((t) => {
+            const cardCls = t.card === '红' ? 'card-red' : t.card === '黄' ? 'card-yellow' : 'card-green';
+            const due = isOverdue(t)
+              ? '<span class="tag tag-red">已逾期</span>'
+              : (isDueSoon(t) ? '<span class="tag tag-yellow">临期</span>' : '');
+            const done = t.status === '已完成';
+            return `
+              <article class="todo-card ${cardCls}" data-open="${t.id}" role="button" tabindex="0">
+                <div class="todo-card-main">
+                  <div class="todo-card-top">
+                    ${S.cardTag(t.card)}
+                    ${S.statusTag(t.status)}
+                    <span class="tag tag-blue">${t.type || '事项'}</span>
+                    ${due}
+                  </div>
+                  <div class="todo-card-title">${t.title}</div>
+                  <div class="todo-card-sum">${taskSummary(t)}</div>
+                  <div class="todo-card-meta">
+                    <span><b>责任单位</b> ${t.owner}</span>
+                    <span><b>时限</b> ${t.deadline}</span>
+                    <span><b>纪要</b> ${t.source || '—'}</span>
+                    <span><b>推送</b> ${t.pushedBy || '办公室'}</span>
+                  </div>
+                </div>
+                <div class="todo-card-actions">
+                  <button class="btn btn-primary btn-sm" type="button" data-handle="${t.id}" ${done ? 'disabled' : ''}>${handleActionLabel(t)}</button>
+                  <button class="btn btn-secondary btn-sm" type="button" data-open="${t.id}">详情</button>
+                </div>
+              </article>`;
+          }).join('');
+        }
+
+        function renderBoard() {
+          renderStats();
+          renderFilterSelects();
+          renderAttention();
+          renderCards();
+          syncStatActive();
+        }
+
+        function closeDrawer() {
+          $('#drawer').classList.remove('open');
+          $('#overlay').classList.remove('open');
+          drawerTaskId = '';
+        }
+
+        function openDrawer(id) {
+          const t = todos().find((x) => x.id === id);
+          if (!t) return;
+          drawerTaskId = id;
+          $('#d-id').textContent = t.id;
+          $('#d-title').textContent = t.title;
+          $('#d-owner').textContent = t.owner;
+          $('#d-person').textContent = t.ownerPerson || '—';
+          $('#d-leader').textContent = t.leader;
+          $('#d-deadline').textContent = t.deadline;
+          $('#d-card').innerHTML = S.cardTag(t.card);
+          $('#d-status').innerHTML = S.statusTag(t.status);
+          $('#d-type').textContent = t.type || '—';
+          $('#d-source').textContent = t.source || '—';
+          $('#d-clause').textContent = t.clause || '—';
+          $('#d-notify').textContent = t.notify || '—';
+          $('#d-cycle').textContent = t.reportCycle || '—';
+          $('#d-desc').textContent = t.desc || '—';
+          $('#d-quote').textContent = t.originQuote || '—';
+          $('#d-nodes').textContent = t.timeNodes || '—';
+          $('#d-week').textContent = t.weekProgress || '—';
+          $('#d-evidence').textContent = (t.evidence && t.evidence.length) ? t.evidence.join('；') : '—';
+          $('#d-progress-bar > i').style.width = (t.progress || 0) + '%';
+          $('#d-progress-bar').className = 'progress ' + (t.progress >= 100 ? 'ok' : t.card === '红' ? 'warn' : '');
+          $('#d-progress-text').textContent = (t.progress || 0) + '%';
+          const pushAt = t.pushedAt ? new Date(t.pushedAt).toLocaleString('zh-CN') : (state.lastPushAt ? new Date(state.lastPushAt).toLocaleString('zh-CN') : '—');
+          $('#d-push-meta').innerHTML =
+            '<strong>办公室推送</strong>' +
+            '<span>推送人：' + (t.pushedBy || '办公室 张璇') + '</span>' +
+            '<span>推送时间：' + pushAt + '</span>' +
+            '<span>关联纪要：' + (t.meetingNo || t.source || '—') + '</span>';
+          $('#d-timeline').innerHTML = (t.timeline || []).map((x) =>
+            '<div class="tl-item"><div class="when">' + x.when + '</div><div class="what">' + x.what + '</div></div>'
+          ).join('') || '<div class="empty" style="display:block;padding:8px 0">暂无办理记录</div>';
+          $('#d-minutes-link').textContent = '查看关联会议纪要 · ' + (t.meetingNo || t.source || '');
+          $('#drawer').classList.add('open');
+          $('#overlay').classList.add('open');
+        }
+
+        function openMinutes(meetingNo) {
+          const m = (S.MINUTES_BY_NO && S.MINUTES_BY_NO[meetingNo]) || S.SAMPLE_MINUTES;
+          if (!m) { S.toast('未找到关联纪要', 'info'); return; }
+          $('#m-no').textContent = m.meetingNo;
+          $('#m-title').textContent = m.title;
+          $('#m-meta').textContent = [m.date, m.place, m.host, '生成：' + (m.publisher || '办公室')].filter(Boolean).join(' · ');
+          $('#m-body').innerHTML = (m.sections || []).map((s) =>
+            '<div class="minutes-sec"><h3>' + s.h + '</h3>' + s.html + '</div>'
+          ).join('');
+          $('#minutes-modal').hidden = false;
+        }
+
+        function closeMinutes() {
+          $('#minutes-modal').hidden = true;
+        }
+
+        function renderMsg() {
+          $('#msg-list').innerHTML = S.MESSAGES.map((m) => `
+            <div class="msg-item">
+              <div class="meta">${S.cardTag(m.level)} ${m.title} · ${m.time} · 推送至 ${m.to}</div>
+              <div class="body">${m.body}</div>
+            </div>
+          `).join('');
+        }
+
+        function reportList() {
+          const list = [];
+          const meta = S.WEEKLY_CURRENT_META;
+          if (state.thisWeekReport) list.push(state.thisWeekReport);
+          else {
+            list.push({
+              id: meta.id,
+              week: meta.week,
+              weekLabel: meta.weekLabel,
+              title: '科创集团督查督办周报（' + meta.weekLabel + '）',
+              period: meta.period,
+              generatedAt: '',
+              pushed: false,
+              draft: true,
+            });
+          }
+          return list.concat(S.WEEKLY_HISTORY || []);
+        }
+
+        function currentReport() {
+          const list = reportList();
+          return list.find((r) => r.id === state.activeReportId) || list[0];
+        }
+
+        function renderReportHist() {
+          const list = reportList();
+          const active = (state.activeReportId || list[0].id);
+          $('#report-hist').innerHTML = list.map((r) => `
+            <button class="report-hist-item${r.id === active ? ' is-on' : ''}" type="button" data-report="${r.id}">
+              <div class="rh-week">${r.weekLabel || ('第' + r.week + '周')}</div>
+              <div class="rh-period">${r.period || ''}</div>
+              <div class="rh-tags">
+                ${r.draft ? '<span class="tag tag-gray">待生成</span>' : '<span class="tag tag-green">已推送</span>'}
+                ${r.id === 'w33' ? '<span class="tag tag-blue">本周</span>' : '<span class="tag tag-gray">历史</span>'}
+              </div>
+            </button>
+          `).join('');
+        }
+
+        function renderReportDoc(r) {
+          const box = $('#report-box');
+          if (!r || r.draft) {
+            box.className = 'empty';
+            box.innerHTML = '本周周报尚未生成。点击右上角「生成本周周报」，系统将按当前督办台账自动汇总并推送集团领导。';
+            return;
+          }
+          const st = r.stats || {};
+          const items = r.items || [];
+          const byType = r.byType || [];
+          const byOwner = r.byOwner || [];
+          box.className = 'report-doc';
+          box.innerHTML = `
+            <div class="report-doc-kicker">郑州航空港科创投资集团 · 督查督办系统自动生成</div>
+            <h2>${r.title}</h2>
+            <div class="meta">统计周期 ${r.period} · 生成于 ${r.generatedAt} · 已推送 ${ (r.pushedTo || []).join('、') }</div>
+            <p>${r.summary || ''}</p>
+            <div class="report-stat-row">
+              <div class="report-stat"><b>${st.total || 0}</b><span>事项总数</span></div>
+              <div class="report-stat is-red"><b>${st.red || 0}</b><span>红牌</span></div>
+              <div class="report-stat is-yellow"><b>${st.yellow || 0}</b><span>黄牌</span></div>
+              <div class="report-stat is-green"><b>${st.green || 0}</b><span>绿牌</span></div>
+              <div class="report-stat"><b>${st.doing || 0}</b><span>进行中</span></div>
+              <div class="report-stat"><b>${st.done || 0}</b><span>已完成</span></div>
+            </div>
+            ${byType.length ? '<div class="report-sec-title">按督办类型</div><p class="report-chips">' +
+              byType.map((x) => '<span class="type-chip">' + x.name + ' ' + x.n + '</span>').join('') + '</p>' : ''}
+            ${byOwner.length ? '<div class="report-sec-title">按责任单位</div><p class="report-chips">' +
+              byOwner.map((x) => '<span class="type-chip">' + x.name + ' ' + x.n + '</span>').join('') + '</p>' : ''}
+            <div class="report-sec-title">重点关注</div>
+            <ul>${(r.highlights || []).map((x) => '<li>' + x + '</li>').join('')}</ul>
+            <div class="report-sec-title">事项进展明细（系统自动抓取）</div>
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>事项名称</th>
+                    <th>责任单位</th>
+                    <th>类型</th>
+                    <th>牌态</th>
+                    <th>状态</th>
+                    <th>时限</th>
+                    <th>进度</th>
+                    <th>本周进展</th>
+                    <th>纪要来源</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map((t) => `
+                    <tr>
+                      <td style="font-weight:500;min-width:140px">${t.title}</td>
+                      <td>${t.owner || '—'}</td>
+                      <td>${t.type || '—'}</td>
+                      <td>${S.cardTag(t.card)}</td>
+                      <td>${S.statusTag(t.status)}</td>
+                      <td style="white-space:nowrap">${t.deadline || '—'}</td>
+                      <td>${t.progress != null ? t.progress + '%' : '—'}</td>
+                      <td class="cell-muted">${t.weekProgress || '—'}</td>
+                      <td class="cell-muted">${t.source || '—'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+            <p class="report-foot">本周报由系统按办结时限与周填报自动汇总，无需办公室逐项收集。推送对象：${(r.pushedTo || []).join('、')}。</p>
+          `;
+        }
+
+        function renderReportView() {
+          if (!state.activeReportId) state.activeReportId = state.thisWeekReport ? 'w33' : 'w32';
+          renderReportHist();
+          renderReportDoc(currentReport());
+          $('#btn-report').textContent = state.thisWeekReport ? '重新生成本周周报' : '生成本周周报';
+        }
+
+        function loadQaCfg() {
+          try { return Object.assign({ proxyUrl: '' }, JSON.parse(localStorage.getItem(QA_CFG_KEY) || '{}')); }
+          catch (e) { return { proxyUrl: '' }; }
+        }
+        function saveQaCfg(cfg) {
+          localStorage.setItem(QA_CFG_KEY, JSON.stringify(cfg));
+        }
+        function defaultQaUrl() {
+          if (location.protocol === 'http:' || location.protocol === 'https:') return location.origin + '/api/qa';
+          return 'http://127.0.0.1:8787/api/qa';
+        }
+        function qaEndpoints() {
+          const saved = loadQaCfg().proxyUrl;
+          const list = [];
+          if (saved) list.push(saved);
+          if (location.protocol === 'http:' || location.protocol === 'https:') list.push(location.origin + '/api/qa');
+          list.push('http://127.0.0.1:8787/api/qa');
+          return list.filter(function (u, i, a) { return u && a.indexOf(u) === i; });
+        }
+        function healthUrl(qaUrl) {
+          return String(qaUrl || '').replace(/\/api\/qa\/?$/, '/api/health');
+        }
+        async function refreshQaStatus() {
+          const sub = $('#qa-panel-sub');
+          if (!sub) return;
+          const urls = qaEndpoints();
+          for (let i = 0; i < urls.length; i++) {
+            try {
+              const res = await fetch(healthUrl(urls[i]), { method: 'GET' });
+              if (!res.ok) continue;
+              const data = await res.json();
+              if (data && data.ok) {
+                sub.textContent = (data.configured ? '大模型已连接' : '服务已启动但未配置密钥') + ' · 按台账与纪要作答';
+                return;
+              }
+            } catch (e) { /* try next */ }
+          }
+          sub.textContent = '模型未连接 · 请运行 node server.js';
+        }
+        function appendQaTurn(role, who, text) {
+          const wrap = document.createElement('div');
+          wrap.className = 'qa-turn ' + role;
+          const w = document.createElement('div');
+          w.className = 'who';
+          w.textContent = who;
+          const b = document.createElement('div');
+          b.className = 'bubble';
+          b.textContent = text;
+          wrap.appendChild(w);
+          wrap.appendChild(b);
+          $('#qa-log').appendChild(wrap);
+          $('#qa-log').scrollTop = $('#qa-log').scrollHeight;
+          return b;
+        }
+        async function streamQa(question, knowledge, history, onDelta) {
+          const urls = qaEndpoints();
+          let lastErr = '';
+          for (let i = 0; i < urls.length; i++) {
+            try {
+              const res = await fetch(urls[i], {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: question, knowledge: knowledge, history: history }),
+              });
+              const ctype = (res.headers.get('content-type') || '').toLowerCase();
+              if (!res.ok) {
+                let msg = 'HTTP ' + res.status;
+                try {
+                  const err = ctype.indexOf('json') >= 0 ? await res.json() : { error: await res.text() };
+                  msg = err.error || err.detail || msg;
+                } catch (e) { /* ignore */ }
+                lastErr = msg;
+                continue;
+              }
+              if (!res.body || !res.body.getReader) {
+                const text = await res.text();
+                if (!text.trim()) { lastErr = '空响应'; continue; }
+                onDelta(text);
+                return text;
+              }
+              const reader = res.body.getReader();
+              const dec = new TextDecoder();
+              let full = '';
+              while (true) {
+                const chunk = await reader.read();
+                if (chunk.done) break;
+                full += dec.decode(chunk.value, { stream: true });
+                onDelta(full);
+              }
+              if (!full.trim()) { lastErr = '空响应'; continue; }
+              return full;
+            } catch (e) {
+              lastErr = e.message || String(e);
+            }
+          }
+          throw new Error(lastErr || '无法连接大模型服务');
+        }
+        async function ask(q) {
+          q = String(q || '').trim();
+          if (!q || qaBusy) return;
+          qaBusy = true;
+          $('#btn-qa').disabled = true;
+          appendQaTurn('user', '您', q);
+          const bubble = appendQaTurn('bot', '智能问答', '正在根据督办台账与纪要作答…');
+          bubble.classList.add('is-pending');
+          try {
+            const knowledge = S.buildQaKnowledge(state);
+            const answer = await streamQa(q, knowledge, qaHistory.slice(-6), function (text) {
+              bubble.classList.remove('is-pending');
+              bubble.textContent = text;
+              $('#qa-log').scrollTop = $('#qa-log').scrollHeight;
+            });
+            bubble.classList.remove('is-pending');
+            bubble.textContent = answer;
+            qaHistory.push({ role: 'user', content: q });
+            qaHistory.push({ role: 'assistant', content: answer });
+          } catch (err) {
+            bubble.classList.remove('is-pending');
+            bubble.classList.add('is-error');
+            bubble.textContent = '未能调用大模型：' + (err.message || err) + '\n请在项目目录运行 node server.js，并确保 .env 中已配置 AI_API_KEY。';
+          }
+          qaBusy = false;
+          $('#btn-qa').disabled = false;
+          $('#qa-log').scrollTop = $('#qa-log').scrollHeight;
+        }
+
+        function bind() {
+          $$('#leader-sidebar [data-view]').forEach((el) => {
+            el.addEventListener('click', () => {
+              showView(el.dataset.view);
+              if (el.dataset.view === 'board') renderBoard();
+            });
+          });
+          $('#btn-bell').addEventListener('click', () => showView('msg'));
+          $$('#view-board .stat-item[data-filter-card]').forEach((el) => {
+            el.addEventListener('click', () => applyCardFilter(el.dataset.filterCard));
+          });
+          $$('#view-board .stat-item[data-filter-status]').forEach((el) => {
+            el.addEventListener('click', () => applyStatusFilter(el.dataset.filterStatus));
+          });
+
+          $('#filter-type').addEventListener('change', (e) => {
+            filters.type = e.target.value || '';
+            renderBoard();
+          });
+          $('#filter-time').addEventListener('change', (e) => {
+            filters.time = e.target.value || '';
+            renderBoard();
+          });
+          $('#filter-owner').addEventListener('change', (e) => {
+            filters.owner = e.target.value || '';
+            renderBoard();
+          });
+          $('#tab-status').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-status]');
+            if (!btn) return;
+            filters.status = btn.dataset.status || '';
+            filters.card = '';
+            renderBoard();
+          });
+
+          $('#attention').addEventListener('click', (e) => {
+            const open = e.target.closest('[data-open]');
+            if (open) openDrawer(open.dataset.open);
+          });
+          $('#attn-prev').addEventListener('click', () => goAttnSlide(attnIndex - 1, true));
+          $('#attn-next').addEventListener('click', () => goAttnSlide(attnIndex + 1, true));
+          const rail = $('#attention');
+          rail.addEventListener('mouseenter', stopAttnAuto);
+          rail.addEventListener('mouseleave', () => startAttnAuto());
+
+          $('#todo-cards').addEventListener('click', (e) => {
+            const handle = e.target.closest('[data-handle]');
+            if (handle) { quickHandle(handle.dataset.handle, e); return; }
+            const open = e.target.closest('[data-open]');
+            if (open) openDrawer(open.dataset.open);
+          });
+          $('#todo-cards').addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            const card = e.target.closest('[data-open]');
+            if (card && e.target === card) {
+              e.preventDefault();
+              openDrawer(card.dataset.open);
+            }
+          });
+
+          $('#btn-close').addEventListener('click', closeDrawer);
+          $('#btn-close-2').addEventListener('click', closeDrawer);
+          $('#overlay').addEventListener('click', closeDrawer);
+          $('#d-minutes-link').addEventListener('click', () => {
+            const t = todos().find((x) => x.id === drawerTaskId);
+            openMinutes(t && (t.meetingNo || t.source));
+          });
+          $('#btn-close-minutes').addEventListener('click', closeMinutes);
+          $('#minutes-modal').addEventListener('click', (e) => {
+            if (e.target === $('#minutes-modal')) closeMinutes();
+          });
+
+          $('#btn-refresh').addEventListener('click', () => { state = S.load(); renderBoard(); S.toast('已刷新', 'info'); });
+          $('#btn-seed').addEventListener('click', () => {
+            state.todos = S.SAMPLE_TODOS.map((t) => Object.assign({}, t));
+            state.pushed = true;
+            state.lastPushAt = new Date().toISOString();
+            state.lastPushLeaders = ['文钊'];
+            S.save(state);
+            renderBoard();
+            S.toast('已载入办公室推送演示数据', 'success');
+          });
+          $('#btn-report').addEventListener('click', () => {
+            const source = (state.todos && state.todos.length) ? state.todos : S.SAMPLE_TODOS;
+            state.thisWeekReport = S.buildWeeklyReport(source, S.WEEKLY_CURRENT_META);
+            state.reportGenerated = true;
+            state.activeReportId = 'w33';
+            S.save(state);
+            renderReportView();
+            S.toast('第33周周报已自动汇总并推送集团领导', 'success');
+          });
+          $('#report-hist').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-report]');
+            if (!btn) return;
+            state.activeReportId = btn.dataset.report;
+            S.save(state);
+            renderReportView();
+          });
+          $('#qa-log').innerHTML = '';
+          appendQaTurn('bot', '智能问答', '您好，文钊。我会根据当前督办台账、会议纪要和周报作答。点上方示例，或直接输入问题。');
+          $('#qa-chips').innerHTML = S.QA_PRESETS.map((x, i) =>
+            '<button class="filter-chip" type="button" data-qi="' + i + '">' + x.q + '</button>'
+          ).join('');
+          $$('#qa-chips .filter-chip').forEach((el) => {
+            el.addEventListener('click', () => {
+              setQaOpen(true);
+              ask(S.QA_PRESETS[Number(el.dataset.qi)].q);
+            });
+          });
+          $('#btn-qa').addEventListener('click', () => {
+            const q = $('#qa-input').value.trim();
+            if (!q) return;
+            ask(q);
+            $('#qa-input').value = '';
+          });
+          $('#qa-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#btn-qa').click(); });
+          $('#btn-qa-fab').addEventListener('click', toggleQa);
+          $('#btn-qa-close').addEventListener('click', () => setQaOpen(false));
+          $('#qa-cfg-url').value = loadQaCfg().proxyUrl || defaultQaUrl();
+          $('#btn-qa-cfg').addEventListener('click', () => {
+            const box = $('#qa-cfg');
+            box.hidden = !box.hidden;
+            if (!box.hidden) $('#qa-cfg-url').focus();
+          });
+          $('#btn-qa-cfg-save').addEventListener('click', () => {
+            const url = $('#qa-cfg-url').value.trim();
+            saveQaCfg({ proxyUrl: url });
+            $('#qa-cfg').hidden = true;
+            refreshQaStatus();
+            S.toast('已保存问答服务地址', 'success');
+          });
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !$('#qa-panel').hidden) setQaOpen(false);
+          });
+        }
+
+        function enter(view, openQa) {
+          if (view === 'qa') { view = 'board'; openQa = true; }
+          renderReportView();
+          showView(view || 'board');
+          if ((view || 'board') === 'board') renderBoard();
+          if (openQa) setQaOpen(true);
+        }
+
+        bind();
+        return { enter };
+      })();
+
+      $$('[data-go]').forEach((el) => {
+        el.addEventListener('click', () => showRole(el.dataset.go));
+      });
+      window.addEventListener('hashchange', () => {
+        const loc = parseHash();
+        showRole(loc.role, loc.view, loc);
+      });
+
+      const start = parseHash();
+      showRole(start.role, start.view, start);
+    })();
+  </script>
+</body>
+</html>

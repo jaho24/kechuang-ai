@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI安全隐患智能管控 · 航空港科创投资集团</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <span class="badge-demo">框架演示 · 模拟数据</span>
+  <div class="shell view-board">
+    <header class="head">
+      <button class="btn-report" type="button" id="btn-go-report">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        安全隐患排查上报
+      </button>
+      <div class="title-block">
+        <div class="title-deco"><i></i><span></span><i></i></div>
+        <h1>AI安全隐患智能管控</h1>
+        <p class="slogan">统一监测 · 分级预警 · 整改闭环 · 态势洞察</p>
+      </div>
+      <div class="spec">
+        <div class="spec-label">专项巡检</div>
+        <div class="spec-row" id="chips">
+          <button type="button" class="chip" data-key="dust"><b></b>防尘</button>
+          <button type="button" class="chip" data-key="heat"><b></b>高温</button>
+          <button type="button" class="chip" data-key="fire"><b></b>消防</button>
+          <button type="button" class="chip" data-key="flood"><b></b>防汛</button>
+          <button type="button" class="chip" data-key="resume"><b></b>复工复产</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="meta-row">
+      <span class="live"><i></i>监测中</span>
+      <span id="clock">2026-08-18 11:35</span>
+    </div>
+    <div class="ingest-bar" id="ingest-bar" hidden></div>
+
+    <div class="main">
+      <section class="panel">
+        <span class="corners" aria-hidden="true"><i></i><i></i></span>
+        <div class="panel-h">
+          <h2>集团安全态势总览</h2>
+          <div class="panel-actions">
+            <span class="stamp">点地图 / 排名 / KPI 可下钻</span>
+            <button class="btn-sm" type="button" id="btn-qa">智能问答</button>
+            <button class="btn-sm primary" type="button" id="btn-month">生成本月报告</button>
+          </div>
+        </div>
+        <div class="panel-b">
+          <div class="kpis">
+            <article class="kpi total" data-filter="all">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-total">1,286</div>
+                <div class="kpi-label">隐患总数</div>
+                <div class="kpi-note" id="kpi-total-note">本月新增 86</div>
+              </div>
+            </article>
+            <article class="kpi rate" data-filter="rate">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-rate">94.6%</div>
+                <div class="kpi-label">整改完成率</div>
+                <div class="kpi-note" id="kpi-rate-note">环比 +2.1 pt</div>
+              </div>
+            </article>
+            <article class="kpi over" data-filter="逾期">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-over">18</div>
+                <div class="kpi-label">逾期隐患</div>
+                <div class="kpi-note" id="kpi-over-note">超期率 1.4%</div>
+              </div>
+            </article>
+            <article class="kpi major" data-filter="重大">
+              <div class="kpi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 16.5h.01"/></svg>
+              </div>
+              <div>
+                <div class="kpi-val" id="kpi-major">3</div>
+                <div class="kpi-label">重大隐患</div>
+                <div class="kpi-note" id="kpi-major-note">即时预警已推送</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="charts">
+            <div class="box map">
+              <div class="box-h">项目分布</div>
+              <div class="chart-mount" id="chart-map"></div>
+              <div class="legend">
+                <span><i style="background:#2f7de1"></i>正常</span>
+                <span><i style="background:#1aa6b8"></i>一般隐患</span>
+                <span><i style="background:#f08a24"></i>逾期隐患</span>
+                <span><i style="background:#e23d3d"></i>重大隐患</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-h">隐患趋势 <span>05-15 — 06-12</span></div>
+              <div class="chart-mount" id="chart-trend"></div>
+            </div>
+            <div class="box">
+              <div class="box-h">专项分布</div>
+              <div class="chart-mount" id="chart-pie"></div>
+            </div>
+            <div class="box">
+              <div class="box-h">待整改分布 <span>未闭环 · 按专项</span></div>
+              <div class="chart-mount" id="chart-pending"></div>
+            </div>
+            <div class="box">
+              <div class="box-h">项目整改排名</div>
+              <div class="chart-mount" id="chart-rank"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel alerts">
+        <span class="corners" aria-hidden="true"><i></i><i></i></span>
+        <div class="panel-h"><h2>自动化预警推送</h2></div>
+        <div class="panel-b">
+          <div class="alert warn" data-filter="临期">
+            <div class="ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2f7de1" stroke-width="1.7"><path d="M6 9a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+            </div>
+            <h3>到期前提醒</h3>
+            <p>按整改时限自动跟踪<br/>到期前推送整改责任人</p>
+          </div>
+          <div class="arrow-down">↓</div>
+          <div class="alert esc" data-filter="逾期">
+            <div class="ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f08a24" stroke-width="1.7"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M12 2v2"/><path d="M16 4l2 3"/></svg>
+            </div>
+            <h3>逾期升级</h3>
+            <p>逾期后逐级升级<br/>项目安全负责人 → 集团分管领导</p>
+          </div>
+          <div class="arrow-down">↓</div>
+          <div class="alert crit" data-filter="重大">
+            <div class="ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e23d3d" stroke-width="1.7"><path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 16.5h.01"/></svg>
+            </div>
+            <h3>重大隐患即时预警</h3>
+            <p>重大隐患入库即推送<br/>不按普通时限等待</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="foot">
+      <div class="flow">
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+          <span>巡检发现</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <span>隐患填报</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3"/><path d="M5 20c1.5-4 12.5-4 14 0"/></svg></div>
+          <span>责任到人</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="1"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div>
+          <span>时限跟踪</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M8.5 12l2.5 2.5L16 10"/></svg></div>
+          <span>整改闭环</span>
+        </div>
+        <div class="flow-arr">→</div>
+        <div class="step">
+          <div class="step-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9l5 3 6-6 5 4v9H4z"/></svg></div>
+          <span>看板月报</span>
+        </div>
+      </div>
+      <div class="values">
+        <button class="val" type="button" id="btn-month-2">
+          <div class="l">月报</div>
+          <div class="m"><em>3 天</em> → 自动生成</div>
+        </button>
+        <div class="val">
+          <div class="l">跨项目</div>
+          <div class="m">实时 <em>横向对比</em></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="view-report">
+    <div class="report-wrap">
+      <button class="back" type="button" id="btn-back-board">← 返回安全态势看板</button>
+      <article class="permit">
+        <h1>安全隐患排查上报</h1>
+        <p class="hint">
+          提交后写入浏览器本地模拟库。返回看板可看到隐患总数与下钻列表更新。正式建设可自研本页或对接简道云 / fireport。
+        </p>
+        <form class="form" id="form">
+          <div class="field">
+            <label>所属项目</label>
+            <select name="project">
+              <option value="A">项目A · 港区仓储一期</option>
+              <option value="B">项目B · 物流枢纽扩建</option>
+              <option value="C">项目C · 智能制造厂房</option>
+              <option value="D">项目D · 配套市政工程</option>
+              <option value="E">项目E · 综合办公楼</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>专项领域</label>
+            <select name="type">
+              <option>日常排查</option>
+              <option>防尘</option>
+              <option>高温</option>
+              <option selected>消防</option>
+              <option>防汛</option>
+              <option>复工复产</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>隐患等级</label>
+            <select name="level">
+              <option>一般隐患</option>
+              <option>重大隐患</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>整改责任人</label>
+            <input name="owner" type="text" placeholder="如：张安全" value="张安全" />
+          </div>
+          <div class="field">
+            <label>整改时限</label>
+            <input name="due" type="date" />
+          </div>
+          <div class="field">
+            <label>发现位置</label>
+            <input name="loc" type="text" placeholder="如：3号塔吊作业面" />
+          </div>
+          <div class="field full">
+            <label>隐患描述</label>
+            <textarea name="desc" rows="3" placeholder="简要描述隐患情况…"></textarea>
+          </div>
+        </form>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" id="submit">提交入库</button>
+          <button class="btn btn-ghost" type="button" id="btn-cancel-report">取消</button>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="toast" id="toast">已写入统一库</div>
+
+  <div class="mask" id="mask"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-h">
+      <div>
+        <div class="crumbs" id="crumbs"></div>
+        <h3 id="drawer-title">下钻</h3>
+      </div>
+      <button class="icon-x" type="button" id="drawer-close" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-b" id="drawer-body"></div>
+  </aside>
+
+  <div class="modal" id="modal-report" aria-hidden="true">
+    <div class="modal-h">
+      <div>
+        <div class="crumbs">自动报表 · 模拟生成</div>
+        <h3>安全隐患排查整改报告 · 2026年8月</h3>
+      </div>
+      <button class="icon-x" type="button" data-close="report" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-b" id="report-body">
+      <p class="hint-bar">点击生成后展示预置月报（非正式模型）。</p>
+    </div>
+  </div>
+
+  <div class="modal modal-qa" id="modal-qa" aria-hidden="true">
+    <div class="modal-h">
+      <div>
+        <div class="crumbs">基于统一库的自然语言查询 · 预置问答</div>
+        <h3>智能问答</h3>
+      </div>
+      <button class="icon-x" type="button" data-close="qa" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-b">
+      <div class="qa-chips" id="qa-chips"></div>
+      <div class="qa-log" id="qa-log"></div>
+      <div class="qa-input-row">
+        <input id="qa-input" placeholder="输入问题，或点上方示例" />
+        <button class="btn btn-primary" type="button" id="qa-ask">询问</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script src="store.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

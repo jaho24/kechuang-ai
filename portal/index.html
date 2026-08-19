@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>科创集团 · 智能决策门户</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="portal-header">
+    <div class="brand">
+      <img class="brand-logo" src="assets/logo.png" alt="科创集团" />
+      <div class="brand-text">
+        <strong>科创集团</strong>
+        <span class="brand-sep">|</span>
+        <span>智能决策门户</span>
+      </div>
+    </div>
+
+    <nav class="portal-nav" aria-label="主导航">
+      <button type="button" class="nav-tab" data-module="investment">
+        投资决策
+      </button>
+      <button type="button" class="nav-tab" data-module="supervision">
+        督查督办
+      </button>
+      <button type="button" class="nav-tab is-active" data-module="safety" aria-current="page">
+        安全生产
+      </button>
+    </nav>
+
+    <div class="portal-right">
+      <div class="role-switch" data-role-switch hidden>
+        <button type="button" class="role-btn is-on" data-role="office">办公室端</button>
+        <button type="button" class="role-btn" data-role="leader">领导端</button>
+      </div>
+      <span class="data-status"><i></i>数据已更新</span>
+      <button type="button" class="icon-btn" title="消息" aria-label="消息">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+      </button>
+      <div class="user-chip" title="演示账号">
+        <div class="avatar">管</div>
+        <span>管理员</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="portal-main">
+    <div class="frame-pane" data-pane="investment" hidden>
+      <div class="frame-loading">正在加载投资决策…</div>
+      <iframe
+        title="投资决策"
+        data-src="https://fde-demo.fineres.com:3000/"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allow="fullscreen"
+      ></iframe>
+    </div>
+    <div class="frame-pane" data-pane="supervision" hidden>
+      <div class="frame-loading">正在加载督查督办…</div>
+      <iframe
+        title="督查督办"
+        data-src="../meeting-supervision-demo/index.html?embed=1#office"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <div class="frame-pane is-on" data-pane="safety">
+      <div class="frame-loading">正在加载安全生产…</div>
+      <iframe
+        title="安全生产"
+        data-src="../safety-production-demo/index.html"
+        loading="eager"
+      ></iframe>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

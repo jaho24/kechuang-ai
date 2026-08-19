@@ -1,0 +1,4769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>会议督查督办系统 · 郑州郑州航空港科创投资集团</title>
+  <style>
+/* 挂图作战 / Ant Design 企业后台风格 — 郑州航空港科创投资集团会议督办 Demo */
+:root {
+  --primary: #1890ff;
+  --primary-hover: #40a9ff;
+  --primary-active: #096dd9;
+  --primary-bg: #e6f7ff;
+  --on-primary: #ffffff;
+  --ink: #262626;
+  --ink-muted: #595959;
+  --ink-subtle: #8c8c8c;
+  --canvas: #ffffff;
+  --page-bg: #f0f2f5;
+  --sidebar-bg: #f7f8fa;
+  --surface-1: #fafafa;
+  --hairline: #f0f0f0;
+  --hairline-strong: #d9d9d9;
+  --header-bg: #252525;
+  --success: #52c41a;
+  --success-bg: #f6ffed;
+  --warning: #faad14;
+  --warning-bg: #fffbe6;
+  --error: #ff4d4f;
+  --error-bg: #fff2f0;
+  --radius: 6px;
+  --radius-sm: 4px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --nav-h: 56px;
+  --side-w: 220px;
+  --ease: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--page-bg);
+  line-height: 1.5715;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: var(--primary-hover); }
+button, input, select, textarea { font-family: inherit; }
+img { max-width: 100%; display: block; }
+code { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); }
+
+/* ——— Header ——— */
+.app-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 24px;
+  background: var(--header-bg);
+  color: #fff;
+}
+.app-screen { display: none; }
+.app-screen.is-on { display: block; }
+.app-nav .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  color: #fff;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.app-nav .brand:hover { color: #fff; }
+.app-nav .brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--primary);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.badge-demo {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-left: 4px;
+  letter-spacing: 0.4px;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-icon {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.nav-icon:hover { background: rgba(255,255,255,0.08); }
+.nav-icon .dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--error);
+}
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px 4px 4px;
+  margin-left: 8px;
+  color: #fff;
+  font-size: 13px;
+}
+.nav-switch {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  margin-left: 8px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #fff;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.nav-switch:hover { background: rgba(255,255,255,0.1); }
+
+/* ——— 角色入口页 ——— */
+.entry-body { background: var(--page-bg); }
+.entry-body .shell { min-height: auto; }
+.entry-main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+.entry-head { text-align: center; margin-bottom: 40px; }
+.entry-head h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+.entry-head p { font-size: 14px; color: var(--ink-muted); }
+.role-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.role-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 28px 28px 24px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1px solid var(--hairline);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+.role-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+.role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.role-icon.office { background: var(--primary); }
+.role-icon.leader { background: #13c2c2; }
+.role-card h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.role-card .role-user { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
+.role-card ul {
+  list-style: none;
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.8;
+  flex: 1;
+  margin-bottom: 20px;
+}
+.role-card ul li::before { content: '· '; color: var(--primary); font-weight: 700; }
+.role-card .btn { align-self: flex-start; pointer-events: none; }
+
+@media (max-width: 720px) {
+  .role-cards { grid-template-columns: 1fr; }
+}
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1890ff, #096dd9);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ——— Shell ——— */
+.shell {
+  display: grid;
+  grid-template-columns: var(--side-w) 1fr;
+  min-height: calc(100vh - var(--nav-h));
+}
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid #e8e8e8;
+  padding: 12px 0 24px;
+  overflow-y: auto;
+}
+.side-item, .side-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-family: inherit;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.side-item:hover, .side-link:hover {
+  color: var(--primary);
+}
+.side-item.active, .side-link.active {
+  color: var(--primary);
+  background: var(--primary-bg);
+  font-weight: 500;
+}
+.side-item svg, .side-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+.side-link.is-muted, .side-group-title.is-muted {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+.side-group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: default;
+}
+.side-group-title svg { width: 16px; height: 16px; opacity: 0.75; }
+.side-sub {
+  padding: 2px 0 8px;
+}
+.side-sub a, .side-sub button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 8px 20px 8px 46px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  text-decoration: none;
+}
+.side-sub a:hover, .side-sub button:hover { color: var(--primary); }
+.side-sub .side-item {
+  padding: 8px 20px 8px 46px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.65);
+  background: transparent;
+}
+.side-sub .side-item.active {
+  color: var(--primary);
+  background: transparent;
+  font-weight: 500;
+}
+
+.main {
+  padding: 16px 20px 32px;
+  min-width: 0;
+}
+.welcome {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.welcome span { color: var(--ink-muted); font-weight: 400; font-size: 13px; margin-left: 12px; }
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.page-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.page-header .sub {
+  color: var(--ink-muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ——— Buttons ——— */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 15px;
+  font-size: 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  white-space: nowrap;
+  background: #fff;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.btn-primary:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-primary:active:not(:disabled) { background: var(--primary-active); }
+.btn-secondary {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+}
+.btn-secondary:hover:not(:disabled) { color: var(--primary); border-color: var(--primary); }
+.btn-ghost {
+  background: transparent;
+  color: var(--primary);
+  border-color: transparent;
+  padding: 0 4px;
+  height: auto;
+}
+.btn-ghost:hover:not(:disabled) { color: var(--primary-hover); }
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  padding: 0;
+  height: auto;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn-link:hover { color: var(--primary-hover); }
+.btn-link + .btn-link { margin-left: 12px; }
+.btn-sm { height: 28px; padding: 0 10px; font-size: 13px; }
+.btn-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ——— Cards ——— */
+.panel {
+  background: var(--canvas);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 20px 24px;
+}
+.panel + .panel { margin-top: 16px; }
+.panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.panel-desc {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 16px;
+}
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.card-head h3 { font-size: 15px; font-weight: 600; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* ——— 三色 / 进度统计卡 ——— */
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px 24px 20px;
+}
+.stat-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+.stat-inline {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink);
+  border: none;
+  background: transparent;
+  padding: 6px 10px;
+  margin: -6px -10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+}
+button.stat-item:hover { background: var(--primary-bg); }
+button.stat-item.is-on {
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-weight: 500;
+}
+.stat-item .num {
+  font-size: 22px;
+  font-weight: 500;
+  min-width: 18px;
+  font-variant-numeric: tabular-nums;
+}
+/* ——— 领导端：科技感优先级滑动推送 ——— */
+.attention-rail {
+  --attn-ink: #eaf6ff;
+  --attn-muted: #8eb4d4;
+  --attn-cyan: #3de7ff;
+  --attn-line: rgba(61, 231, 255, 0.22);
+  position: relative;
+  margin-bottom: 14px;
+  padding: 14px 16px 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  color: var(--attn-ink);
+  background:
+    radial-gradient(ellipse 70% 80% at 0% 0%, rgba(0, 180, 255, 0.22), transparent 55%),
+    radial-gradient(ellipse 50% 60% at 100% 100%, rgba(61, 231, 255, 0.12), transparent 50%),
+    linear-gradient(145deg, #071525 0%, #0c2238 48%, #081a2c 100%);
+  border: 1px solid var(--attn-line);
+  box-shadow: 0 10px 28px rgba(7, 21, 37, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  font-family: "DIN Alternate", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.attention-rail[hidden] { display: none; }
+.attention-rail::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(61, 231, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61, 231, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.attention-rail::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -8%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(61, 231, 255, 0.18), transparent 68%);
+  pointer-events: none;
+  animation: attn-glow 4s ease-in-out infinite alternate;
+}
+.attn-scan {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, transparent 0%, rgba(61, 231, 255, 0.08) 50%, transparent 100%);
+  height: 28%;
+  animation: attn-scan 4.8s linear infinite;
+}
+@keyframes attn-scan {
+  0% { transform: translateY(-120%); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 0.4; }
+  100% { transform: translateY(420%); opacity: 0; }
+}
+@keyframes attn-glow {
+  from { opacity: 0.55; transform: translate(0, 0); }
+  to { opacity: 1; transform: translate(-12px, 10px); }
+}
+.attention-rail-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.attn-live {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.attn-spacer { flex: 1; }
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--attn-cyan);
+  box-shadow: 0 0 0 0 rgba(61, 231, 255, 0.5);
+  animation: live-pulse 1.6s ease-out infinite;
+}
+@keyframes live-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(61, 231, 255, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(61, 231, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(61, 231, 255, 0); }
+}
+.attention-kicker {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--attn-cyan);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.attention-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+.attention-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.attn-nav {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--attn-line);
+  background: rgba(8, 28, 48, 0.75);
+  color: var(--attn-ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.attn-nav:hover {
+  border-color: var(--attn-cyan);
+  background: rgba(61, 231, 255, 0.12);
+  color: #fff;
+}
+.attn-index {
+  font-size: 13px;
+  color: var(--attn-cyan);
+  min-width: 72px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+}
+.attn-hud {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.attn-hud-pri {
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(61, 231, 255, 0.14);
+  border: 1px solid rgba(61, 231, 255, 0.4);
+  color: var(--attn-cyan);
+  font-weight: 700;
+}
+.attn-slide.pri-0 .attn-hud-pri {
+  background: rgba(255, 77, 79, 0.2);
+  border-color: rgba(255, 77, 79, 0.55);
+  color: #ff8a8c;
+}
+.attn-hud-type { color: #fff; font-weight: 700; letter-spacing: 0.08em; }
+.attn-hud-kind { color: var(--attn-cyan); }
+.attn-hud-count {
+  margin-left: auto;
+  color: var(--attn-muted);
+  font-variant-numeric: tabular-nums;
+}
+.attn-viewport {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.attn-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.attn-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  padding: 12px 12px 10px;
+  background: rgba(6, 22, 40, 0.72);
+  border: 1px solid rgba(61, 231, 255, 0.16);
+  border-radius: 10px;
+  opacity: 0.78;
+  transition: opacity 0.35s ease;
+  box-sizing: border-box;
+}
+.attn-slide.is-active { opacity: 1; }
+.attn-slide.pri-0 { box-shadow: inset 3px 0 0 #ff4d4f; }
+.attn-slide.pri-1 { box-shadow: inset 3px 0 0 #ff7a45; }
+.attn-slide.pri-2 { box-shadow: inset 3px 0 0 #faad14; }
+.attn-slide.pri-3 { box-shadow: inset 3px 0 0 #40a9ff; }
+.attn-slide.pri-4 { box-shadow: inset 3px 0 0 #69c0ff; }
+.attn-slide-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.attn-slide-meta strong {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+.attn-slide-meta em {
+  font-style: normal;
+  font-size: 13px;
+  color: var(--attn-cyan);
+  font-weight: 600;
+}
+.attn-count {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--attn-muted);
+  font-weight: 600;
+}
+.attn-card-row {
+  display: grid;
+  gap: 10px;
+}
+.attn-card-row.n-1 { grid-template-columns: 1fr; }
+.attn-card-row.n-2 { grid-template-columns: 1fr 1fr; }
+.attn-card-row.n-3 { grid-template-columns: repeat(3, 1fr); }
+.attn-card {
+  position: relative;
+  text-align: left;
+  padding: 14px 14px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(61, 231, 255, 0.18);
+  background:
+    linear-gradient(165deg, rgba(14, 42, 68, 0.95), rgba(8, 26, 44, 0.92));
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  min-height: 118px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.attn-card::before,
+.attn-card::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+.attn-card::before {
+  top: 6px;
+  left: 6px;
+  border-top: 1px solid var(--attn-cyan);
+  border-left: 1px solid var(--attn-cyan);
+}
+.attn-card::after {
+  right: 6px;
+  bottom: 6px;
+  border-right: 1px solid var(--attn-cyan);
+  border-bottom: 1px solid var(--attn-cyan);
+}
+.attn-card:hover {
+  border-color: rgba(61, 231, 255, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(61, 231, 255, 0.18), 0 10px 22px rgba(0, 0, 0, 0.28);
+}
+.attn-card.is-red {
+  border-color: rgba(255, 77, 79, 0.45);
+  background: linear-gradient(165deg, rgba(56, 18, 24, 0.95), rgba(28, 12, 18, 0.92));
+}
+.attn-card.is-red:hover {
+  border-color: rgba(255, 77, 79, 0.75);
+  box-shadow: 0 0 20px rgba(255, 77, 79, 0.2), 0 10px 22px rgba(0, 0, 0, 0.28);
+}
+.attn-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.attn-card.is-red::before,
+.attn-card.is-red::after { border-color: #ff6b6d; }
+.attn-kind {
+  font-size: 12px;
+  color: var(--attn-muted);
+  font-weight: 600;
+}
+.attn-type {
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--attn-cyan);
+  font-weight: 700;
+}
+.attn-card .ttl {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.attn-card .sum {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--attn-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.attn-card .attn-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #7aa3c7;
+  font-weight: 600;
+}
+@media (max-width: 860px) {
+  .attn-card-row.n-2,
+  .attn-card-row.n-3 { grid-template-columns: 1fr; }
+  .attention-title { font-size: 16px; }
+  .attn-card .ttl { font-size: 15px; }
+}
+
+.tech-stats .stat-card {
+  border: 1px solid rgba(24, 144, 255, 0.12);
+  background: linear-gradient(180deg, #fff 0%, #f7fbff 100%);
+}
+
+/* ——— 待办卡片 + 筛选下拉 / 状态 Tab ——— */
+.todo-panel .panel-desc { color: var(--ink-muted); font-size: 13px; }
+.todo-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.filter-field > span {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.todo-filters .filter-select {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+.todo-filters .filter-select:focus {
+  border-color: var(--primary-hover);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.15);
+}
+.todo-tabs {
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 16px;
+}
+.tab-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.tab-row:last-child { margin-bottom: 0; }
+.tab-label {
+  flex: 0 0 36px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  line-height: 28px;
+}
+.tab-group { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; }
+.todo-tab {
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--hairline-strong);
+  background: #fff;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+.todo-tab:hover { border-color: var(--primary); color: var(--primary); }
+.todo-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.28);
+}
+.todo-tab .n {
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+  font-size: 12px;
+}
+@media (max-width: 860px) {
+  .todo-filters { grid-template-columns: 1fr; }
+}
+.todo-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.todo-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.todo-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary);
+}
+.todo-card.card-red::before { background: var(--error); }
+.todo-card.card-yellow::before { background: var(--warning); }
+.todo-card.card-green::before { background: var(--success); }
+.todo-card:hover {
+  border-color: rgba(24, 144, 255, 0.45);
+  box-shadow: 0 6px 18px rgba(24, 144, 255, 0.1);
+  transform: translateY(-1px);
+}
+.todo-card-main { min-width: 0; }
+.todo-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.todo-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+.todo-card-sum {
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.todo-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  font-size: 12px;
+  color: var(--ink-subtle);
+}
+.todo-card-meta b { color: var(--ink-muted); font-weight: 500; }
+.todo-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  justify-content: center;
+}
+.todo-card-actions .btn { white-space: nowrap; }
+
+.push-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e6f7ff, #f0f5ff);
+  border: 1px solid #91d5ff;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.push-banner strong { color: var(--primary-active); font-weight: 600; }
+
+.minutes-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.45);
+}
+.minutes-modal[hidden] { display: none; }
+.minutes-dialog {
+  width: min(720px, 100%);
+  max-height: min(86vh, 860px);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: minutes-in 0.28s var(--ease);
+}
+@keyframes minutes-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.minutes-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--hairline);
+  background: linear-gradient(180deg, #f7fbff, #fff);
+}
+.minutes-head h2 { font-size: 17px; font-weight: 600; margin-top: 6px; }
+.minutes-body {
+  padding: 20px 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+.minutes-sec { margin-bottom: 20px; }
+.minutes-sec:first-child {
+  background: #f7f8fa;
+  border: 1px solid var(--hairline);
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin-bottom: 22px;
+}
+.minutes-sec:first-child h3 { display: none; }
+.minutes-sec:first-child p {
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.85;
+}
+.minutes-sec h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--ink);
+  padding-left: 10px;
+  border-left: 3px solid var(--primary);
+}
+.minutes-sec p, .minutes-sec li {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+.minutes-sec ul { padding-left: 18px; }
+.minutes-sec li + li { margin-top: 4px; }
+table.data tr.row-red td { background: var(--error-bg); }
+table.data tr.row-red:hover td { background: #fff1f0; }
+table.data tr.row-yellow td { background: var(--warning-bg); }
+table.data tr.row-yellow:hover td { background: #fff7e6; }
+.board-summary {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.board-summary[hidden] { display: none; }
+.summary-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.summary-row + .summary-row { margin-top: 8px; }
+.summary-label {
+  font-size: 12px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  line-height: 28px;
+}
+.summary-chips { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; }
+.summary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 14px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+}
+.summary-chip:hover { border-color: var(--primary); color: var(--primary); }
+.summary-chip.active {
+  background: var(--primary-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 500;
+}
+.summary-chip .n {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+.summary-chip.active .n { color: var(--primary); }
+.dot-blue, .dot-yellow, .dot-red, .dot-black {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-blue { background: #1890ff; }
+.dot-yellow { background: #faad14; }
+.dot-red { background: #ff4d4f; }
+.dot-black { background: #262626; }
+
+/* legacy stat tiles still used on office */
+.stat {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px 20px;
+}
+.stat .label { font-size: 13px; color: var(--ink-muted); }
+.stat .value { font-size: 28px; font-weight: 500; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.stat .delta { font-size: 12px; color: var(--success); margin-top: 4px; }
+
+/* ——— Tags ——— */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 11px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.tag-blue { background: var(--primary-bg); color: var(--primary); border: 1px solid #91d5ff; }
+.tag-green { background: var(--success-bg); color: #389e0d; border: 1px solid #b7eb8f; }
+.tag-yellow { background: var(--warning-bg); color: #d48806; border: 1px solid #ffe58f; }
+.tag-red { background: var(--error-bg); color: var(--error); border: 1px solid #ffa39e; }
+.tag-gray { background: #fafafa; color: var(--ink-muted); border: 1px solid #d9d9d9; }
+
+/* ——— Steps ——— */
+.steps {
+  display: flex;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.step {
+  flex: 1;
+  padding: 14px 20px;
+  border-right: 1px solid var(--hairline);
+  font-size: 13px;
+  color: var(--ink-subtle);
+  cursor: pointer;
+}
+.step:last-child { border-right: none; }
+.step .n { font-size: 12px; margin-bottom: 2px; color: var(--ink-subtle); }
+.step.active { color: var(--ink); background: var(--primary-bg); }
+.step.active .n { color: var(--primary); font-weight: 600; }
+.step.done { color: var(--ink-muted); }
+.step.done .n { color: var(--success); }
+
+/* ——— Forms ——— */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.field textarea {
+  height: auto;
+  min-height: 88px;
+  padding: 8px 11px;
+  resize: vertical;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--primary-hover);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* ——— Upload ——— */
+.upload-zone {
+  border: 1px dashed var(--hairline-strong);
+  background: var(--surface-1);
+  border-radius: var(--radius);
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+.upload-zone .icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+  font-size: 22px;
+}
+.upload-zone h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.upload-zone p { font-size: 13px; color: var(--ink-subtle); }
+.file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.file-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+}
+.file-chip .ftype {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+.file-chip .meta { flex: 1; text-align: left; }
+.file-chip .meta .name { font-size: 14px; }
+.file-chip .meta .size { font-size: 12px; color: var(--ink-subtle); }
+.file-chip .remove {
+  border: none;
+  background: transparent;
+  color: var(--ink-subtle);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+.file-chip .remove:hover { color: var(--error); }
+
+/* ——— AI pipeline ——— */
+.ai-pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+.pipe-node {
+  flex: 1;
+  min-width: 110px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  padding: 14px 10px;
+  text-align: center;
+}
+.pipe-node + .pipe-node { border-left: none; }
+.pipe-node:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.pipe-node:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.pipe-node .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  margin: 0 auto 8px;
+}
+.pipe-node.active .dot {
+  background: var(--primary);
+  box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.2);
+  animation: pulse 1.2s infinite;
+}
+.pipe-node.done .dot { background: var(--success); box-shadow: none; animation: none; }
+.pipe-node .t { font-size: 13px; font-weight: 600; }
+.pipe-node .d { font-size: 12px; color: var(--ink-subtle); margin-top: 2px; }
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(24, 144, 255, 0.08); }
+}
+.log-console {
+  background: #1f1f1f;
+  color: #d9d9d9;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  max-height: 180px;
+  overflow-y: auto;
+  line-height: 1.7;
+}
+.log-console .ok { color: #73d13d; }
+.log-console .info { color: #69c0ff; }
+.log-console .warn { color: #ffc53d; }
+
+/* ——— Minutes ——— */
+.minutes-body {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  padding: 24px 28px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.minutes-body h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+.minutes-body h3 { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: var(--primary); }
+.minutes-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 24px;
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 12px;
+}
+.minutes-meta strong { color: var(--ink); font-weight: 500; }
+.minutes-body ul { padding-left: 20px; margin: 8px 0; }
+.minutes-body li { margin: 4px 0; }
+
+/* ——— Table ——— */
+.table-card { padding: 16px 20px 8px; }
+.table-wrap { overflow-x: auto; }
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 13px;
+}
+table.data th {
+  text-align: left;
+  padding: 12px 12px;
+  background: #fafafa;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+table.data td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+  color: var(--ink);
+}
+table.data tr:hover td { background: #fafafa; }
+table.data .check { width: 40px; text-align: center; }
+table.data input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+table.data .cell-muted { color: var(--ink-muted); font-size: 12px; line-height: 1.6; max-width: 180px; }
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 4px 8px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.pager select {
+  height: 28px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  padding: 0 8px;
+  background: #fff;
+}
+.pager-btn {
+  min-width: 28px;
+  height: 28px;
+  border: 1px solid var(--hairline-strong);
+  background: #fff;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--ink);
+}
+.pager-btn.active {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* ——— Filters ——— */
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  align-items: center;
+}
+.filter-chip {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--hairline-strong);
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink-muted);
+  border-radius: var(--radius-sm);
+}
+.filter-chip:hover { color: var(--primary); border-color: var(--primary); }
+.filter-chip.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.search-box {
+  margin-left: auto;
+  height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  min-width: 220px;
+  outline: none;
+}
+.search-box:focus {
+  border-color: var(--primary-hover);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* ——— Overview / architecture ——— */
+.hero {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 36px 32px;
+  margin-bottom: 16px;
+}
+.hero .eyebrow {
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.35;
+  max-width: 640px;
+}
+.hero .lead {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin-top: 10px;
+  max-width: 620px;
+  line-height: 1.7;
+}
+.hero-cta { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+.arch-board {
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 16px;
+}
+.arch-side {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.arch-side h3 {
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.role-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+.arch-side.leader .role-dot { background: #13c2c2; }
+.arch-feat {
+  font-size: 13px;
+  padding: 10px 12px;
+  background: var(--surface-1);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.arch-side.leader .arch-feat { border-left-color: #13c2c2; }
+.arch-center {
+  background: linear-gradient(180deg, #e6f7ff 0%, #fff 70%);
+  border: 1px solid #91d5ff;
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.arch-center h3 {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--primary);
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.flow-box {
+  background: #fff;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 80px;
+}
+.flow-arrow { color: var(--primary); font-size: 16px; font-weight: 700; }
+.flow-note { text-align: center; font-size: 12px; color: var(--ink-muted); margin-top: 16px; }
+.sys-bar {
+  margin-bottom: 16px;
+  background: var(--header-bg);
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sys-bar .title { font-weight: 600; font-size: 14px; }
+.sys-bar .hint { font-size: 12px; color: rgba(255,255,255,0.55); }
+.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pain-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+.pain-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pain-card p { font-size: 13px; color: var(--ink-muted); line-height: 1.7; }
+.pain-card.before h4::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
+.pain-card.after h4::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+
+/* ——— Toast ——— */
+.toast-wrap {
+  position: fixed;
+  top: 72px;
+  right: 24px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  background: #fff;
+  color: var(--ink);
+  padding: 12px 16px;
+  font-size: 14px;
+  min-width: 280px;
+  max-width: 400px;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: slideIn 0.25s var(--ease);
+}
+.toast.success { border-left: 3px solid var(--success); }
+.toast.info { border-left: 3px solid var(--primary); }
+@keyframes slideIn {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.progress {
+  height: 6px;
+  background: #f5f5f5;
+  border-radius: 3px;
+  margin: 4px 0;
+  overflow: hidden;
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.4s var(--ease);
+}
+.progress.ok > i { background: var(--success); }
+.progress.warn > i { background: var(--warning); }
+
+.empty {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ink-subtle);
+  font-size: 14px;
+}
+
+/* ——— Drawer ——— */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(480px, 100%);
+  height: 100%;
+  background: #fff;
+  z-index: 160;
+  transform: translateX(100%);
+  transition: transform 0.25s var(--ease);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -6px 0 16px rgba(0,0,0,0.08);
+}
+.drawer.open { transform: translateX(0); }
+.drawer-head {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.drawer-head h2 { font-size: 16px; font-weight: 600; }
+.drawer-body { padding: 24px; overflow-y: auto; flex: 1; }
+.drawer-foot {
+  padding: 12px 24px;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.extract-kv { margin-bottom: 20px; padding: 12px 16px; background: var(--surface-1); border-radius: var(--radius-sm); }
+.kv { display: grid; grid-template-columns: 100px 1fr; gap: 10px 12px; font-size: 14px; margin-bottom: 20px; }
+.kv dt { color: var(--ink-muted); }
+.kv dd { color: var(--ink); }
+
+.timeline { border-left: 2px solid var(--hairline); margin-left: 8px; padding-left: 20px; }
+.tl-item { position: relative; padding-bottom: 18px; }
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid #fff;
+}
+.tl-item .when { font-size: 12px; color: var(--ink-subtle); font-family: var(--mono); }
+.tl-item .what { font-size: 14px; margin-top: 2px; }
+
+.view { display: none; animation: fadeUp 0.25s var(--ease); }
+.view.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.section-gap { margin-top: 16px; }
+
+/* ——— 红黄绿牌 ——— */
+.card-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 11px;
+  font-weight: 500;
+}
+.card-flag::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.card-flag.red { background: var(--error-bg); color: var(--error); border: 1px solid #ffa39e; }
+.card-flag.red::before { background: #ff4d4f; }
+.card-flag.yellow { background: var(--warning-bg); color: #d48806; border: 1px solid #ffe58f; }
+.card-flag.yellow::before { background: #faad14; }
+.card-flag.green { background: var(--success-bg); color: #389e0d; border: 1px solid #b7eb8f; }
+.card-flag.green::before { background: #52c41a; }
+.dot-green { width: 8px; height: 8px; border-radius: 50%; background: #52c41a; flex-shrink: 0; }
+
+/* ——— OA 纪要卡片 ——— */
+.doc-row { display: flex; flex-direction: column; gap: 8px; }
+.doc-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+}
+.doc-card:hover { border-color: var(--primary-hover); }
+.doc-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+.doc-card .ftype { flex-shrink: 0; }
+
+/* ——— 提取要点 ——— */
+.resolve-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.resolve-item {
+  padding: 10px 12px;
+  background: var(--surface-1);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ——— 抄送对比 ——— */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.compare-col h4 { font-size: 14px; margin-bottom: 8px; }
+.compare-col ul { list-style: none; font-size: 13px; color: var(--ink-muted); }
+.compare-col li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.compare-col .reason { color: var(--primary); font-size: 12px; }
+
+/* ——— 消息 / 周报 / 问答 ——— */
+.msg-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.msg-item .meta { font-size: 12px; color: var(--ink-subtle); margin-bottom: 4px; }
+.msg-item .body { font-size: 14px; line-height: 1.6; }
+.report-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin-top: 8px;
+}
+.report-hist {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  padding: 12px 10px;
+}
+.report-hist-title {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+.report-hist-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 10px 10px 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.report-hist-item:last-child { margin-bottom: 0; }
+.report-hist-item:hover { border-color: var(--primary-hover); }
+.report-hist-item.is-on {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+.rh-week { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.rh-period { font-size: 12px; color: var(--ink-muted); margin-bottom: 6px; }
+.rh-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.report-doc {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 24px 28px;
+  font-size: 14px;
+  line-height: 1.7;
+  background: #fff;
+}
+.report-doc-kicker {
+  font-size: 12px;
+  color: var(--ink-subtle);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.report-doc h2 { font-size: 18px; margin-bottom: 8px; }
+.report-doc .meta { color: var(--ink-muted); font-size: 13px; margin-bottom: 16px; }
+.report-stat-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+.report-stat {
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 10px 8px;
+  text-align: center;
+  background: var(--surface-1);
+}
+.report-stat b { display: block; font-size: 20px; line-height: 1.2; }
+.report-stat span { font-size: 12px; color: var(--ink-muted); }
+.report-stat.is-red b { color: var(--error); }
+.report-stat.is-yellow b { color: #d48806; }
+.report-stat.is-green b { color: var(--success); }
+.report-sec-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 18px 0 8px;
+}
+.report-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.report-foot {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--ink-subtle);
+}
+@media (max-width: 1100px) {
+  .report-layout { grid-template-columns: 1fr; }
+  .report-stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+/* ——— 智能问答悬浮助手 ——— */
+.qa-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 180;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  pointer-events: none;
+}
+.qa-widget > * { pointer-events: auto; }
+.qa-fab {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 24px rgba(24, 144, 255, 0.42);
+  position: relative;
+  transition: transform 0.2s var(--ease), background 0.2s, box-shadow 0.2s;
+}
+.qa-fab:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 10px 28px rgba(24, 144, 255, 0.5);
+}
+.qa-fab:active { transform: scale(0.96); }
+.qa-fab::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(24, 144, 255, 0.4);
+  animation: qaPulse 2s ease-out infinite;
+  pointer-events: none;
+}
+.qa-fab::before {
+  content: '智能问答';
+  position: absolute;
+  right: 66px;
+  white-space: nowrap;
+  background: #262626;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  padding: 7px 10px;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateX(6px);
+  pointer-events: none;
+  transition: opacity 0.18s, transform 0.18s;
+}
+.qa-fab:hover::before {
+  opacity: 1;
+  transform: none;
+}
+.qa-widget.is-open .qa-fab::after,
+.qa-widget.is-open .qa-fab::before { display: none; }
+.qa-fab-icon { display: grid; place-items: center; line-height: 0; }
+.qa-fab-x { display: none; font-size: 28px; font-weight: 300; line-height: 1; margin-top: -2px; }
+.qa-widget.is-open .qa-fab-chat { display: none; }
+.qa-widget.is-open .qa-fab-x { display: block; }
+.qa-widget.is-open .qa-fab {
+  background: #595959;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+@keyframes qaPulse {
+  0% { transform: scale(1); opacity: 0.75; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+.qa-panel {
+  width: min(392px, calc(100vw - 32px));
+  height: min(560px, calc(100vh - 120px));
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+  animation: qaPop 0.22s var(--ease);
+}
+.qa-panel[hidden] { display: none !important; }
+@keyframes qaPop {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.qa-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 14px 16px;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  color: #fff;
+  flex-shrink: 0;
+}
+.qa-bot-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.qa-panel-title { font-size: 15px; font-weight: 600; line-height: 1.3; }
+.qa-panel-sub { font-size: 11px; opacity: 0.82; margin-top: 2px; }
+.qa-panel-close {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0.85;
+}
+.qa-panel-close:hover { background: rgba(255, 255, 255, 0.16); opacity: 1; }
+.qa-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 12px 0;
+  flex-shrink: 0;
+}
+.qa-chips .filter-chip {
+  height: auto;
+  min-height: 26px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: left;
+  border-radius: 14px;
+  white-space: normal;
+}
+.qa-log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 14px 8px;
+}
+.qa-turn { margin-bottom: 12px; }
+.qa-turn .who { font-size: 11px; color: var(--ink-subtle); margin-bottom: 4px; }
+.qa-turn .bubble {
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.65;
+  max-width: 92%;
+}
+.qa-turn.user { text-align: right; }
+.qa-turn.user .bubble {
+  display: inline-block;
+  text-align: left;
+  background: var(--primary);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.qa-turn.bot .bubble {
+  background: var(--surface-1);
+  border-bottom-left-radius: 4px;
+}
+.qa-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--hairline);
+  flex-shrink: 0;
+  background: #fff;
+}
+.qa-input-row input {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 18px;
+  outline: none;
+  font-size: 13px;
+}
+.qa-input-row input:focus {
+  border-color: var(--primary-hover);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+.qa-send {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.qa-send:hover { background: var(--primary-hover); }
+@media (max-width: 480px) {
+  .qa-widget { right: 16px; bottom: 16px; }
+  .qa-panel { height: min(70vh, 520px); }
+}
+
+.filter-select {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.upload-types {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.type-chip {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--hairline-strong);
+  background: #fff;
+  border-radius: 14px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  display: inline-flex;
+  align-items: center;
+}
+.evidence-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.evidence-row {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  font-size: 13px;
+}
+.leader-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.leader-pack {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+}
+.leader-pack:hover { border-color: var(--primary-hover); }
+.leader-pack.selected {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+.leader-pack .who {
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.leader-pack .who input { margin: 0; pointer-events: none; }
+.leader-pack .role { font-size: 12px; color: var(--ink-subtle); margin: 2px 0 8px; }
+.leader-pack .hint { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+
+@media (max-width: 1100px) {
+  .stat-row, .arch-board, .pain-grid, .compare-grid, .leader-grid { grid-template-columns: 1fr; }
+  .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 860px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .grid-2, .grid-3, .grid-4, .minutes-meta { grid-template-columns: 1fr; }
+  .search-box { margin-left: 0; width: 100%; }
+}
+
+</style>
+</head>
+<body class="entry-body">
+  <!-- 身份入口 -->
+  <div class="app-screen is-on" id="screen-entry">
+    <nav class="app-nav">
+      <div class="brand" style="cursor:default">
+        <div class="brand-mark">督</div>
+        <span>郑州航空港科创投资集团 · 会议督查督办系统</span>
+        <span class="badge-demo">DEMO</span>
+      </div>
+    </nav>
+    <main class="entry-main">
+      <div class="entry-head">
+        <h1>请选择登录身份</h1>
+        <p>办公室与领导使用不同入口，演示时可分别体验「材料汇聚分发」与「督办看板决策」。</p>
+      </div>
+      <div class="role-cards">
+        <button class="role-card" type="button" data-go="office">
+          <div class="role-icon office">办</div>
+          <h2>办公室端</h2>
+          <p class="role-user">张璇 · 办公室</p>
+          <ul>
+            <li>上传 PDF / 转录稿 / 图片</li>
+            <li>Agent 识别并整理待办</li>
+            <li>按领导分发并转入督办</li>
+          </ul>
+          <span class="btn btn-primary">进入办公室端</span>
+        </button>
+        <button class="role-card" type="button" data-go="leader">
+          <div class="role-icon leader">领</div>
+          <h2>领导端</h2>
+          <p class="role-user">文钊 · 总经理</p>
+          <ul>
+            <li>红黄绿牌督办看板</li>
+            <li>临期提醒与逾期升级</li>
+            <li>督查周报与智能问答</li>
+          </ul>
+          <span class="btn btn-secondary">进入领导端</span>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- 办公室端 -->
+  <div class="app-screen" id="screen-office">
+    <nav class="app-nav">
+      <button class="brand" type="button" data-go="entry">
+        <div class="brand-mark">督</div>
+        <span>郑州航空港科创投资集团 · 会议督查督办系统</span>
+        <span class="badge-demo">DEMO</span>
+      </button>
+      <div class="nav-right">
+        <button class="nav-switch" type="button" data-go="leader">切换至领导端</button>
+        <button class="nav-icon" type="button" title="消息">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <div class="nav-user">
+          <div class="avatar">张</div>
+          <span>张璇 · 办公室</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="shell">
+      <aside class="sidebar" id="office-sidebar">
+        <button class="side-link active" type="button" data-office="material">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          会议材料
+        </button>
+        <button class="side-link" type="button" data-office="dispatch">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          待办分发
+        </button>
+        <button class="side-link" type="button" data-office="history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          转入记录
+        </button>
+        <button class="side-link" type="button" data-office="inbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          站内信
+        </button>
+      </aside>
+
+      <main class="main">
+        <div class="welcome">欢迎您，张璇！<span>办公室 · 多材料识别与待办分发</span></div>
+        <div class="page-header">
+          <div>
+            <h1 id="office-title">会议材料汇聚</h1>
+            <p class="sub" id="office-sub">上传 PDF / 文字转录稿 / 图片 → Agent 识别 → 结构化提取 → 转入督办</p>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-secondary btn-sm" type="button" id="btn-load-sample">载入示例材料</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="btn-reset">重置 Demo 数据</button>
+          </div>
+        </div>
+
+        <div class="steps" id="steps-bar">
+          <div class="step active" data-step="1"><div class="n">STEP 01</div>上传材料</div>
+          <div class="step" data-step="2"><div class="n">STEP 02</div>Agent 识别</div>
+          <div class="step" data-step="3"><div class="n">STEP 03</div>结构化提取</div>
+          <div class="step" data-step="4"><div class="n">STEP 04</div>转入督办</div>
+        </div>
+
+        <div id="office-workflow">
+          <section class="view active" id="view-1">
+            <div class="panel">
+              <div class="panel-title">上传会议材料</div>
+              <p class="panel-desc">支持同时上传多种来源。Agent 将跨材料对齐同一场会议的决议与任务。</p>
+              <div class="upload-types">
+                <span class="type-chip">PDF 纪要 / 材料</span>
+                <span class="type-chip">文字转录稿 TXT / DOCX</span>
+                <span class="type-chip">图片 JPG / PNG（白板、截图）</span>
+              </div>
+              <div class="upload-zone" id="upload-zone">
+                <div class="icon">↑</div>
+                <h3>拖拽文件到此处，或点击选择</h3>
+                <p>演示可点「载入示例材料」一次加入 PDF、转录稿、白板照片、微信截图</p>
+              </div>
+              <input type="file" id="file-input" multiple accept=".pdf,.txt,.doc,.docx,.jpg,.jpeg,.png,.webp" hidden />
+              <div class="file-list" id="file-list"></div>
+              <div class="btn-group" style="margin-top:20px">
+                <button class="btn btn-primary" type="button" id="btn-to-extract" disabled>下一步：Agent 识别</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-2">
+            <div class="panel">
+              <div class="panel-title">Agent 多模态识别</div>
+              <p class="panel-desc">分别解析 PDF 正文、转录稿语义、图片 OCR，再汇聚为同一场会议的完整信息。</p>
+              <div class="ai-pipeline" id="ai-pipeline">
+                <div class="pipe-node" data-p="0"><div class="dot"></div><div class="t">PDF 解析</div><div class="d">纪要正文</div></div>
+                <div class="pipe-node" data-p="1"><div class="dot"></div><div class="t">转录理解</div><div class="d">发言与表态</div></div>
+                <div class="pipe-node" data-p="2"><div class="dot"></div><div class="t">图片 OCR</div><div class="d">白板 / 截图</div></div>
+                <div class="pipe-node" data-p="3"><div class="dot"></div><div class="t">交叉对齐</div><div class="d">去重汇聚</div></div>
+              </div>
+              <div class="log-console" id="ai-log" style="display:none"></div>
+              <div class="evidence-list" id="evidence-list" style="display:none"></div>
+              <div class="btn-group" style="margin-top:16px">
+                <button class="btn btn-primary" type="button" id="btn-run-ai">开始识别</button>
+                <button class="btn btn-secondary" type="button" data-back="1">返回</button>
+                <button class="btn btn-primary" type="button" id="btn-after-ai" data-next="3" style="display:none">下一步：结构化提取</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-3">
+            <div class="panel">
+              <div class="card-head">
+                <div>
+                  <div class="panel-title" style="margin:0">结构化提取结果</div>
+                  <p class="panel-desc" style="margin:4px 0 0">从会议材料中抽取决议与工作任务，核对后转入督办</p>
+                </div>
+                <span class="tag tag-green">Agent 已整理</span>
+              </div>
+              <div class="panel-title" style="font-size:13px;color:var(--ink-muted);font-weight:400;margin-bottom:8px">会议要素</div>
+              <dl class="kv extract-kv" id="extract-meta"></dl>
+              <div class="panel-title" style="font-size:13px;color:var(--ink-muted);font-weight:400;margin-bottom:8px">核心决议</div>
+              <div class="resolve-list" id="resolve-list"></div>
+              <div class="panel-title" style="font-size:13px;color:var(--ink-muted);font-weight:400;margin-bottom:8px">工作任务</div>
+              <div class="table-wrap">
+                <table class="data" id="task-table">
+                  <thead>
+                    <tr>
+                      <th>事项名称</th>
+                      <th>督办类型</th>
+                      <th>任务分解</th>
+                      <th>责任单位</th>
+                      <th>负责人</th>
+                      <th>分管领导</th>
+                      <th>办结时限</th>
+                      <th>初评牌态</th>
+                      <th>纪要条款</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="btn-group" style="margin-top:16px">
+                <button class="btn btn-primary" type="button" data-next="4">下一步：转入督查督办</button>
+                <button class="btn btn-secondary" type="button" data-back="2">返回</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-4">
+            <div class="panel">
+              <div class="panel-title">转入督查督办</div>
+              <p class="panel-desc">勾选要转入的事项和推送对象，确认后写入督办台账。</p>
+              <div class="card-head" style="margin-top:8px">
+                <div class="panel-title" style="margin:0">推送事项</div>
+                <button class="btn btn-secondary btn-sm" type="button" id="btn-toggle-tasks">全选 / 取消</button>
+              </div>
+              <div class="table-wrap">
+                <table class="data" id="transfer-table">
+                  <thead>
+                    <tr>
+                      <th class="check"><input type="checkbox" id="check-all-tasks" /></th>
+                      <th>事项名称</th>
+                      <th>责任单位</th>
+                      <th>分管领导</th>
+                      <th>办结时限</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="card-head" style="margin-top:20px">
+                <div class="panel-title" style="margin:0">推送领导</div>
+                <button class="btn btn-secondary btn-sm" type="button" id="btn-toggle-leaders">全选 / 取消</button>
+              </div>
+              <div class="leader-grid" id="leader-packs"></div>
+              <div class="btn-group" style="margin-top:20px">
+                <button class="btn btn-primary" type="button" id="btn-push">确认转入并推送</button>
+                <button class="btn btn-secondary" type="button" data-back="3">返回</button>
+              </div>
+              <div id="push-result" style="display:none;margin-top:16px">
+                <span class="tag tag-green">已转入</span>
+                <p id="push-result-text" style="font-size:13px;color:var(--ink-muted);margin-top:12px;line-height:1.6"></p>
+                <button class="btn btn-primary btn-sm" type="button" data-go="leader" style="margin-top:12px">前往领导端查看</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="view" id="view-history">
+          <div class="panel">
+            <div class="panel-title">转入记录</div>
+            <p class="panel-desc">办公室推送至督查督办系统的历史记录（Demo 模拟）。</p>
+            <div id="history-box" class="empty">暂无转入记录。完成「待办分发」推送后将在此显示。</div>
+          </div>
+        </section>
+
+        <section class="view" id="view-inbox">
+          <div class="panel">
+            <div class="panel-title">站内信</div>
+            <p class="panel-desc">领导签收、责任单位回执等消息（Demo 占位）。</p>
+            <div class="msg-item">
+              <div class="meta"><span class="tag tag-green">已读</span> 文钊 · 2026-08-12 17:45</div>
+              <div class="body">已收到安委会〔2026〕12号督办事项包。</div>
+            </div>
+            <div class="msg-item">
+              <div class="meta"><span class="tag tag-blue">回执</span> 赵磊 · 2026-08-13 09:20</div>
+              <div class="body">国际港务公司已接收基坑支护隐患整改事项并反馈整改计划。</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- 领导端 -->
+  <div class="app-screen" id="screen-leader">
+    <nav class="app-nav">
+      <button class="brand" type="button" data-go="entry">
+        <div class="brand-mark">督</div>
+        <span>郑州航空港科创投资集团 · 会议督查督办系统</span>
+        <span class="badge-demo">DEMO</span>
+      </button>
+      <div class="nav-right">
+        <button class="nav-switch" type="button" data-go="office">切换至办公室端</button>
+        <button class="nav-icon" type="button" title="消息" id="btn-bell">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="nav-user">
+          <div class="avatar">文</div>
+          <span>文钊 · 总经理</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="shell">
+      <aside class="sidebar" id="leader-sidebar">
+        <button class="side-link active" type="button" data-view="board">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          任务清单
+        </button>
+        <button class="side-link" type="button" data-view="report">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          督查周报
+        </button>
+        <button class="side-link" type="button" data-view="msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          站内信
+        </button>
+      </aside>
+
+      <main class="main">
+        <div class="welcome">欢迎您，文钊！<span id="sync-hint">总经理 · 督办事项总览</span></div>
+
+        <section class="view active" id="view-board">
+          <div class="attention-rail" id="attention" hidden>
+            <div class="attention-rail-head">
+              <div class="attn-live">
+                <span class="live-dot"></span>
+                <div>
+                  <div class="attention-kicker">AUTO PUSH</div>
+                  <div class="attention-title">需关注推送</div>
+                </div>
+              </div>
+              <div class="attn-spacer"></div>
+              <div class="attention-nav">
+                <button class="attn-nav" type="button" id="attn-prev" aria-label="上一组">‹</button>
+                <span class="attn-index" id="attn-index">1 / 1</span>
+                <button class="attn-nav" type="button" id="attn-next" aria-label="下一组">›</button>
+              </div>
+            </div>
+            <div class="attn-viewport">
+              <div class="attn-track" id="attention-track"></div>
+            </div>
+            <div class="attn-scan" aria-hidden="true"></div>
+          </div>
+
+          <div class="stat-row tech-stats">
+            <div class="stat-card">
+              <h3>红黄绿牌</h3>
+              <div class="stat-inline">
+                <button class="stat-item" type="button" data-filter-card="绿"><span class="dot-green"></span>绿牌 <span class="num" id="s-green">0</span></button>
+                <button class="stat-item" type="button" data-filter-card="黄"><span class="dot-yellow"></span>黄牌 <span class="num" id="s-yellow">0</span></button>
+                <button class="stat-item" type="button" data-filter-card="红"><span class="dot-red"></span>红牌 <span class="num" id="s-red">0</span></button>
+              </div>
+            </div>
+            <div class="stat-card">
+              <h3>进度统计</h3>
+              <div class="stat-inline">
+                <button class="stat-item" type="button" data-filter-status="all"><span class="dot-black"></span>事项总数 <span class="num" id="s-total">0</span></button>
+                <button class="stat-item" type="button" data-filter-status="未开始"><span class="dot-black"></span>未开始 <span class="num" id="s-todo">0</span></button>
+                <button class="stat-item" type="button" data-filter-status="进行中"><span class="dot-black"></span>进行中 <span class="num" id="s-doing">0</span></button>
+                <button class="stat-item" type="button" data-filter-status="已完成"><span class="dot-black"></span>已完成 <span class="num" id="s-done">0</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel todo-panel">
+            <div class="card-head">
+              <div>
+                <h3>办公室推送 · 待办事项</h3>
+                <p class="panel-desc" style="margin:4px 0 0" id="push-from-hint">来自办公室转入的督办事项，可按类型、时间、责任单位筛选</p>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-secondary btn-sm" type="button" id="btn-seed">载入演示数据</button>
+                <button class="btn btn-primary btn-sm" type="button" id="btn-refresh">刷新</button>
+              </div>
+            </div>
+
+            <div class="todo-filters">
+              <label class="filter-field">
+                <span>类型</span>
+                <select class="filter-select" id="filter-type"></select>
+              </label>
+              <label class="filter-field">
+                <span>时间</span>
+                <select class="filter-select" id="filter-time">
+                  <option value="">全部时间</option>
+                  <option value="overdue">已逾期</option>
+                  <option value="due7">7 日内到期</option>
+                  <option value="month">本月到期</option>
+                  <option value="later">本月之后</option>
+                </select>
+              </label>
+              <label class="filter-field">
+                <span>责任单位</span>
+                <select class="filter-select" id="filter-owner"></select>
+              </label>
+            </div>
+
+            <div class="todo-tabs">
+              <div class="tab-row">
+                <span class="tab-label">状态</span>
+                <div class="tab-group" id="tab-status">
+                  <button class="todo-tab active" type="button" data-status="">全部</button>
+                  <button class="todo-tab" type="button" data-status="未开始">未开始</button>
+                  <button class="todo-tab" type="button" data-status="进行中">进行中</button>
+                  <button class="todo-tab" type="button" data-status="已完成">已完成</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="todo-cards" id="todo-cards"></div>
+            <div class="empty" id="empty-state" style="display:none">
+              暂无推送事项。请先在办公室端完成转入，或点击「载入演示数据」。
+            </div>
+            <div class="pager">
+              <span id="pager-total">共 0 条</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-msg">
+          <div class="panel">
+            <div class="panel-title">自动化提醒与升级</div>
+            <p class="panel-desc">按办结时限监测：临期推送负责人，逾期自动升级分管领导，并评定红黄绿牌。</p>
+            <div id="msg-list"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-report">
+          <div class="panel">
+            <div class="card-head">
+              <div>
+                <div class="panel-title" style="margin:0">自动报表生成</div>
+                <p class="panel-desc" style="margin:4px 0 0">每周自动汇总各督办事项进展，生成督查周报并推送集团领导，替代人工逐项收集</p>
+              </div>
+              <button class="btn btn-primary btn-sm" type="button" id="btn-report">生成本周周报</button>
+            </div>
+            <div class="report-layout">
+              <aside class="report-hist">
+                <div class="report-hist-title">周报档案</div>
+                <div id="report-hist"></div>
+              </aside>
+              <div id="report-box" class="empty">请选择左侧历史周报，或点击「生成本周周报」按当前督办台账自动汇总。</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="qa-widget" id="qa-widget">
+      <div class="qa-panel" id="qa-panel" hidden>
+        <div class="qa-panel-head">
+          <div class="qa-bot-mark">AI</div>
+          <div>
+            <div class="qa-panel-title">智能问答</div>
+            <div class="qa-panel-sub">在线 · 基于督办台账与纪要</div>
+          </div>
+          <button class="qa-panel-close" type="button" id="btn-qa-close" aria-label="关闭">×</button>
+        </div>
+        <div class="qa-chips" id="qa-chips"></div>
+        <div class="qa-log" id="qa-log"></div>
+        <div class="qa-input-row">
+          <input id="qa-input" placeholder="输入问题，或点上方示例…" />
+          <button class="qa-send" type="button" id="btn-qa" aria-label="发送">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="qa-fab" type="button" id="btn-qa-fab" aria-label="打开智能问答">
+        <span class="qa-fab-icon qa-fab-chat">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span class="qa-fab-icon qa-fab-x">×</span>
+      </button>
+    </div>
+
+    <div class="drawer-overlay" id="overlay"></div>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="tag tag-blue" id="d-id" style="margin-bottom:8px">—</div>
+          <h2 id="d-title">—</h2>
+        </div>
+        <button class="btn btn-secondary btn-sm" type="button" id="btn-close">关闭</button>
+      </div>
+      <div class="drawer-body">
+        <div class="push-banner" id="d-push-meta">办公室推送</div>
+        <dl class="kv">
+          <dt>责任单位</dt><dd id="d-owner">—</dd>
+          <dt>负责人</dt><dd id="d-person">—</dd>
+          <dt>分管领导</dt><dd id="d-leader">—</dd>
+          <dt>办结时限</dt><dd id="d-deadline">—</dd>
+          <dt>红黄绿牌</dt><dd id="d-card">—</dd>
+          <dt>任务状态</dt><dd id="d-status">—</dd>
+          <dt>督办类型</dt><dd id="d-type">—</dd>
+          <dt>纪要来源</dt><dd id="d-source">—</dd>
+          <dt>纪要条款</dt><dd id="d-clause">—</dd>
+          <dt>知会范围</dt><dd id="d-notify">—</dd>
+          <dt>报送节奏</dt><dd id="d-cycle">—</dd>
+        </dl>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">完成进度</div>
+        <div class="progress" id="d-progress-bar"><i style="width:0%"></i></div>
+        <div style="font-size:13px;margin-bottom:20px" id="d-progress-text">0%</div>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">事项说明</div>
+        <p style="font-size:14px;line-height:1.6;margin-bottom:16px" id="d-desc">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">纪要原文摘录</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--ink-muted)" id="d-quote">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">任务分解</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--ink-muted)" id="d-nodes">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">本周进展</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px" id="d-week">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">识别来源</div>
+        <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--ink-muted)" id="d-evidence">—</p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">关联纪要</div>
+        <p style="margin-bottom:20px"><button class="btn-link" type="button" id="d-minutes-link">查看关联会议纪要</button></p>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--ink-muted);font-weight:600">办理时间线</div>
+        <div class="timeline" id="d-timeline"></div>
+      </div>
+      <div class="drawer-foot">
+        <button class="btn btn-secondary" type="button" id="btn-close-2">关闭</button>
+      </div>
+    </aside>
+
+    <div class="minutes-modal" id="minutes-modal" hidden>
+      <div class="minutes-dialog">
+        <div class="minutes-head">
+          <div>
+            <div class="tag tag-blue" id="m-no">—</div>
+            <h2 id="m-title">—</h2>
+            <p class="panel-desc" id="m-meta" style="margin-top:6px"></p>
+          </div>
+          <button class="btn btn-secondary btn-sm" type="button" id="btn-close-minutes">关闭</button>
+        </div>
+        <div class="minutes-body" id="m-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/* Shared demo state — 会议纪要与督查督办联动 */
+(function (global) {
+  const STORE_KEY = 'hkg_meeting_demo_v9';
+  const TODAY = '2026-08-17';
+  const ORG = '郑州航空港科创投资集团';
+
+  const SAMPLE_MATERIALS = [
+    { id: 'm-pdf', name: '安委会〔2026〕12号会议纪要.pdf', type: 'PDF', kind: 'pdf', size: '1.1 MB', source: 'OA 已发布', evidence: '解析正文 16 页，定位「议定事项」4 条。' },
+    { id: 'm-txt', name: '录音转写_安委会_0812.txt', type: 'TXT', kind: 'transcript', size: '74 KB', source: '语音转写', evidence: '转写 58 分，抽取「文总强调」「责任到项目」「三管三必须」等关键句。' },
+    { id: 'm-board', name: '白板拍照_议定事项.jpg', type: 'JPG', kind: 'image', size: '2.8 MB', source: '现场照片', evidence: 'OCR 识别手写：8/25 基坑闭环、8/22 科技园整改、8/20 方案。' },
+    { id: 'm-wx', name: '微信群截图_任务确认.png', type: 'PNG', kind: 'image', size: '380 KB', source: '即时通讯', evidence: '识别群聊确认人：陈帅、赵磊、苏云霄已回复「收到」。' },
+  ];
+
+  const OA_DOCS = [
+    {
+      id: 'oa-0812',
+      title: '郑州航空港科创投资集团安全生产委员会专题会议纪要',
+      meetingNo: '安委会〔2026〕12号',
+      date: '2026年8月12日',
+      place: '华夏大道180号 金融广场南座 3 号会议室',
+      host: '文钊（集团总经理）',
+      publishTime: '2026-08-12 17:30',
+      oaStatus: '已审批发布',
+      initiator: '办公室 张璇',
+      ccCount: 64,
+      file: '安委会〔2026〕12号会议纪要.pdf',
+      size: '1.1 MB',
+    },
+    {
+      id: 'oa-0801',
+      title: '重大隐患挂牌督办专题会议纪要',
+      meetingNo: '安委会〔2026〕11号',
+      date: '2026年8月1日',
+      place: '金融广场南座 3 号会议室',
+      host: '文钊（集团总经理）',
+      publishTime: '2026-08-01 11:20',
+      oaStatus: '已审批发布',
+      initiator: '办公室 张璇',
+      ccCount: 28,
+      file: '安委会〔2026〕11号会议纪要.pdf',
+      size: '980 KB',
+    },
+    {
+      id: 'oa-0728',
+      title: '深基坑重大隐患挂牌督办专题会议纪要',
+      meetingNo: '安委会〔2026〕10号',
+      date: '2026年7月28日',
+      place: '金融广场南座 3 号会议室',
+      host: '文钊（集团总经理）',
+      publishTime: '2026-07-28 17:10',
+      oaStatus: '已审批发布',
+      initiator: '办公室 张璇',
+      ccCount: 26,
+      file: '安委会〔2026〕10号会议纪要.pdf',
+      size: '1.0 MB',
+    },
+    {
+      id: 'oa-0805',
+      title: '集团党委扩大会议纪要',
+      meetingNo: '党委会〔2026〕8号',
+      date: '2026年8月5日',
+      place: '金融广场南座 1 号会议室',
+      host: '党委书记',
+      publishTime: '2026-08-05 18:10',
+      oaStatus: '已审批发布',
+      initiator: '党委办公室',
+      ccCount: 48,
+      file: '党委会〔2026〕8号会议纪要.pdf',
+      size: '720 KB',
+    },
+  ];
+
+  const SAMPLE_MINUTES = {
+    title: '郑州航空港科创投资集团安全生产委员会专题会议纪要',
+    meetingNo: '安委会〔2026〕12号',
+    date: '2026年8月12日',
+    place: '华夏大道180号 金融广场南座 3 号会议室',
+    host: '文钊（集团总经理）',
+    attendees: '安委办、工程管理部、国际港务公司、数字航空港、科技资本及在建项目负责人等 26 人',
+    publisher: '办公室 张璇',
+    sections: [
+      {
+        h: '一、会议议题',
+        html: '<ul><li>建设及运营领域风险隐患专项整治进展</li><li>国际陆港、锦荣科技园在建项目危大工程管控</li><li>安全生产「一张图」智慧监管平台对接</li><li>中秋国庆期间园区与在建项目安全稳定工作</li></ul>',
+      },
+      {
+        h: '二、会议要点',
+        html: '<p>会议听取了安委办关于复工复产检查、隐患排查治理及安全生产治本攻坚三年行动进展的汇报。工程管理部通报了国际陆港集结中心、锦荣科技园等在建项目基坑与危大工程管控情况。</p><p>文钊总经理强调：要把「人民至上、生命至上」贯穿生产经营全过程，落实「党政同责、一岗双责」和「三管三必须」；对逾期未整改隐患实行挂牌督办；加快推动智慧安监平台建设，提升科技赋能水平。</p>',
+      },
+      {
+        h: '三、议定事项',
+        html: '<ul><li>国际港务公司对中欧班列（郑州）集结中心在建基坑支护隐患于 8 月 25 日前完成整改并验收。</li><li>工程管理部牵头，8 月 22 日前完成锦荣科技园危大工程专项检查整改闭环。</li><li>各二级单位于 8 月 20 日前报送中秋国庆期间园区与在建项目安全稳定工作方案。</li><li>安委办建立周报机制，并将安全指标纳入年度经营业绩考核，实行责任事故「一票否决」。</li></ul>',
+      },
+    ],
+  };
+
+  const MINUTES_PARTY = {
+    title: '郑州航空港科创投资集团党委扩大会议纪要',
+    meetingNo: '党委会〔2026〕8号',
+    date: '2026年8月5日（星期二）下午',
+    place: '华夏大道180号金融广场南座 1 号会议室',
+    host: '党委书记',
+    attendees: '党委班子成员；办公室、党委巡察办、法务部、财务部主要负责人；科技资本、国际港务、数字航空港等参控股企业主要负责人共 32 人',
+    publisher: '党委办公室',
+    recorder: '党委办公室 张璇',
+    sections: [
+      {
+        h: '文头',
+        html: '<p><strong>郑州航空港科创投资集团有限公司党委扩大会议纪要</strong><br/>党委会〔2026〕8号　　签发：党委书记　　2026年8月5日</p>',
+      },
+      {
+        h: '一、会议时间、地点及出席',
+        html: '<p><strong>时间：</strong>2026年8月5日（星期二）15:00—17:20<br/><strong>地点：</strong>集团总部金融广场南座 1 号会议室<br/><strong>主持人：</strong>党委书记<br/><strong>记录人：</strong>党委办公室 张璇<br/><strong>出席：</strong>党委书记，党委副书记、总经理文钊，党委班子有关成员；办公室、党委巡察办、法务部、财务部主要负责人；科技资本公司、国际港务公司、数字航空港公司主要负责人。<br/><strong>列席：</strong>科技资本公司分管合规、财务管理相关人员。</p>',
+      },
+      {
+        h: '二、会议议题',
+        html: '<ol><li>听取 2026 年上半年参控股企业专项巡察整改推进情况汇报</li><li>研究整改台账销号标准、验收程序与逾期问责安排</li><li>通报科技资本公司基金合规及对外投资决策留痕复核进展</li></ol>',
+      },
+      {
+        h: '三、会议内容',
+        html: '<p><strong>（一）情况通报。</strong>党委巡察办汇报：本轮专项巡察台账共列问题 28 项，截至 8 月 4 日已销号 19 项、未销号 9 项。未销号事项中，科技资本公司牵头 5 项，主要集中在产业投资基金决策留痕、关联交易披露、投后管理台账三个方面。其余 4 项由国际港务、数字航空港分别认领，目前均已进入验收程序。</p><p><strong>（二）讨论意见。</strong>与会同志认为，科技资本公司作为集团全资子公司（注册资本 20 亿元），承担产业投资引导与基金管理职能，整改材料必须做到「一事一档、审签闭环」，不得以口头说明替代书面依据。</p><p><strong>（三）领导讲话。</strong>党委书记强调：巡察整改是政治任务，必须坚持「整改不到位不销号、验收不通过不销号、群众不满意不销号」；对逾期未闭环事项实行挂牌督办，由总经理办公室按周跟踪通报。总经理文钊要求科技资本公司对照《销号验收清单》逐条补齐基金合规、对外投资决策留痕等材料，法务与财务双审通过后方可提请销号；对仍不到位的，按干部管理权限启动约谈。</p>',
+      },
+      {
+        h: '四、议定事项',
+        html: '<ol><li><strong>责任单位：</strong>科技资本公司（牵头），党委巡察办、法务部、财务部协办。<br/><strong>事项：</strong>完成参控股企业专项巡察整改台账闭环销号。<br/><strong>时限：</strong>2026年8月12日前。逾期未销号事项自动升红牌并升级推送总经理。</li><li>党委巡察办会同法务部、财务部于 <strong>8月10日前</strong>完成验收复核，形成《销号验收意见》报党委审定。验收采取「书面审核 + 抽查底稿」方式，抽查比例不低于未销号事项的 50%。</li><li>未销号事项实行周报：每周三 18:00 前向党委扩大会成员书面报送进展，直至全部销号。周报由科技资本公司起草，党委巡察办审核。</li><li>对 8 月 12 日后仍未销号的事项，由党委巡察办提出问责建议，按集团有关规定办理。</li></ol>',
+      },
+      {
+        h: '五、附件及印发',
+        html: '<ul><li>附件 1：参控股企业专项巡察整改台账（截至 2026-08-04）</li><li>附件 2：科技资本公司未销号事项清单（5 项）及责任人</li><li>附件 3：《销号验收清单》及双审流程说明</li></ul><p>出席人员已核阅。如有出入，请于收到本纪要 3 个工作日内向党委办公室书面反馈。</p><p style="margin-top:10px">党委办公室　　2026年8月5日<br/>印发：党委班子成员，各部门、各参控股企业主要负责人。共印 40 份。</p>',
+      },
+    ],
+  };
+
+  const MINUTES_HAZARD = {
+    title: '郑州航空港科创投资集团重大隐患挂牌督办专题会议纪要',
+    meetingNo: '安委会〔2026〕11号',
+    date: '2026年8月1日（星期五）上午',
+    place: '华夏大道180号金融广场南座 3 号会议室',
+    host: '文钊（集团总经理）',
+    attendees: '安委办、工程管理部、国际港务公司、项目总包及监理单位负责人等 21 人',
+    publisher: '办公室 张璇',
+    recorder: '办公室 张璇',
+    sections: [
+      {
+        h: '文头',
+        html: '<p><strong>郑州航空港科创投资集团有限公司安全生产委员会专题会议纪要</strong><br/>安委会〔2026〕11号　　签发：文钊　　2026年8月1日</p>',
+      },
+      {
+        h: '一、会议时间、地点及出席',
+        html: '<p><strong>时间：</strong>2026年8月1日（星期五）09:30—11:10<br/><strong>地点：</strong>集团总部金融广场南座 3 号会议室<br/><strong>主持人：</strong>集团总经理、安委会主任文钊<br/><strong>记录人：</strong>办公室 张璇<br/><strong>出席：</strong>安委办主任苏云霄，工程管理部陈帅，国际港务公司赵磊；集结中心项目总包项目经理、总监代表；安委办、工程管理部有关人员。<br/><strong>列席：</strong>监理单位安全专监 2 人。</p>',
+      },
+      {
+        h: '二、会议背景',
+        html: '<p>7 月 22 日至 24 日，安委办会同工程管理部对中欧班列（郑州）集结中心在建区域开展联合检查。检查发现：临边防护缺失 6 处、洞口临边栏杆未按《建筑施工高处作业安全技术规范》封闭 8 处，存在高处坠落重大隐患。现场已下达《责令限期整改指令书》（港科安令〔2026〕07号）。</p><p>根据国务院安委会安全生产治本攻坚三年行动部署及《集团生产安全事故隐患挂牌督办办法》，安委会决定对该隐患实行挂牌督办。</p>',
+      },
+      {
+        h: '三、会议内容',
+        html: '<p><strong>（一）隐患及临时管控。</strong>国际港务公司汇报：已设置警戒区域并安排专人值守，临时围挡完成约 40%；洞口封闭尚未形成闭环。工程管理部通报监理旁站记录 11 份，指出夜间交叉施工期间旁站覆盖不足。</p><p><strong>（二）领导讲话。</strong>文钊总经理强调：重大隐患必须「发现即挂牌、整改即销号、逾期即问责」；整改期间每日巡查不得间断；销号须经安委办现场验收，不得以书面材料替代现场核验。对总包、监理履职不到位的，由国际港务公司按合同约定扣减安全文明施工费并书面报告集团。</p>',
+      },
+      {
+        h: '四、议定事项',
+        html: '<ol><li><strong>责任单位：</strong>国际港务公司；<strong>协办：</strong>工程管理部；<strong>验收：</strong>安委办。<br/><strong>事项：</strong>完成集结中心临边防护、洞口封闭整改并申请销号。<br/><strong>时限：</strong>2026年8月10日前。</li><li>整改期间实行「每日巡查、每日报送」：国际港务公司于每日 18:00 前将巡查表、影像资料报送安委办。</li><li>销号当日由安委办组织现场验收，验收组成员不少于 3 人，形成《重大隐患销号验收意见》。</li><li>逾期未销号的，系统自动评定红牌，升级推送总经理，并按集团安全考核「一票否决」口径纳入月度经营业绩通报。</li></ol>',
+      },
+      {
+        h: '五、附件及印发',
+        html: '<ul><li>附件 1：重大隐患挂牌督办通知书（港科安督〔2026〕11号）</li><li>附件 2：临边防护 / 洞口封闭整改验收清单（共 14 项）</li><li>附件 3：联合检查照片（7 张）及监理旁站记录摘要</li><li>附件 4：责令限期整改指令书（港科安令〔2026〕07号）</li></ul><p>出席人员已核阅。本纪要已经主持人审定。</p><p style="margin-top:10px">办公室　　2026年8月1日<br/>印发：安委会成员，国际港务公司、工程管理部、安委办，项目总包、监理。共印 28 份。</p>',
+      },
+    ],
+  };
+
+  const MINUTES_PIT = {
+    title: '郑州航空港科创投资集团深基坑重大隐患挂牌督办专题会议纪要',
+    meetingNo: '安委会〔2026〕10号',
+    date: '2026年7月28日（星期一）下午',
+    place: '华夏大道180号金融广场南座 3 号会议室',
+    host: '文钊（集团总经理）',
+    attendees: '安委办、工程管理部、锦荣科技园项目部、支护专项施工及监测单位负责人等 18 人',
+    publisher: '办公室 张璇',
+    recorder: '办公室 张璇',
+    sections: [
+      {
+        h: '文头',
+        html: '<p><strong>郑州航空港科创投资集团有限公司安全生产委员会专题会议纪要</strong><br/>安委会〔2026〕10号　　签发：文钊　　2026年7月28日</p>',
+      },
+      {
+        h: '一、会议时间、地点及出席',
+        html: '<p><strong>时间：</strong>2026年7月28日（星期一）14:30—16:40<br/><strong>地点：</strong>集团总部金融广场南座 3 号会议室<br/><strong>主持人：</strong>集团总经理、安委会主任文钊<br/><strong>记录人：</strong>办公室 张璇<br/><strong>出席：</strong>安委办苏云霄，工程管理部陈帅；锦荣科技园项目负责人；支护专项施工单位、第三方监测单位主要人员。<br/><strong>列席：</strong>监理单位总监代表。</p>',
+      },
+      {
+        h: '二、会议背景',
+        html: '<p>锦荣科技园位于港区南部高端制造业集聚区，为省级重点建设项目。7 月 21 日第三方监测报告显示：基坑东侧支护桩水平位移连续 3 日超黄色预警值，局部接近橙色阈值；降水井运行记录不完整，存在支护结构失稳风险。</p><p>工程管理部已于 7 月 22 日下达停工令（局部作业面），要求立即加密监测、复核支护设计并完善应急预案。安委会研究决定，对该深基坑隐患实行挂牌督办。</p>',
+      },
+      {
+        h: '三、会议内容',
+        html: '<p><strong>（一）现场与监测。</strong>第三方监测单位汇报：东侧 3 个监测点位移速率未收敛；南侧地下水位波动较大。支护单位说明：拟采取增加斜撑、复喷混凝土面层及加密降水观测等措施，预计 10 日内完成主体加固。</p><p><strong>（二）管理问题。</strong>工程管理部指出：专项施工方案专家论证意见中「信息化监测日报」未严格执行；7 月 18 日、19 日两份日报缺失，属于重大管理缺陷。</p><p><strong>（三）领导讲话。</strong>文钊总经理要求：隐患不消除、监测不收敛，不得恢复东侧土方作业；挂牌期间每日向安委办报送监测曲线；销号必须同时满足「监测稳定 + 支护验收 + 方案闭合」三项条件。对监测日报缺失问题，由工程管理部对项目部、监测单位书面通报。</p>',
+      },
+      {
+        h: '四、议定事项',
+        html: '<ol><li><strong>责任单位：</strong>工程管理部；<strong>项目实施：</strong>锦荣科技园项目部及支护、监测单位；<strong>验收：</strong>安委办。<br/><strong>事项：</strong>完成深基坑支护加固、监测体系恢复及挂牌销号。<br/><strong>时限：</strong>2026年8月8日前。</li><li>即日起东侧作业面继续局部停工，待连续 3 日监测数据稳定且安委办书面同意后方可复工。</li><li>监测日报于每日 17:00 前报工程管理部、安委办；缺报一次，对责任单位在集团安委会通报。</li><li>逾期未销号的，系统自动评定红牌并升级推送总经理；相关责任纳入月度安全考核。</li></ol>',
+      },
+      {
+        h: '五、附件及印发',
+        html: '<ul><li>附件 1：重大隐患挂牌督办通知书（港科安督〔2026〕10号）</li><li>附件 2：锦荣科技园深基坑监测超限报告（2026-07-21）</li><li>附件 3：支护加固方案及专家意见复函</li><li>附件 4：局部停工令及复工条件清单</li></ul><p>出席人员已核阅。本纪要已经主持人审定。</p><p style="margin-top:10px">办公室　　2026年7月28日<br/>印发：安委会成员，工程管理部、安委办、锦荣科技园项目部，支护及监测单位。共印 26 份。</p>',
+      },
+    ],
+  };
+
+  const MINUTES_BY_NO = {
+    '安委会〔2026〕12号': SAMPLE_MINUTES,
+    '安委会〔2026〕11号': MINUTES_HAZARD,
+    '安委会〔2026〕10号': MINUTES_PIT,
+    '党委会〔2026〕8号': MINUTES_PARTY,
+  };
+
+  const RESOLUTIONS = [
+    '坚持「人民至上、生命至上」，落实「三管三必须」，对逾期未整改隐患实行挂牌督办。',
+    '压实国际陆港、锦荣科技园等在建项目危大工程安全责任，限期整改闭环。',
+    '中秋国庆期间保持园区与在建项目安全稳定，按时报送工作方案。',
+  ];
+
+  const TYPE_PRIORITY = {
+    '安全隐患': 0,
+    '巡察整改': 1,
+    '节假日安保': 2,
+    '项目推进': 3,
+    '机制建设': 4,
+  };
+
+  const SAMPLE_TODOS = [
+    {
+      id: 'T-2026-0812-01',
+      title: '国际陆港集结中心基坑支护隐患整改并验收',
+      summary: '临期黄牌：支护监测已加密，需在 8/25 前完成整改验收。公开报道显示集结中心建设期间压实施工安全责任。',
+      owner: '国际港务公司',
+      ownerDept: '工程管理部协办',
+      leader: '文钊',
+      ownerPerson: '赵磊',
+      deadline: '2026-08-25',
+      priority: '高',
+      status: '进行中',
+      progress: 62,
+      card: '黄',
+      source: '安委会〔2026〕12号',
+      batch: '2026年第12次安委会',
+      type: '安全隐患',
+      timeNodes: '8月13日启动整改 / 8月25日验收闭环',
+      weekProgress: '基坑监测频率已加密，支护补强正在施工。',
+      nextStep: '8月22日前完成自验并报送验收材料。',
+      issues: '需协调夜间吊装窗口',
+      updateTime: '2026-08-15 14:10',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-12T17:42:00',
+      desc: '针对中欧班列（郑州）集结中心在建基坑支护缺陷隐患，完成整改、自验并报送验收材料。逾期未闭环将挂牌督办。',
+      meetingNo: '安委会〔2026〕12号',
+      clause: '三、议定事项（一）',
+      notify: '工程管理部、安委办',
+      reportCycle: '每周填报',
+      originQuote: '国际港务公司对中欧班列（郑州）集结中心在建基坑支护隐患于 8 月 25 日前完成整改并验收。',
+      evidence: ['PDF 纪要 P6 议定事项第 1 条', '白板照片 OCR「8/25 基坑闭环」', '转写 00:38:12 文总点名国际港务'],
+      timeline: [
+        { when: '2026-08-12 17:40', what: '办公室生成纪要并完成结构化提取' },
+        { when: '2026-08-12 17:42', what: '办公室推送至总经理文钊，初评黄牌' },
+        { when: '2026-08-13 09:20', what: '国际港务公司已接收并反馈整改计划' },
+        { when: '2026-08-15 14:10', what: '支护补强实施中，完成率 62%' },
+        { when: '2026-08-17 08:00', what: '临期提醒已自动推送负责人赵磊' },
+      ],
+    },
+    {
+      id: 'T-2026-0812-02',
+      title: '锦荣科技园危大工程专项检查整改闭环',
+      summary: '临期黄牌：专项检查列出 6 项，已销 4 项；8/22 前须完成剩余高处作业与临时用电整改。',
+      owner: '工程管理部',
+      ownerDept: '工程管理部',
+      leader: '文钊',
+      ownerPerson: '陈帅',
+      deadline: '2026-08-22',
+      priority: '高',
+      status: '进行中',
+      progress: 70,
+      card: '黄',
+      source: '安委会〔2026〕12号',
+      batch: '2026年第12次安委会',
+      type: '安全隐患',
+      timeNodes: '8月13日下发整改单 / 8月22日销号',
+      weekProgress: '6 项隐患已销 4 项，剩余高处作业防护与临时用电。',
+      nextStep: '8月20日前完成现场复核并拍照销号。',
+      issues: '总包交叉作业面需错峰',
+      updateTime: '2026-08-16 10:20',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-12T17:42:00',
+      desc: '对锦荣科技园在建项目危大工程开展专项检查，限期完成整改闭环。园区位于港区南部高端制造业集聚区，为省级重点建设项目。',
+      meetingNo: '安委会〔2026〕12号',
+      clause: '三、议定事项（二）',
+      notify: '安委办、项目总包',
+      reportCycle: '销号前每日填报',
+      originQuote: '工程管理部牵头，8 月 22 日前完成锦荣科技园危大工程专项检查整改闭环。',
+      evidence: ['PDF 纪要 P6 议定事项第 2 条', '转写 00:46:30 工程管理部表态'],
+      timeline: [
+        { when: '2026-08-12 17:40', what: '办公室生成纪要并完成结构化提取' },
+        { when: '2026-08-12 17:42', what: '办公室推送至总经理文钊，初评黄牌' },
+        { when: '2026-08-14 16:00', what: '专项检查整改单已下发项目部' },
+        { when: '2026-08-17 08:00', what: '临期提醒已自动推送负责人陈帅' },
+      ],
+    },
+    {
+      id: 'T-2026-0812-03',
+      title: '中秋国庆园区与在建项目安全稳定方案报送',
+      summary: '临期催收：12 家单位已报 7 家，国际港务与科技资本尚未报送；8/20 截止。',
+      owner: '各二级单位',
+      ownerDept: '安委办汇总',
+      leader: '文钊',
+      ownerPerson: '苏云霄',
+      deadline: '2026-08-20',
+      priority: '高',
+      status: '进行中',
+      progress: 45,
+      card: '黄',
+      source: '安委会〔2026〕12号',
+      batch: '2026年第12次安委会',
+      type: '节假日安保',
+      timeNodes: '8月14日启动填报 / 8月20日汇总呈报',
+      weekProgress: '已收到 7/12 家单位方案。',
+      nextStep: '催收未报单位，形成汇总稿呈报总经理。',
+      issues: '国际港务、科技资本尚未报送',
+      updateTime: '2026-08-16 11:00',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-12T17:42:00',
+      desc: '各单位报送中秋、国庆期间园区运营与在建项目安全稳定工作方案，安委办汇总后呈报。',
+      meetingNo: '安委会〔2026〕12号',
+      clause: '三、议定事项（三）',
+      notify: '各二级单位办公室',
+      reportCycle: '一次性报送，逾期催收',
+      originQuote: '各二级单位于 8 月 20 日前报送中秋国庆期间园区与在建项目安全稳定工作方案。',
+      evidence: ['PDF 纪要 P7 议定事项第 3 条', '微信截图 苏云霄「周五前收齐」'],
+      timeline: [
+        { when: '2026-08-12 17:40', what: '办公室生成纪要并完成结构化提取' },
+        { when: '2026-08-12 17:42', what: '办公室推送至总经理文钊，初评黄牌' },
+        { when: '2026-08-16 11:00', what: '已收到 7/12 家单位方案' },
+        { when: '2026-08-17 08:00', what: '临期提醒已自动推送负责人苏云霄' },
+      ],
+    },
+    {
+      id: 'T-2026-0812-04',
+      title: '安委办周报机制与安全考核一票否决落地',
+      summary: '周报模板已发布，安全指标已纳入经营业绩考核口径，首期周报已呈报，事项办结（绿牌）。',
+      owner: '安委办',
+      ownerDept: '安委办',
+      leader: '文钊',
+      ownerPerson: '苏云霄',
+      deadline: '2026-08-19',
+      priority: '中',
+      status: '已完成',
+      progress: 100,
+      card: '绿',
+      source: '安委会〔2026〕12号',
+      batch: '2026年第12次安委会',
+      type: '机制建设',
+      timeNodes: '8月13日发布模板 / 8月16日首期报送',
+      weekProgress: '首期周报已提交总经理。',
+      nextStep: '按周滚动报送（现已由系统自动生成）。',
+      issues: '—',
+      updateTime: '2026-08-16 09:00',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-12T17:42:00',
+      desc: '建立督办事项周报模板，并将安全指标纳入年度经营业绩考核，对责任事故实行「一票否决」。',
+      meetingNo: '安委会〔2026〕12号',
+      clause: '三、议定事项（四）',
+      notify: '总经理办公室、人力资源部',
+      reportCycle: '每周自动汇总',
+      originQuote: '安委办建立周报机制，并将安全指标纳入年度经营业绩考核，实行责任事故「一票否决」。',
+      evidence: ['PDF 纪要 P8 议定事项第 4 条', '转写 00:55:18'],
+      timeline: [
+        { when: '2026-08-12 17:40', what: '办公室生成纪要并完成结构化提取' },
+        { when: '2026-08-13 18:00', what: '周报模板发布' },
+        { when: '2026-08-16 09:00', what: '首期周报已报送，事项办结，评定绿牌' },
+      ],
+    },
+    {
+      id: 'T-2026-0812-05',
+      title: '中秋国庆在建项目不停工包保责任落实',
+      summary: '临期：需明确国际陆港、锦荣科技园节日不停工点位的领导包保与应急值班表。',
+      owner: '工程管理部',
+      ownerDept: '安委办协办',
+      leader: '文钊',
+      ownerPerson: '陈帅',
+      deadline: '2026-08-21',
+      priority: '高',
+      status: '进行中',
+      progress: 35,
+      card: '黄',
+      source: '安委会〔2026〕12号',
+      batch: '2026年第12次安委会',
+      type: '节假日安保',
+      timeNodes: '8月15日梳理不停工点 / 8月21日报备值班表',
+      weekProgress: '已梳理 5 个不停工点位，值班表尚未会签。',
+      nextStep: '8月19日前完成包保领导会签。',
+      issues: '国际陆港夜间施工点需增加巡查频次',
+      updateTime: '2026-08-16 17:30',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-12T17:42:00',
+      desc: '对中秋国庆期间不停工的在建项目落实领导包保、应急值班和巡查频次。',
+      meetingNo: '安委会〔2026〕12号',
+      clause: '三、议定事项（三）附',
+      notify: '国际港务公司、安委办',
+      reportCycle: '节日前一次性报备',
+      originQuote: '节日期间不停工项目必须明确包保领导、应急队伍和巡查频次。',
+      evidence: ['转写 00:49:06 文总补充不停工包保', '白板 OCR「值班表 8/21」'],
+      timeline: [
+        { when: '2026-08-12 17:42', what: '办公室推送至总经理文钊，初评黄牌' },
+        { when: '2026-08-16 17:30', what: '不停工点位清单已形成' },
+        { when: '2026-08-17 08:00', what: '临期提醒已自动推送负责人陈帅' },
+      ],
+    },
+    {
+      id: 'T-2026-0812-06',
+      title: '安全生产「一张图」智慧监管平台一期对接',
+      summary: '数字航空港牵头对接工贸危化监测与防汛「四张图」，9/10 前提交联调报告，现场联调尚未启动。',
+      owner: '数字航空港公司',
+      ownerDept: '数字航空港公司',
+      leader: '文钊',
+      ownerPerson: '李会超',
+      deadline: '2026-09-10',
+      priority: '中',
+      status: '未开始',
+      progress: 0,
+      card: '绿',
+      source: '安委会〔2026〕12号',
+      batch: '2026年第12次安委会',
+      type: '项目推进',
+      timeNodes: '8月20日启动联调 / 9月10日提交报告',
+      weekProgress: '尚未启动与工贸危化企业的接口联调。',
+      nextStep: '明确接口清单并通知相关企业对接人。',
+      issues: '—',
+      updateTime: '2026-08-12 17:42',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-12T17:42:00',
+      desc: '推进数字航空港融合基础设施提升项目中的安全生产「一张图」智慧监管平台一期对接，完成与工贸危化企业监测互联。',
+      meetingNo: '安委会〔2026〕12号',
+      clause: '会议要点 · 智慧安监',
+      notify: '安委办、新型智慧城市运行中心',
+      reportCycle: '节点复核期间每周填报',
+      originQuote: '加快推动智慧安监平台建设，安全生产「一张图」一期完成与工贸危化企业对接。',
+      evidence: ['转写 00:51:40 文总要求科技赋能', 'OA 附件：智慧应急二阶段招标范围'],
+      timeline: [
+        { when: '2026-08-12 17:40', what: '办公室生成纪要并完成结构化提取' },
+        { when: '2026-08-12 17:42', what: '办公室推送至总经理文钊，初评绿牌' },
+      ],
+    },
+    {
+      id: 'T-2026-0728-01',
+      title: '锦荣科技园深基坑支护重大隐患挂牌销号',
+      summary: 'P0 红牌逾期：东侧支护位移超预警，8/8 销号时限已过；监测日报曾缺报，系统已升级推送总经理。',
+      owner: '工程管理部',
+      ownerDept: '安委办验收',
+      leader: '文钊',
+      ownerPerson: '陈帅',
+      deadline: '2026-08-08',
+      priority: '高',
+      status: '进行中',
+      progress: 58,
+      card: '红',
+      source: '安委会〔2026〕10号',
+      batch: '2026年深基坑挂牌督办专题会',
+      type: '安全隐患',
+      timeNodes: '7月28日挂牌 / 8月8日销号（已超期）',
+      weekProgress: '斜撑已安装过半，东侧位移速率下降但仍未连续 3 日稳定。',
+      nextStep: '加密监测至连续 3 日稳定后申请安委办现场验收销号。',
+      issues: '局部停工影响工期；监测日报 7 月 18—19 日曾缺报',
+      updateTime: '2026-08-16 16:05',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-07-28T17:15:00',
+      desc: '对锦荣科技园深基坑东侧支护位移超限重大隐患实行挂牌督办，完成支护加固、监测恢复并现场验收销号。',
+      meetingNo: '安委会〔2026〕10号',
+      clause: '四、议定事项（一）',
+      notify: '安委办、锦荣科技园项目部、支护及监测单位',
+      reportCycle: '销号前每日填报监测日报',
+      originQuote: '工程管理部对锦荣科技园深基坑支护重大隐患于 2026 年 8 月 8 日前完成加固并申请销号。',
+      evidence: ['PDF 纪要安委会〔2026〕10号', '挂牌督办通知书 港科安督〔2026〕10号', '监测超限报告 2026-07-21'],
+      timeline: [
+        { when: '2026-07-28 17:10', what: '办公室生成深基坑挂牌督办专题会议纪要' },
+        { when: '2026-07-28 17:15', what: '办公室推送至总经理文钊，初评黄牌' },
+        { when: '2026-08-03 18:00', what: '斜撑开始安装，东侧继续局部停工' },
+        { when: '2026-08-09 08:00', what: '逾期未销号，系统自动升红牌并升级推送总经理文钊' },
+        { when: '2026-08-16 16:05', what: '位移速率下降，尚未连续 3 日稳定，完成率 58%' },
+      ],
+    },
+    {
+      id: 'T-2026-0808-01',
+      title: '国际陆港集结中心临边防护重大隐患挂牌销号',
+      summary: 'P0 红牌逾期：临边防护与洞口封闭未按规范完成，8/10 销号时限已过，系统已升级推送总经理。',
+      owner: '国际港务公司',
+      ownerDept: '工程管理部协办',
+      leader: '文钊',
+      ownerPerson: '赵磊',
+      deadline: '2026-08-10',
+      priority: '高',
+      status: '进行中',
+      progress: 48,
+      card: '红',
+      source: '安委会〔2026〕11号',
+      batch: '2026年重大隐患挂牌督办专题会',
+      type: '安全隐患',
+      timeNodes: '8月1日挂牌 / 8月10日销号（已超期）',
+      weekProgress: '临时围挡已补设，洞口临边栏杆仍有 3 处未封闭验收。',
+      nextStep: '48 小时内完成剩余封闭并申请安委办现场验收销号。',
+      issues: '夜间施工交叉，监理旁站力量不足',
+      updateTime: '2026-08-16 15:40',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-01T11:30:00',
+      desc: '对中欧班列（郑州）集结中心在建区域临边防护缺失、洞口临边栏杆未封闭等重大隐患实行挂牌督办，限期整改销号。',
+      meetingNo: '安委会〔2026〕11号',
+      clause: '四、议定事项（一）',
+      notify: '工程管理部、安委办、项目总包、监理',
+      reportCycle: '销号前每日填报',
+      originQuote: '国际港务公司对集结中心临边防护重大隐患于 2026 年 8 月 10 日前完成整改并申请销号。',
+      evidence: ['PDF 纪要安委会〔2026〕11号 P4', '挂牌督办通知书 港科安督〔2026〕11号', '现场检查照片 7 张'],
+      timeline: [
+        { when: '2026-08-01 11:20', what: '办公室生成挂牌督办专题会议纪要' },
+        { when: '2026-08-01 11:30', what: '办公室推送至总经理文钊，初评黄牌' },
+        { when: '2026-08-05 18:00', what: '国际港务反馈：临时围挡完成，洞口封闭进行中' },
+        { when: '2026-08-11 08:00', what: '逾期未销号，系统自动升红牌并升级推送总经理文钊' },
+        { when: '2026-08-16 15:40', what: '仍有 3 处洞口未封闭验收，完成率 48%' },
+      ],
+    },
+    {
+      id: 'T-2026-0805-01',
+      title: '参控股企业专项巡察整改台账销号',
+      summary: '红牌逾期：科技资本牵头整改措施已定，仍有 3 项未验收；系统已升级推送总经理。',
+      owner: '科技资本公司',
+      ownerDept: '党委巡察办协办',
+      leader: '文钊',
+      ownerPerson: '连冠',
+      deadline: '2026-08-12',
+      priority: '高',
+      status: '进行中',
+      progress: 55,
+      card: '红',
+      source: '党委会〔2026〕8号',
+      batch: '2026年第8次党委会',
+      type: '巡察整改',
+      timeNodes: '8月6日启动 / 8月12日闭环（已超期）',
+      weekProgress: '整改措施已制定，3 项未完成验收。',
+      nextStep: '本周完成剩余验收并销号。',
+      issues: '涉及基金合规材料需法务复核',
+      updateTime: '2026-08-16 16:20',
+      pushedBy: '办公室 张璇',
+      pushedAt: '2026-08-05T18:20:00',
+      desc: '按党委扩大会议要求，完成参控股企业专项巡察整改台账闭环。科技资本公司为集团全资子公司，注册资本 20 亿元。',
+      meetingNo: '党委会〔2026〕8号',
+      clause: '四、议定事项（一）',
+      notify: '党委巡察办、法务部、财务部、总经理办公室',
+      reportCycle: '每周三书面填报',
+      originQuote: '科技资本公司牵头，参控股企业专项巡察整改台账须于 2026 年 8 月 12 日前闭环销号；逾期自动升红牌并升级推送总经理。',
+      evidence: ['PDF 纪要党委会〔2026〕8号', '巡察整改台账（截至 8月4日）', '未销号事项清单 5 项'],
+      timeline: [
+        { when: '2026-08-05 18:10', what: '党委办公室印发党委会〔2026〕8号纪要' },
+        { when: '2026-08-05 18:20', what: '办公室推送至总经理文钊，纳入督办台账' },
+        { when: '2026-08-10 17:30', what: '巡察办、法务、财务完成部分验收，仍余 3 项未过双审' },
+        { when: '2026-08-13 08:00', what: '逾期未销号，系统自动升红牌并升级推送总经理文钊' },
+        { when: '2026-08-16 16:20', what: '基金合规材料仍在法务复核，完成率 55%' },
+      ],
+    },
+  ];
+
+  const CC_ALL = [
+    '集团领导班子（9人）',
+    '安委办全体（8人）',
+    '工程管理部全体（12人）',
+    '国际港务公司主要负责人（6人）',
+    '数字航空港 / 科技资本（7人）',
+    '办公室/党委办传阅（10人）',
+  ];
+
+  const MATCHED_RECIPIENTS = [
+    { name: '文钊', role: '集团总经理 · 主持人', reason: '本场主持；全部事项阅知；逾期升级对象' },
+    { name: '赵磊', role: '国际港务公司工程负责人', reason: '议定事项（一）责任单位负责人' },
+    { name: '陈帅', role: '工程管理部', reason: '议定事项（二）牵头责任人' },
+    { name: '苏云霄', role: '安委办', reason: '议定事项（三）（四）汇总与周报责任人' },
+  ];
+
+  const TRANSFER_FIELDS = [
+    { from: '工作任务', to: '事项名称', note: '督办标题，来自议定事项条款' },
+    { from: '任务分类', to: '督办类型', note: '安全隐患 / 项目推进 / 节假日安保 / 机制建设' },
+    { from: '时间节点', to: '任务分解', note: '启动、验收、报送等节点' },
+    { from: '近期进展（材料交叉对齐）', to: '本周进展', note: '转入后由责任单位按周填报；提取时写入最近进展' },
+    { from: '完成时限', to: '办结时限', note: '纪要明确日期，逾期自动监测' },
+    { from: '责任领导', to: '分管领导', note: '升级与阅知对象' },
+    { from: '责任单位 / 负责人', to: '责任单位', note: '承办主体；负责人用于临期提醒' },
+    { from: '初评牌态', to: '红黄绿牌状态', note: '按距办结时限初评，转入后持续重算' },
+    { from: '纪要文号 / 条款', to: '纪要来源', note: '可回溯到哪次会、哪一条' },
+  ];
+
+  const LEADER_PACKS = [
+    {
+      leader: '文钊',
+      role: '集团总经理 · 安委会主持',
+      taskIds: ['T-2026-0812-01', 'T-2026-0812-02', 'T-2026-0812-03', 'T-2026-0812-04', 'T-2026-0812-05'],
+      hint: '本场会议全部督办事项',
+    },
+    {
+      leader: '赵磊',
+      role: '国际港务公司',
+      taskIds: ['T-2026-0812-01'],
+      hint: '国际陆港基坑支护隐患整改并验收',
+    },
+    {
+      leader: '陈帅',
+      role: '工程管理部',
+      taskIds: ['T-2026-0812-02', 'T-2026-0812-05'],
+      hint: '锦荣科技园危大工程 · 节日包保',
+    },
+    {
+      leader: '苏云霄',
+      role: '安委办',
+      taskIds: ['T-2026-0812-03', 'T-2026-0812-04'],
+      hint: '节假日安保方案汇总 · 周报机制',
+    },
+  ];
+
+  const MESSAGES = [
+    {
+      id: 'm1',
+      level: '黄',
+      title: '临期提醒',
+      time: '2026-08-17 08:00',
+      to: '负责人 赵磊',
+      body: '「国际陆港集结中心基坑支护隐患整改并验收」距办结时限 8 天，请按节点完成自验。',
+    },
+    {
+      id: 'm2',
+      level: '黄',
+      title: '临期提醒',
+      time: '2026-08-17 08:00',
+      to: '负责人 陈帅',
+      body: '「锦荣科技园危大工程专项检查整改闭环」将于 8 月 22 日到期，仍有 2 项未销号。',
+    },
+    {
+      id: 'm3',
+      level: '黄',
+      title: '临期提醒',
+      time: '2026-08-17 08:00',
+      to: '负责人 苏云霄',
+      body: '「中秋国庆园区与在建项目安全稳定方案报送」将于 8 月 20 日到期，尚有 5 家单位未报。',
+    },
+    {
+      id: 'm4',
+      level: '红',
+      title: '逾期升级',
+      time: '2026-08-09 08:00',
+      to: '总经理 文钊',
+      body: '「锦荣科技园深基坑支护重大隐患挂牌销号」已逾期，系统已评定红牌（P0），请关注工程管理部销号进度。',
+    },
+    {
+      id: 'm5',
+      level: '红',
+      title: '逾期升级',
+      time: '2026-08-11 08:00',
+      to: '总经理 文钊',
+      body: '「国际陆港集结中心临边防护重大隐患挂牌销号」已逾期，系统已评定红牌（P0），请关注国际港务公司销号进度。',
+    },
+    {
+      id: 'm6',
+      level: '红',
+      title: '逾期升级',
+      time: '2026-08-13 08:00',
+      to: '总经理 文钊',
+      body: '「参控股企业专项巡察整改台账销号」已逾期，系统已评定红牌，请关注科技资本公司推进情况。',
+    },
+  ];
+
+  const WEEKLY_HISTORY = [
+    {
+      id: 'w32',
+      week: 32,
+      weekLabel: '2026年第32周',
+      title: '科创集团督查督办周报（2026年第32周）',
+      period: '2026-08-04 至 2026-08-10',
+      generatedAt: '2026-08-10 09:00',
+      pushedTo: ['总经理 文钊', '党委办公室', '安委会成员'],
+      pushed: true,
+      auto: true,
+      summary: '系统自动汇总在办事项 3 项：红牌 1、黄牌 2。本周新从党委会〔2026〕8号转入巡察整改 1 项；深基坑挂牌事项于 8 月 8 日逾期升红。',
+      stats: { total: 3, red: 1, yellow: 2, green: 0, doing: 3, todo: 0, done: 0 },
+      highlights: [
+        '红牌：锦荣科技园深基坑支护挂牌销号（安委会〔2026〕10号）已于 8 月 8 日逾期，系统已升级推送总经理。',
+        '临期：国际陆港临边防护挂牌销号（安委会〔2026〕11号）办结时限为 8 月 10 日，临时围挡已补设，洞口封闭未完。',
+        '新转入：参控股企业专项巡察整改台账销号（党委会〔2026〕8号），时限 8 月 12 日，科技资本公司牵头。',
+      ],
+      items: [
+        { title: '锦荣科技园深基坑支护重大隐患挂牌销号', owner: '工程管理部', type: '安全隐患', card: '红', status: '进行中', deadline: '2026-08-08', progress: 42, weekProgress: '斜撑开始安装，东侧继续局部停工。', source: '安委会〔2026〕10号' },
+        { title: '国际陆港集结中心临边防护重大隐患挂牌销号', owner: '国际港务公司', type: '安全隐患', card: '黄', status: '进行中', deadline: '2026-08-10', progress: 40, weekProgress: '临时围挡施工中，洞口封闭尚未闭环。', source: '安委会〔2026〕11号' },
+        { title: '参控股企业专项巡察整改台账销号', owner: '科技资本公司', type: '巡察整改', card: '黄', status: '进行中', deadline: '2026-08-12', progress: 35, weekProgress: '整改措施已制定，双审材料收集中。', source: '党委会〔2026〕8号' },
+      ],
+    },
+    {
+      id: 'w31',
+      week: 31,
+      weekLabel: '2026年第31周',
+      title: '科创集团督查督办周报（2026年第31周）',
+      period: '2026-07-28 至 2026-08-03',
+      generatedAt: '2026-08-03 09:00',
+      pushedTo: ['总经理 文钊', '安委会成员'],
+      pushed: true,
+      auto: true,
+      summary: '系统自动汇总在办事项 2 项：黄牌 2。本周新从安委会〔2026〕10号、11号挂牌督办专题会转入重大隐患 2 项，尚无红牌。',
+      stats: { total: 2, red: 0, yellow: 2, green: 0, doing: 2, todo: 0, done: 0 },
+      highlights: [
+        '新转入：锦荣科技园深基坑支护重大隐患挂牌（安委会〔2026〕10号），时限 8 月 8 日，东侧作业面已局部停工。',
+        '新转入：国际陆港集结中心临边防护挂牌（安委会〔2026〕11号），时限 8 月 10 日，已设置警戒并安排值守。',
+        '本周无办结、无红牌。系统已按办结时限启动临期监测。',
+      ],
+      items: [
+        { title: '锦荣科技园深基坑支护重大隐患挂牌销号', owner: '工程管理部', type: '安全隐患', card: '黄', status: '进行中', deadline: '2026-08-08', progress: 18, weekProgress: '已下达局部停工令，加密监测，支护加固方案评审中。', source: '安委会〔2026〕10号' },
+        { title: '国际陆港集结中心临边防护重大隐患挂牌销号', owner: '国际港务公司', type: '安全隐患', card: '黄', status: '进行中', deadline: '2026-08-10', progress: 15, weekProgress: '挂牌督办通知已下达，临时围挡开始施工。', source: '安委会〔2026〕11号' },
+      ],
+    },
+  ];
+
+  function countBy(list, key) {
+    const map = {};
+    list.forEach(function (t) {
+      const k = t[key] || '其他';
+      map[k] = (map[k] || 0) + 1;
+    });
+    return Object.keys(map).map(function (k) { return { name: k, n: map[k] }; });
+  }
+
+  function buildWeeklyReport(todos, meta) {
+    const list = (todos && todos.length) ? todos : SAMPLE_TODOS;
+    const red = list.filter(function (t) { return t.card === '红'; });
+    const yellow = list.filter(function (t) { return t.card === '黄'; });
+    const green = list.filter(function (t) { return t.card === '绿'; });
+    const doing = list.filter(function (t) { return t.status === '进行中'; });
+    const todo = list.filter(function (t) { return t.status === '未开始'; });
+    const done = list.filter(function (t) { return t.status === '已完成'; });
+    const highlights = [];
+    if (red.length) {
+      highlights.push('红牌 ' + red.length + ' 项：' + red.map(function (t) { return '「' + t.title + '」（' + t.source + '，' + t.owner + '）'; }).join('；') + '。已自动升级推送总经理。');
+    }
+    if (yellow.length) {
+      highlights.push('黄牌临期 ' + yellow.length + ' 项：' + yellow.map(function (t) { return t.title; }).join('、') + '。已向负责人推送提醒。');
+    }
+    if (done.length) {
+      highlights.push('本周办结 ' + done.length + ' 项：' + done.map(function (t) { return t.title; }).join('、') + '。');
+    }
+    if (todo.length) {
+      highlights.push('尚未启动 ' + todo.length + ' 项：' + todo.map(function (t) { return t.title; }).join('、') + '。');
+    }
+    const summary = '系统自动汇总在办督办事项 ' + list.length + ' 项：绿牌 ' + green.length + '、黄牌 ' + yellow.length + '、红牌 ' + red.length +
+      '；进行中 ' + doing.length + '、未开始 ' + todo.length + '、已完成 ' + done.length + '。本周数据来自会议纪要转入及督办台账，无需人工逐项收集。';
+    return {
+      id: meta.id || 'w33',
+      week: meta.week || 33,
+      weekLabel: meta.weekLabel || '2026年第33周',
+      title: '科创集团督查督办周报（' + (meta.weekLabel || '2026年第33周') + '）',
+      period: meta.period || '2026-08-11 至 2026-08-17',
+      generatedAt: meta.generatedAt || '2026-08-17 09:00',
+      pushedTo: ['总经理 文钊', '党委办公室', '安委会成员'],
+      pushed: true,
+      auto: true,
+      summary: summary,
+      stats: {
+        total: list.length,
+        red: red.length,
+        yellow: yellow.length,
+        green: green.length,
+        doing: doing.length,
+        todo: todo.length,
+        done: done.length,
+      },
+      byType: countBy(list, 'type'),
+      byOwner: countBy(list, 'owner'),
+      highlights: highlights,
+      items: list.map(function (t) {
+        return {
+          title: t.title,
+          owner: t.owner,
+          type: t.type,
+          card: t.card,
+          status: t.status,
+          deadline: t.deadline,
+          progress: t.progress || 0,
+          weekProgress: t.weekProgress || t.summary || '',
+          source: t.source || t.meetingNo || '',
+        };
+      }),
+    };
+  }
+
+  const WEEKLY_CURRENT_META = {
+    id: 'w33',
+    week: 33,
+    weekLabel: '2026年第33周',
+    period: '2026-08-11 至 2026-08-17',
+    generatedAt: '2026-08-17 09:00',
+  };
+
+  const QA_PRESETS = [
+    {
+      q: '安委会第12次会议部署了哪些任务？',
+      a: '安委会〔2026〕12号共部署：① 国际陆港集结中心基坑支护隐患整改（国际港务公司，8月25日）；② 锦荣科技园危大工程专项检查整改（工程管理部，8月22日）；③ 中秋国庆安全稳定方案报送（各二级单位，8月20日）；④ 安委办周报机制与安全考核一票否决（已办结）；另明确节日不停工包保及安全生产「一张图」平台对接。',
+    },
+    {
+      q: '本月哪些督办事项超期了？',
+      a: '截至 2026-08-17，红牌（超期）3 项：①「锦荣科技园深基坑支护重大隐患挂牌销号」（安委会〔2026〕10号，工程管理部，时限 8月8日，P0）；②「国际陆港集结中心临边防护重大隐患挂牌销号」（安委会〔2026〕11号，国际港务公司，时限 8月10日，P0）；③「参控股企业专项巡察整改台账销号」（党委会〔2026〕8号，科技资本公司，时限 8月12日）。均已升级推送总经理文钊。',
+    },
+    {
+      q: '国际陆港基坑整改最新进展如何？',
+      a: '事项 T-2026-0812-01，责任单位国际港务公司，负责人赵磊。本周进展：基坑监测已加密，支护补强正在施工，完成率 62%。黄牌（临期），下一步 8月22日前自验。来源：安委会〔2026〕12号。另有同场区临边防护挂牌事项（安委会〔2026〕11号）已红牌逾期，请一并关注。',
+    },
+  ];
+
+  function defaultState() {
+    return {
+      files: [],
+      extracted: false,
+      pushed: false,
+      todos: [],
+      lastPushAt: null,
+      lastPushLeaders: [],
+      reportGenerated: false,
+      thisWeekReport: null,
+      activeReportId: 'w32',
+    };
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return defaultState();
+      return Object.assign(defaultState(), JSON.parse(raw));
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  function save(state) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  }
+
+  function reset() {
+    localStorage.removeItem(STORE_KEY);
+    return defaultState();
+  }
+
+  function toast(message, type) {
+    let wrap = document.querySelector('.toast-wrap');
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'toast-wrap';
+      document.body.appendChild(wrap);
+    }
+    const el = document.createElement('div');
+    el.className = 'toast ' + (type || 'info');
+    el.innerHTML = '<span>' + message + '</span>';
+    wrap.appendChild(el);
+    setTimeout(function () {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.3s';
+      setTimeout(function () { el.remove(); }, 300);
+    }, 3200);
+  }
+
+  function statusTag(s) {
+    if (s === '已完成') return '<span class="tag tag-green">已完成</span>';
+    if (s === '进行中') return '<span class="tag tag-blue">进行中</span>';
+    if (s === '逾期') return '<span class="tag tag-red">逾期</span>';
+    return '<span class="tag tag-gray">未开始</span>';
+  }
+
+  function cardTag(c) {
+    if (c === '红') return '<span class="card-flag red">红牌</span>';
+    if (c === '黄') return '<span class="card-flag yellow">黄牌</span>';
+    return '<span class="card-flag green">绿牌</span>';
+  }
+
+  function sleep(ms) {
+    return new Promise(function (r) { setTimeout(r, ms); });
+  }
+
+  global.DemoStore = {
+    STORE_KEY: STORE_KEY,
+    TODAY: TODAY,
+    ORG: ORG,
+    SAMPLE_MATERIALS: SAMPLE_MATERIALS,
+    OA_DOCS: OA_DOCS,
+    SAMPLE_MINUTES: SAMPLE_MINUTES,
+    MINUTES_BY_NO: MINUTES_BY_NO,
+    RESOLUTIONS: RESOLUTIONS,
+    SAMPLE_TODOS: SAMPLE_TODOS,
+    TYPE_PRIORITY: TYPE_PRIORITY,
+    CC_ALL: CC_ALL,
+    MATCHED_RECIPIENTS: MATCHED_RECIPIENTS,
+    TRANSFER_FIELDS: TRANSFER_FIELDS,
+    LEADER_PACKS: LEADER_PACKS,
+    MESSAGES: MESSAGES,
+    WEEKLY_HISTORY: WEEKLY_HISTORY,
+    WEEKLY_CURRENT_META: WEEKLY_CURRENT_META,
+    buildWeeklyReport: buildWeeklyReport,
+    QA_PRESETS: QA_PRESETS,
+    load: load,
+    save: save,
+    reset: reset,
+    toast: toast,
+    statusTag: statusTag,
+    cardTag: cardTag,
+    sleep: sleep,
+  };
+})(window);
+
+</script>
+  <script>
+    (function () {
+      const S = DemoStore;
+      let state = S.load();
+      const $ = (sel, root) => (root || document).querySelector(sel);
+      const $$ = (sel, root) => (root || document).querySelectorAll(sel);
+      const titles = {
+        entry: '会议督查督办系统 · 郑州航空港科创投资集团',
+        office: '办公室端 · 会议督查督办系统',
+        leader: '领导端 · 会议督查督办系统',
+      };
+
+      function parseHash() {
+        const h = (location.hash || '').replace('#', '');
+        if (h === 'office') return { role: 'office' };
+        if (h === 'leader') return { role: 'leader', view: 'board' };
+        if (h === 'msg' || h === 'report') return { role: 'leader', view: h };
+        if (h === 'qa') return { role: 'leader', view: 'board', qa: true };
+        return { role: 'entry' };
+      }
+
+      function showRole(role, leaderView, extra) {
+        $('#screen-entry').classList.toggle('is-on', role === 'entry');
+        $('#screen-office').classList.toggle('is-on', role === 'office');
+        $('#screen-leader').classList.toggle('is-on', role === 'leader');
+        document.body.classList.toggle('entry-body', role === 'entry');
+        document.title = titles[role] || titles.entry;
+        const hash = role === 'leader' && leaderView && leaderView !== 'board'
+          ? '#' + leaderView
+          : '#' + role;
+        if (location.hash !== hash) history.replaceState(null, '', hash);
+        state = S.load();
+        if (role === 'office') Office.enter();
+        if (role === 'leader') {
+          $('#drawer').classList.remove('open');
+          $('#overlay').classList.remove('open');
+          Leader.enter(leaderView || 'board', extra && extra.qa);
+        }
+      }
+
+      const Office = (function () {
+        let running = false;
+        let officeSection = 'material';
+        const meetingTodos = () => S.SAMPLE_TODOS.filter((t) => t.source === '安委会〔2026〕12号');
+        const pick = { tasks: new Set(), leaders: new Set(), ready: false };
+
+        function ensurePick() {
+          if (pick.ready) return;
+          meetingTodos().forEach((t) => pick.tasks.add(t.id));
+          S.LEADER_PACKS.forEach((p) => pick.leaders.add(p.leader));
+          pick.ready = true;
+        }
+
+        function resetPick() {
+          pick.tasks.clear();
+          pick.leaders.clear();
+          pick.ready = false;
+        }
+
+        function selectedTasks() {
+          return meetingTodos().filter((t) => pick.tasks.has(t.id));
+        }
+
+        function switchOfficeSection(section) {
+          officeSection = section;
+          $$('#office-sidebar .side-link[data-office]').forEach((el) => {
+            el.classList.toggle('active', el.dataset.office === section);
+          });
+          const showWorkflow = section === 'material' || section === 'dispatch';
+          $('#steps-bar').style.display = showWorkflow ? '' : 'none';
+          $('#office-workflow').style.display = showWorkflow ? '' : 'none';
+          $('#office-title').textContent =
+            section === 'material' ? '会议材料汇聚' :
+            section === 'dispatch' ? '待办分发' :
+            section === 'history' ? '转入记录' : '站内信';
+          $('#office-sub').textContent =
+            section === 'material' ? '上传 PDF / 文字转录稿 / 图片 → Agent 识别 → 结构化提取 → 转入督办' :
+            section === 'dispatch' ? '勾选推送事项和推送领导，确认后转入督办' :
+            section === 'history' ? '查看本次及历史推送至督查督办的转入结果（Demo 模拟）' :
+            '领导签收、责任单位回执等消息（Demo 占位）';
+          $$('#screen-office .view').forEach((v) => v.classList.remove('active'));
+          if (showWorkflow) {
+            goStep(section === 'material' ? (state.extracted ? 2 : 1) : (state.pushed ? 4 : 3));
+          } else if (section === 'history') {
+            $('#view-history').classList.add('active');
+            renderHistory();
+          } else {
+            $('#view-inbox').classList.add('active');
+          }
+        }
+
+        function goStep(n) {
+          if (officeSection !== 'material' && officeSection !== 'dispatch') return;
+          $$('#office-workflow .view').forEach((v) => v.classList.remove('active'));
+          $('#view-' + n).classList.add('active');
+          $$('#steps-bar .step').forEach((el) => {
+            const s = Number(el.dataset.step);
+            el.classList.toggle('active', s === n);
+            el.classList.toggle('done', s < n);
+          });
+          if (n <= 2) officeSection = 'material';
+          if (n >= 3) officeSection = 'dispatch';
+          $$('#office-sidebar .side-link[data-office]').forEach((el) => {
+            const key = el.dataset.office;
+            el.classList.toggle('active', (key === 'material' && n <= 2) || (key === 'dispatch' && n >= 3));
+          });
+          if (n === 3) renderExtract();
+          if (n === 4) renderPacks();
+        }
+
+        function renderHistory() {
+          const box = $('#history-box');
+          if (!state.pushed || !state.lastPushAt) {
+            box.className = 'empty';
+            box.innerHTML = '暂无转入记录。完成「待办分发」推送后将在此显示。';
+            return;
+          }
+          box.className = '';
+          const when = new Date(state.lastPushAt).toLocaleString('zh-CN', { hour12: false });
+          const pushed = (state.todos || []).filter((t) => t.source === '安委会〔2026〕12号');
+          const leaders = state.lastPushLeaders && state.lastPushLeaders.length
+            ? state.lastPushLeaders.join('、')
+            : '—';
+          const rows = pushed.map((t) => `
+            <tr>
+              <td style="font-weight:500">${t.title}</td>
+              <td>${t.owner}</td>
+              <td>${t.leader}</td>
+              <td>${t.deadline}</td>
+            </tr>
+          `).join('');
+          box.innerHTML = `
+            <div class="msg-item">
+              <div class="meta"><span class="tag tag-green">已转入</span> ${when} · ${pushed.length} 项 · 推送 ${leaders}</div>
+            </div>
+            <div class="table-wrap" style="margin-top:12px">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>事项名称</th>
+                    <th>责任单位</th>
+                    <th>分管领导</th>
+                    <th>办结时限</th>
+                  </tr>
+                </thead>
+                <tbody>${rows || '<tr><td colspan="4" class="cell-muted">无事项</td></tr>'}</tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        function renderFiles() {
+          const list = $('#file-list');
+          $('#btn-to-extract').disabled = !state.files.length;
+          if (!state.files.length) { list.innerHTML = ''; return; }
+          list.innerHTML = state.files.map((f) => `
+            <div class="file-chip" data-id="${f.id}">
+              <div class="ftype">${f.type}</div>
+              <div class="meta">
+                <div class="name">${f.name}</div>
+                <div class="size">${f.size} · ${f.source} · ${f.kind === 'image' ? '图片识别' : f.kind === 'transcript' ? '文字转录' : '文档解析'}</div>
+              </div>
+              <button class="remove" type="button">×</button>
+            </div>
+          `).join('');
+          list.querySelectorAll('.remove').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const id = btn.closest('.file-chip').dataset.id;
+              state.files = state.files.filter((x) => x.id !== id);
+              S.save(state);
+              renderFiles();
+            });
+          });
+        }
+
+        function loadSamples() {
+          state.files = S.SAMPLE_MATERIALS.map((x) => Object.assign({}, x));
+          S.save(state);
+          renderFiles();
+          S.toast('已载入 PDF、转录稿、白板照片、微信截图', 'success');
+        }
+
+        function addDroppedFiles(fileList) {
+          const arr = Array.from(fileList || []);
+          if (!arr.length) { loadSamples(); return; }
+          arr.forEach((file) => {
+            const name = file.name.toLowerCase();
+            let kind = 'pdf';
+            let type = 'FILE';
+            if (/\.(png|jpe?g|webp|gif)$/.test(name)) { kind = 'image'; type = name.split('.').pop().toUpperCase(); }
+            else if (/\.(txt|docx?)$/.test(name)) { kind = 'transcript'; type = name.split('.').pop().toUpperCase(); }
+            else if (/\.pdf$/.test(name)) { kind = 'pdf'; type = 'PDF'; }
+            state.files.push({
+              id: 'u-' + Date.now() + '-' + Math.random().toString(16).slice(2),
+              name: file.name,
+              type: type,
+              kind: kind,
+              size: file.size > 1048576 ? (file.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(file.size / 1024)) + ' KB',
+              source: '本地上传',
+              evidence: kind === 'image' ? '图片已接收，演示按 OCR 样例识别。' : kind === 'transcript' ? '转录稿已接收，演示按语义抽取样例。' : '文档已接收，演示按 PDF 解析样例。',
+            });
+          });
+          S.save(state);
+          renderFiles();
+          S.toast('已加入 ' + arr.length + ' 个文件（识别结果为演示样例）', 'info');
+        }
+
+        function renderEvidence() {
+          const box = $('#evidence-list');
+          box.style.display = 'flex';
+          box.innerHTML = (state.files.length ? state.files : S.SAMPLE_MATERIALS).map((f) => `
+            <div class="evidence-row">
+              <div class="ftype">${f.type}</div>
+              <div>
+                <div style="font-weight:500">${f.name}</div>
+                <div style="color:var(--ink-muted);margin-top:4px">${f.evidence || '已纳入汇聚'}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function renderExtract() {
+          const m = S.SAMPLE_MINUTES;
+          const oa = S.OA_DOCS[0];
+          $('#extract-meta').innerHTML = [
+            ['会议名称', m.title],
+            ['纪要文号', m.meetingNo],
+            ['会议日期', m.date],
+            ['主持人', m.host],
+            ['地点 / 出席', m.place + ' · ' + m.attendees],
+            ['OA 状态', oa.oaStatus + ' · ' + oa.publishTime],
+            ['发起人', oa.initiator],
+            ['原抄送范围', oa.ccCount + ' 人（将按任务匹配精简）'],
+          ].map((row) => '<dt>' + row[0] + '</dt><dd>' + row[1] + '</dd>').join('');
+          $('#resolve-list').innerHTML = S.RESOLUTIONS.map((t, i) =>
+            '<div class="resolve-item">' + (i + 1) + '. ' + t + '</div>'
+          ).join('');
+          $('#task-table tbody').innerHTML = meetingTodos().map((t) => `
+            <tr>
+              <td style="font-weight:500;min-width:160px">${t.title}</td>
+              <td>${t.type}</td>
+              <td class="cell-muted">${t.timeNodes}</td>
+              <td>${t.owner}</td>
+              <td>${t.ownerPerson || '—'}</td>
+              <td>${t.leader}</td>
+              <td style="white-space:nowrap">${t.deadline}</td>
+              <td>${S.cardTag(t.card)}</td>
+              <td class="cell-muted">${t.clause || t.meetingNo || '—'}</td>
+            </tr>
+          `).join('');
+        }
+
+        function renderPacks() {
+          ensurePick();
+          const list = meetingTodos();
+          $('#transfer-table tbody').innerHTML = list.map((t) => `
+            <tr>
+              <td class="check"><input type="checkbox" data-task="${t.id}" ${pick.tasks.has(t.id) ? 'checked' : ''} /></td>
+              <td style="font-weight:500">${t.title}</td>
+              <td>${t.owner}</td>
+              <td>${t.leader}</td>
+              <td style="white-space:nowrap">${t.deadline}</td>
+            </tr>
+          `).join('');
+          const allOn = list.length && list.every((t) => pick.tasks.has(t.id));
+          $('#check-all-tasks').checked = allOn;
+          $('#leader-packs').innerHTML = S.LEADER_PACKS.map((p) => {
+            const n = (p.taskIds || []).filter((id) => pick.tasks.has(id)).length;
+            const on = pick.leaders.has(p.leader);
+            return `
+            <button class="leader-pack${on ? ' selected' : ''}" type="button" data-leader="${p.leader}">
+              <div class="who">
+                <input type="checkbox" tabindex="-1" ${on ? 'checked' : ''} />
+                ${p.leader} <span class="tag tag-blue">${n} 项</span>
+              </div>
+              <div class="role">${p.role}</div>
+              <div class="hint">${p.hint}</div>
+            </button>`;
+          }).join('');
+          if (state.pushed) {
+            $('#push-result').style.display = 'block';
+            const n = (state.todos || []).filter((t) => t.source === '安委会〔2026〕12号').length;
+            const names = (state.lastPushLeaders || []).join('、') || '—';
+            $('#push-result-text').textContent = '已转入 ' + n + ' 项，推送至 ' + names + '。';
+          }
+        }
+
+        async function runAI() {
+          if (running) return;
+          if (!state.files.length) { S.toast('请先上传或载入会议材料', 'info'); return; }
+          running = true;
+          $('#btn-run-ai').disabled = true;
+          $('#btn-after-ai').style.display = 'none';
+          const log = $('#ai-log');
+          log.style.display = 'block';
+          log.innerHTML = '';
+          const nodes = $$('#ai-pipeline .pipe-node');
+          nodes.forEach((n) => n.classList.remove('active', 'done'));
+          const logs = [
+            { p: 0, msg: '<span class="info">[PDF]</span> 解析会议纪要正文，抽取议定事项条款…' },
+            { p: 0, msg: '<span class="ok">[PDF]</span> 识别 4 条议定事项、主持人总经理文钊' },
+            { p: 1, msg: '<span class="info">[转录]</span> 对齐发言人与口头布置…' },
+            { p: 1, msg: '<span class="ok">[转录]</span> 补全责任到国际港务、工程管理部、安委办' },
+            { p: 2, msg: '<span class="info">[图片]</span> OCR 白板手写日期；识别微信群确认回复…' },
+            { p: 2, msg: '<span class="ok">[图片]</span> 时限 8/25、8/22、8/20 与纪要一致；三人已回复收到' },
+            { p: 3, msg: '<span class="ok">[汇聚]</span> 已结构化：决议 3 条、任务已对齐（类型/单位/领导/时限/牌态/来源）' },
+          ];
+          let cur = -1;
+          for (const item of logs) {
+            if (item.p !== cur) {
+              if (cur >= 0) { nodes[cur].classList.remove('active'); nodes[cur].classList.add('done'); }
+              cur = item.p;
+              nodes[cur].classList.add('active');
+            }
+            log.innerHTML += item.msg + '<br/>';
+            log.scrollTop = log.scrollHeight;
+            await S.sleep(420);
+          }
+          nodes[cur].classList.remove('active');
+          nodes[cur].classList.add('done');
+          state.extracted = true;
+          S.save(state);
+          renderEvidence();
+          $('#btn-after-ai').style.display = 'inline-flex';
+          S.toast('已识别全部材料并完成交叉对齐', 'success');
+          $('#btn-run-ai').disabled = false;
+          $('#btn-run-ai').textContent = '重新识别';
+          running = false;
+        }
+
+        function bind() {
+          $$('#steps-bar .step').forEach((el) => el.addEventListener('click', () => goStep(Number(el.dataset.step))));
+          $$('#screen-office [data-next]').forEach((el) => el.addEventListener('click', () => goStep(Number(el.dataset.next))));
+          $$('#screen-office [data-back]').forEach((el) => el.addEventListener('click', () => goStep(Number(el.dataset.back))));
+          $$('#office-sidebar .side-link[data-office]').forEach((el) => {
+            el.addEventListener('click', () => switchOfficeSection(el.dataset.office));
+          });
+          $('#btn-load-sample').addEventListener('click', loadSamples);
+          $('#btn-to-extract').addEventListener('click', () => goStep(2));
+          $('#btn-run-ai').addEventListener('click', runAI);
+
+          const zone = $('#upload-zone');
+          const input = $('#file-input');
+          zone.addEventListener('click', () => input.click());
+          input.addEventListener('change', (e) => {
+            addDroppedFiles(e.target.files);
+            e.target.value = '';
+          });
+          ['dragenter', 'dragover'].forEach((ev) => {
+            zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+          });
+          ['dragleave', 'drop'].forEach((ev) => {
+            zone.addEventListener(ev, (e) => {
+              e.preventDefault();
+              zone.classList.remove('dragover');
+              if (ev === 'drop') addDroppedFiles(e.dataTransfer.files);
+            });
+          });
+
+          $('#btn-push').addEventListener('click', () => {
+            if (!state.extracted) { S.toast('请先完成 Agent 识别', 'info'); goStep(2); return; }
+            ensurePick();
+            const tasks = selectedTasks();
+            const leaders = S.LEADER_PACKS.filter((p) => pick.leaders.has(p.leader)).map((p) => p.leader);
+            if (!tasks.length) { S.toast('请至少选择一项推送事项', 'info'); return; }
+            if (!leaders.length) { S.toast('请至少选择一位推送领导', 'info'); return; }
+            const pushedAt = new Date().toISOString();
+            state.todos = tasks.map((t) => Object.assign({}, t, {
+              pushedBy: '办公室 张璇',
+              pushedAt: pushedAt,
+              summary: t.summary || t.weekProgress || t.desc || t.originQuote || '',
+            }));
+            state.pushed = true;
+            state.lastPushAt = pushedAt;
+            state.lastPushLeaders = leaders;
+            S.save(state);
+            $('#push-result').style.display = 'block';
+            $('#push-result-text').textContent = '已转入 ' + tasks.length + ' 项，推送至 ' + leaders.join('、') + '。';
+            renderHistory();
+            S.toast('已转入 ' + tasks.length + ' 项，推送 ' + leaders.length + ' 人', 'success');
+          });
+          $('#check-all-tasks').addEventListener('change', (e) => {
+            ensurePick();
+            pick.tasks.clear();
+            if (e.target.checked) meetingTodos().forEach((t) => pick.tasks.add(t.id));
+            renderPacks();
+          });
+          $('#btn-toggle-tasks').addEventListener('click', () => {
+            ensurePick();
+            const all = meetingTodos();
+            const on = all.every((t) => pick.tasks.has(t.id));
+            pick.tasks.clear();
+            if (!on) all.forEach((t) => pick.tasks.add(t.id));
+            renderPacks();
+          });
+          $('#btn-toggle-leaders').addEventListener('click', () => {
+            ensurePick();
+            const all = S.LEADER_PACKS;
+            const on = all.every((p) => pick.leaders.has(p.leader));
+            pick.leaders.clear();
+            if (!on) all.forEach((p) => pick.leaders.add(p.leader));
+            renderPacks();
+          });
+          $('#transfer-table').addEventListener('change', (e) => {
+            const box = e.target.closest('[data-task]');
+            if (!box) return;
+            if (box.checked) pick.tasks.add(box.dataset.task);
+            else pick.tasks.delete(box.dataset.task);
+            renderPacks();
+          });
+          $('#leader-packs').addEventListener('click', (e) => {
+            const card = e.target.closest('[data-leader]');
+            if (!card) return;
+            const name = card.dataset.leader;
+            if (pick.leaders.has(name)) pick.leaders.delete(name);
+            else pick.leaders.add(name);
+            renderPacks();
+          });
+          $('#btn-reset').addEventListener('click', () => {
+            if (confirm('确定重置全部 Demo 数据？')) {
+              state = S.reset();
+              $('#push-result').style.display = 'none';
+              $('#evidence-list').style.display = 'none';
+              $('#ai-log').style.display = 'none';
+              $('#btn-after-ai').style.display = 'none';
+              $('#btn-run-ai').textContent = '开始识别';
+              resetPick();
+              renderFiles();
+              renderHistory();
+              switchOfficeSection('material');
+              S.toast('Demo 数据已重置', 'info');
+            }
+          });
+        }
+
+        function enter() {
+          renderFiles();
+          if (state.extracted) {
+            $('#btn-after-ai').style.display = 'inline-flex';
+            renderEvidence();
+          }
+          if (state.pushed) {
+            $('#push-result').style.display = 'block';
+            renderHistory();
+          }
+          switchOfficeSection(officeSection || (state.pushed ? 'dispatch' : 'material'));
+        }
+
+        bind();
+        return { enter };
+      })();
+
+      const Leader = (function () {
+        const filters = { card: '', type: '', status: '', time: '', owner: '' };
+        let attnIndex = 0;
+        let attnTimer = null;
+        let attnPaused = false;
+        let drawerTaskId = '';
+
+        function todos() { return state.todos && state.todos.length ? state.todos : []; }
+        function taskSummary(t) {
+          return t.summary || t.weekProgress || t.desc || t.originQuote || '办公室推送事项，点击查看完整字段。';
+        }
+        function typePri(t) {
+          const map = S.TYPE_PRIORITY || {};
+          return map[t.type] != null ? map[t.type] : 9;
+        }
+
+        function setQaOpen(on) {
+          const widget = $('#qa-widget');
+          const panel = $('#qa-panel');
+          if (!widget || !panel) return;
+          panel.hidden = !on;
+          widget.classList.toggle('is-open', !!on);
+          $('#btn-qa-fab').setAttribute('aria-label', on ? '关闭智能问答' : '打开智能问答');
+          if (on) setTimeout(() => $('#qa-input').focus(), 40);
+        }
+        function toggleQa() { setQaOpen($('#qa-panel').hidden); }
+
+        function showView(name) {
+          if (name === 'qa') {
+            name = 'board';
+            setQaOpen(true);
+          }
+          const viewEl = $('#view-' + name);
+          if (!viewEl) name = 'board';
+          $$('#screen-leader .view').forEach((v) => v.classList.remove('active'));
+          $('#view-' + name).classList.add('active');
+          $$('#leader-sidebar .side-link[data-view]').forEach((el) => {
+            el.classList.toggle('active', el.dataset.view === name);
+          });
+          if (name === 'msg') renderMsg();
+          if (name === 'report') renderReportView();
+        }
+
+        function daysUntil(deadline) {
+          const a = new Date(S.TODAY + 'T00:00:00');
+          const b = new Date((deadline || S.TODAY) + 'T00:00:00');
+          return Math.round((b - a) / 86400000);
+        }
+        function isOverdue(t) {
+          return t.card === '红' || daysUntil(t.deadline) < 0;
+        }
+        function isDueSoon(t) {
+          if (isOverdue(t) || t.status === '已完成') return false;
+          const d = daysUntil(t.deadline);
+          return t.card === '黄' || (d >= 0 && d <= 7);
+        }
+        function ranked(list) {
+          return list.slice().sort((a, b) => {
+            const cardRank = (t) => (t.card === '红' ? 0 : t.card === '黄' ? 1 : 2);
+            const r = cardRank(a) - cardRank(b);
+            if (r) return r;
+            const tp = typePri(a) - typePri(b);
+            if (tp) return tp;
+            return (a.deadline || '').localeCompare(b.deadline || '');
+          });
+        }
+        function watchItems() {
+          return ranked(todos().filter((t) => t.status !== '已完成' && (isOverdue(t) || isDueSoon(t))));
+        }
+
+        function matchTimeFilter(t) {
+          if (!filters.time) return true;
+          const d = daysUntil(t.deadline);
+          if (filters.time === 'overdue') return d < 0;
+          if (filters.time === 'due7') return d >= 0 && d <= 7;
+          if (filters.time === 'month') {
+            const today = new Date(S.TODAY + 'T00:00:00');
+            const due = new Date((t.deadline || S.TODAY) + 'T00:00:00');
+            return due.getFullYear() === today.getFullYear() && due.getMonth() === today.getMonth();
+          }
+          if (filters.time === 'later') {
+            const today = new Date(S.TODAY + 'T00:00:00');
+            const due = new Date((t.deadline || S.TODAY) + 'T00:00:00');
+            return due.getFullYear() > today.getFullYear() ||
+              (due.getFullYear() === today.getFullYear() && due.getMonth() > today.getMonth());
+          }
+          return true;
+        }
+
+        function filtered() {
+          return ranked(todos().filter((t) => {
+            if (filters.status && t.status !== filters.status) return false;
+            if (filters.card && t.card !== filters.card) return false;
+            if (filters.type && t.type !== filters.type) return false;
+            if (filters.owner && t.owner !== filters.owner) return false;
+            if (!matchTimeFilter(t)) return false;
+            return true;
+          }));
+        }
+
+        function scrollToList() {
+          const panel = document.querySelector('#view-board .todo-panel');
+          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function applyCardFilter(card) {
+          filters.card = filters.card === card ? '' : card;
+          renderBoard();
+          scrollToList();
+        }
+        function applyStatusFilter(status) {
+          if (status === 'all') {
+            filters.status = '';
+            filters.card = '';
+          } else {
+            filters.status = filters.status === status ? '' : status;
+          }
+          renderBoard();
+          scrollToList();
+        }
+        function applyTypeFilter(type) {
+          filters.type = filters.type === type ? '' : type;
+          renderBoard();
+          scrollToList();
+        }
+
+        function syncStatActive() {
+          $$('#view-board .stat-item[data-filter-card]').forEach((el) => {
+            el.classList.toggle('is-on', el.dataset.filterCard === filters.card);
+          });
+          $$('#view-board .stat-item[data-filter-status]').forEach((el) => {
+            const v = el.dataset.filterStatus;
+            if (v === 'all') el.classList.toggle('is-on', !filters.status && !filters.card);
+            else el.classList.toggle('is-on', v === filters.status);
+          });
+          $$('#tab-status .todo-tab').forEach((el) => {
+            el.classList.toggle('active', (el.dataset.status || '') === (filters.status || ''));
+          });
+          const typeSel = $('#filter-type');
+          const timeSel = $('#filter-time');
+          const ownerSel = $('#filter-owner');
+          if (typeSel) typeSel.value = filters.type || '';
+          if (timeSel) timeSel.value = filters.time || '';
+          if (ownerSel) ownerSel.value = filters.owner || '';
+        }
+
+        function fillSelect(sel, options, allLabel, current) {
+          if (!sel) return;
+          const keep = current || '';
+          const valid = keep && options.some((o) => o.value === keep);
+          const cur = valid ? keep : '';
+          sel.innerHTML =
+            '<option value="">' + allLabel + '</option>' +
+            options.map((o) =>
+              '<option value="' + o.value + '"' + (o.value === cur ? ' selected' : '') + '>' +
+              o.label + '</option>'
+            ).join('');
+          if (!valid && keep) {
+            if (sel.id === 'filter-type') filters.type = '';
+            if (sel.id === 'filter-owner') filters.owner = '';
+          }
+        }
+
+        function renderFilterSelects() {
+          const all = todos();
+          const typeMap = {};
+          const ownerMap = {};
+          all.forEach((t) => {
+            if (t.type) typeMap[t.type] = (typeMap[t.type] || 0) + 1;
+            if (t.owner) ownerMap[t.owner] = (ownerMap[t.owner] || 0) + 1;
+          });
+          const types = Object.keys(typeMap)
+            .sort((a, b) => typePri({ type: a }) - typePri({ type: b }))
+            .map((k) => ({ value: k, label: k + '（' + typeMap[k] + '）' }));
+          const owners = Object.keys(ownerMap)
+            .sort((a, b) => a.localeCompare(b, 'zh-CN'))
+            .map((k) => ({ value: k, label: k + '（' + ownerMap[k] + '）' }));
+          fillSelect($('#filter-type'), types, '全部类型', filters.type);
+          fillSelect($('#filter-owner'), owners, '全部单位', filters.owner);
+          const timeSel = $('#filter-time');
+          if (timeSel) timeSel.value = filters.time || '';
+        }
+
+        function watchGroups() {
+          const list = watchItems();
+          const groups = [];
+          const reds = list.filter((t) => t.card === '红');
+          if (reds.length) {
+            groups.push({ pri: 0, type: '红牌逾期', kind: '逾期升级', items: reds });
+          }
+          const map = new Map();
+          list.filter((t) => t.card !== '红').forEach((t) => {
+            const pri = typePri(t) + 1;
+            if (!map.has(pri)) {
+              map.set(pri, {
+                pri: pri,
+                type: t.type || '事项',
+                kind: isDueSoon(t) ? '临期提醒' : '关注',
+                items: [],
+              });
+            }
+            map.get(pri).items.push(t);
+          });
+          return groups.concat(Array.from(map.values()).sort((a, b) => a.pri - b.pri));
+        }
+
+        function stopAttnAuto() {
+          if (attnTimer) { clearTimeout(attnTimer); attnTimer = null; }
+        }
+
+        function goAttnSlide(i, restart) {
+          const groups = watchGroups();
+          if (!groups.length) return;
+          attnIndex = ((i % groups.length) + groups.length) % groups.length;
+          const track = $('#attention-track');
+          track.style.transform = 'translateX(-' + (attnIndex * 100) + '%)';
+          $$('#attention-track .attn-slide').forEach((el, idx) => {
+            el.classList.toggle('is-active', idx === attnIndex);
+          });
+          const g = groups[attnIndex];
+          $('#attn-index').textContent = (attnIndex + 1) + ' / ' + groups.length;
+          if (restart !== false && !attnPaused) startAttnAuto();
+        }
+
+        function startAttnAuto() {
+          stopAttnAuto();
+          const groups = watchGroups();
+          if (groups.length < 2) return;
+          attnTimer = setTimeout(() => {
+            goAttnSlide(attnIndex + 1, true);
+          }, 4200);
+        }
+
+        function renderAttention() {
+          const box = $('#attention');
+          const list = watchItems();
+          if (!todos().length || !list.length) {
+            box.hidden = true;
+            stopAttnAuto();
+            return;
+          }
+          box.hidden = false;
+          const groups = watchGroups();
+          if (attnIndex >= groups.length) attnIndex = 0;
+          $('#attention-track').innerHTML = groups.map((g, i) => `
+            <div class="attn-slide pri-${g.pri}${i === attnIndex ? ' is-active' : ''}" data-pri="${g.pri}">
+              <div class="attn-hud">
+                <span class="attn-hud-pri">P${g.pri}</span>
+                <span class="attn-hud-type">${g.type}</span>
+                <span class="attn-hud-kind">${g.kind}</span>
+                <span class="attn-hud-count">${g.items.length} SIGNAL</span>
+              </div>
+              <div class="attn-card-row n-${Math.min(g.items.length, 3)}">
+                ${g.items.map((t) => {
+                  const kind = isOverdue(t) ? '逾期升级' : '临期提醒';
+                  const red = t.card === '红' ? ' is-red' : '';
+                  return `
+                    <button class="attn-card${red}" type="button" data-open="${t.id}">
+                      <div class="attn-card-top">
+                        ${S.cardTag(t.card)}
+                        <span class="attn-kind">${kind}</span>
+                        <span class="attn-type">${t.type || ''}</span>
+                      </div>
+                      <div class="ttl">${t.title}</div>
+                      <div class="sum">${taskSummary(t)}</div>
+                      <div class="attn-foot">
+                        <span>${t.owner}</span>
+                        <span>${t.deadline}</span>
+                      </div>
+                    </button>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('');
+          goAttnSlide(attnIndex, true);
+        }
+
+        function renderStats() {
+          const all = todos();
+          $('#s-total').textContent = all.length;
+          $('#s-todo').textContent = all.filter((t) => t.status === '未开始').length;
+          $('#s-doing').textContent = all.filter((t) => t.status === '进行中').length;
+          $('#s-done').textContent = all.filter((t) => t.status === '已完成').length;
+          $('#s-green').textContent = all.filter((t) => t.card === '绿').length;
+          $('#s-yellow').textContent = all.filter((t) => t.card === '黄').length;
+          $('#s-red').textContent = all.filter((t) => t.card === '红').length;
+          if (state.pushed && state.lastPushAt) {
+            $('#sync-hint').textContent = '办公室已推送 · ' + new Date(state.lastPushAt).toLocaleString('zh-CN');
+            $('#push-from-hint').textContent = '来自办公室转入的督办事项（' + (state.lastPushLeaders || []).join('、') + '），可按类型、时间、责任单位筛选';
+          } else if (all.length) {
+            $('#sync-hint').textContent = '演示预置推送 · 可与办公室端转入联动';
+            $('#push-from-hint').textContent = '来自办公室转入的督办事项，可按类型、时间、责任单位筛选';
+          } else {
+            $('#sync-hint').textContent = '总经理 · 暂无推送，可载入演示数据';
+            $('#push-from-hint').textContent = '暂无推送事项。请先在办公室端完成转入，或点击「载入演示数据」';
+          }
+          syncStatActive();
+        }
+
+        function handleActionLabel(t) {
+          if (t.status === '未开始') return '一键启动';
+          if (t.status === '进行中') return '一键办结';
+          return '已办结';
+        }
+
+        function quickHandle(id, e) {
+          if (e) e.stopPropagation();
+          const list = state.todos || [];
+          const t = list.find((x) => x.id === id);
+          if (!t || t.status === '已完成') return;
+          const now = new Date().toLocaleString('zh-CN', { hour12: false }).replace(/\//g, '-');
+          if (t.status === '未开始') {
+            t.status = '进行中';
+            t.progress = Math.max(t.progress || 0, 10);
+            t.timeline = (t.timeline || []).concat([{ when: now, what: '领导端一键启动办理' }]);
+            S.toast('已启动：' + t.title, 'success');
+          } else {
+            t.status = '已完成';
+            t.progress = 100;
+            t.card = '绿';
+            t.timeline = (t.timeline || []).concat([{ when: now, what: '领导端一键办结' }]);
+            S.toast('已办结：' + t.title, 'success');
+          }
+          t.updateTime = now;
+          S.save(state);
+          renderBoard();
+        }
+
+        function renderCards() {
+          const rows = filtered();
+          const box = $('#todo-cards');
+          $('#pager-total').textContent = '共 ' + rows.length + ' 条';
+          if (!todos().length) {
+            box.innerHTML = '';
+            $('#empty-state').style.display = 'block';
+            return;
+          }
+          $('#empty-state').style.display = 'none';
+          if (!rows.length) {
+            box.innerHTML = '<div class="empty" style="display:block">无匹配结果，请调整类型 / 时间 / 责任单位或状态筛选</div>';
+            return;
+          }
+          box.innerHTML = rows.map((t) => {
+            const cardCls = t.card === '红' ? 'card-red' : t.card === '黄' ? 'card-yellow' : 'card-green';
+            const due = isOverdue(t)
+              ? '<span class="tag tag-red">已逾期</span>'
+              : (isDueSoon(t) ? '<span class="tag tag-yellow">临期</span>' : '');
+            const done = t.status === '已完成';
+            return `
+              <article class="todo-card ${cardCls}" data-open="${t.id}" role="button" tabindex="0">
+                <div class="todo-card-main">
+                  <div class="todo-card-top">
+                    ${S.cardTag(t.card)}
+                    ${S.statusTag(t.status)}
+                    <span class="tag tag-blue">${t.type || '事项'}</span>
+                    ${due}
+                  </div>
+                  <div class="todo-card-title">${t.title}</div>
+                  <div class="todo-card-sum">${taskSummary(t)}</div>
+                  <div class="todo-card-meta">
+                    <span><b>责任单位</b> ${t.owner}</span>
+                    <span><b>时限</b> ${t.deadline}</span>
+                    <span><b>纪要</b> ${t.source || '—'}</span>
+                    <span><b>推送</b> ${t.pushedBy || '办公室'}</span>
+                  </div>
+                </div>
+                <div class="todo-card-actions">
+                  <button class="btn btn-primary btn-sm" type="button" data-handle="${t.id}" ${done ? 'disabled' : ''}>${handleActionLabel(t)}</button>
+                  <button class="btn btn-secondary btn-sm" type="button" data-open="${t.id}">详情</button>
+                </div>
+              </article>`;
+          }).join('');
+        }
+
+        function renderBoard() {
+          renderStats();
+          renderFilterSelects();
+          renderAttention();
+          renderCards();
+          syncStatActive();
+        }
+
+        function closeDrawer() {
+          $('#drawer').classList.remove('open');
+          $('#overlay').classList.remove('open');
+          drawerTaskId = '';
+        }
+
+        function openDrawer(id) {
+          const t = todos().find((x) => x.id === id);
+          if (!t) return;
+          drawerTaskId = id;
+          $('#d-id').textContent = t.id;
+          $('#d-title').textContent = t.title;
+          $('#d-owner').textContent = t.owner;
+          $('#d-person').textContent = t.ownerPerson || '—';
+          $('#d-leader').textContent = t.leader;
+          $('#d-deadline').textContent = t.deadline;
+          $('#d-card').innerHTML = S.cardTag(t.card);
+          $('#d-status').innerHTML = S.statusTag(t.status);
+          $('#d-type').textContent = t.type || '—';
+          $('#d-source').textContent = t.source || '—';
+          $('#d-clause').textContent = t.clause || '—';
+          $('#d-notify').textContent = t.notify || '—';
+          $('#d-cycle').textContent = t.reportCycle || '—';
+          $('#d-desc').textContent = t.desc || '—';
+          $('#d-quote').textContent = t.originQuote || '—';
+          $('#d-nodes').textContent = t.timeNodes || '—';
+          $('#d-week').textContent = t.weekProgress || '—';
+          $('#d-evidence').textContent = (t.evidence && t.evidence.length) ? t.evidence.join('；') : '—';
+          $('#d-progress-bar > i').style.width = (t.progress || 0) + '%';
+          $('#d-progress-bar').className = 'progress ' + (t.progress >= 100 ? 'ok' : t.card === '红' ? 'warn' : '');
+          $('#d-progress-text').textContent = (t.progress || 0) + '%';
+          const pushAt = t.pushedAt ? new Date(t.pushedAt).toLocaleString('zh-CN') : (state.lastPushAt ? new Date(state.lastPushAt).toLocaleString('zh-CN') : '—');
+          $('#d-push-meta').innerHTML =
+            '<strong>办公室推送</strong>' +
+            '<span>推送人：' + (t.pushedBy || '办公室 张璇') + '</span>' +
+            '<span>推送时间：' + pushAt + '</span>' +
+            '<span>关联纪要：' + (t.meetingNo || t.source || '—') + '</span>';
+          $('#d-timeline').innerHTML = (t.timeline || []).map((x) =>
+            '<div class="tl-item"><div class="when">' + x.when + '</div><div class="what">' + x.what + '</div></div>'
+          ).join('') || '<div class="empty" style="display:block;padding:8px 0">暂无办理记录</div>';
+          $('#d-minutes-link').textContent = '查看关联会议纪要 · ' + (t.meetingNo || t.source || '');
+          $('#drawer').classList.add('open');
+          $('#overlay').classList.add('open');
+        }
+
+        function openMinutes(meetingNo) {
+          const m = (S.MINUTES_BY_NO && S.MINUTES_BY_NO[meetingNo]) || S.SAMPLE_MINUTES;
+          if (!m) { S.toast('未找到关联纪要', 'info'); return; }
+          $('#m-no').textContent = m.meetingNo;
+          $('#m-title').textContent = m.title;
+          $('#m-meta').textContent = [m.date, m.place, m.host, '生成：' + (m.publisher || '办公室')].filter(Boolean).join(' · ');
+          $('#m-body').innerHTML = (m.sections || []).map((s) =>
+            '<div class="minutes-sec"><h3>' + s.h + '</h3>' + s.html + '</div>'
+          ).join('');
+          $('#minutes-modal').hidden = false;
+        }
+
+        function closeMinutes() {
+          $('#minutes-modal').hidden = true;
+        }
+
+        function renderMsg() {
+          $('#msg-list').innerHTML = S.MESSAGES.map((m) => `
+            <div class="msg-item">
+              <div class="meta">${S.cardTag(m.level)} ${m.title} · ${m.time} · 推送至 ${m.to}</div>
+              <div class="body">${m.body}</div>
+            </div>
+          `).join('');
+        }
+
+        function reportList() {
+          const list = [];
+          const meta = S.WEEKLY_CURRENT_META;
+          if (state.thisWeekReport) list.push(state.thisWeekReport);
+          else {
+            list.push({
+              id: meta.id,
+              week: meta.week,
+              weekLabel: meta.weekLabel,
+              title: '科创集团督查督办周报（' + meta.weekLabel + '）',
+              period: meta.period,
+              generatedAt: '',
+              pushed: false,
+              draft: true,
+            });
+          }
+          return list.concat(S.WEEKLY_HISTORY || []);
+        }
+
+        function currentReport() {
+          const list = reportList();
+          return list.find((r) => r.id === state.activeReportId) || list[0];
+        }
+
+        function renderReportHist() {
+          const list = reportList();
+          const active = (state.activeReportId || list[0].id);
+          $('#report-hist').innerHTML = list.map((r) => `
+            <button class="report-hist-item${r.id === active ? ' is-on' : ''}" type="button" data-report="${r.id}">
+              <div class="rh-week">${r.weekLabel || ('第' + r.week + '周')}</div>
+              <div class="rh-period">${r.period || ''}</div>
+              <div class="rh-tags">
+                ${r.draft ? '<span class="tag tag-gray">待生成</span>' : '<span class="tag tag-green">已推送</span>'}
+                ${r.id === 'w33' ? '<span class="tag tag-blue">本周</span>' : '<span class="tag tag-gray">历史</span>'}
+              </div>
+            </button>
+          `).join('');
+        }
+
+        function renderReportDoc(r) {
+          const box = $('#report-box');
+          if (!r || r.draft) {
+            box.className = 'empty';
+            box.innerHTML = '本周周报尚未生成。点击右上角「生成本周周报」，系统将按当前督办台账自动汇总并推送集团领导。';
+            return;
+          }
+          const st = r.stats || {};
+          const items = r.items || [];
+          const byType = r.byType || [];
+          const byOwner = r.byOwner || [];
+          box.className = 'report-doc';
+          box.innerHTML = `
+            <div class="report-doc-kicker">郑州航空港科创投资集团 · 督查督办系统自动生成</div>
+            <h2>${r.title}</h2>
+            <div class="meta">统计周期 ${r.period} · 生成于 ${r.generatedAt} · 已推送 ${ (r.pushedTo || []).join('、') }</div>
+            <p>${r.summary || ''}</p>
+            <div class="report-stat-row">
+              <div class="report-stat"><b>${st.total || 0}</b><span>事项总数</span></div>
+              <div class="report-stat is-red"><b>${st.red || 0}</b><span>红牌</span></div>
+              <div class="report-stat is-yellow"><b>${st.yellow || 0}</b><span>黄牌</span></div>
+              <div class="report-stat is-green"><b>${st.green || 0}</b><span>绿牌</span></div>
+              <div class="report-stat"><b>${st.doing || 0}</b><span>进行中</span></div>
+              <div class="report-stat"><b>${st.done || 0}</b><span>已完成</span></div>
+            </div>
+            ${byType.length ? '<div class="report-sec-title">按督办类型</div><p class="report-chips">' +
+              byType.map((x) => '<span class="type-chip">' + x.name + ' ' + x.n + '</span>').join('') + '</p>' : ''}
+            ${byOwner.length ? '<div class="report-sec-title">按责任单位</div><p class="report-chips">' +
+              byOwner.map((x) => '<span class="type-chip">' + x.name + ' ' + x.n + '</span>').join('') + '</p>' : ''}
+            <div class="report-sec-title">重点关注</div>
+            <ul>${(r.highlights || []).map((x) => '<li>' + x + '</li>').join('')}</ul>
+            <div class="report-sec-title">事项进展明细（系统自动抓取）</div>
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>事项名称</th>
+                    <th>责任单位</th>
+                    <th>类型</th>
+                    <th>牌态</th>
+                    <th>状态</th>
+                    <th>时限</th>
+                    <th>进度</th>
+                    <th>本周进展</th>
+                    <th>纪要来源</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map((t) => `
+                    <tr>
+                      <td style="font-weight:500;min-width:140px">${t.title}</td>
+                      <td>${t.owner || '—'}</td>
+                      <td>${t.type || '—'}</td>
+                      <td>${S.cardTag(t.card)}</td>
+                      <td>${S.statusTag(t.status)}</td>
+                      <td style="white-space:nowrap">${t.deadline || '—'}</td>
+                      <td>${t.progress != null ? t.progress + '%' : '—'}</td>
+                      <td class="cell-muted">${t.weekProgress || '—'}</td>
+                      <td class="cell-muted">${t.source || '—'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+            <p class="report-foot">本周报由系统按办结时限与周填报自动汇总，无需办公室逐项收集。推送对象：${(r.pushedTo || []).join('、')}。</p>
+          `;
+        }
+
+        function renderReportView() {
+          if (!state.activeReportId) state.activeReportId = state.thisWeekReport ? 'w33' : 'w32';
+          renderReportHist();
+          renderReportDoc(currentReport());
+          $('#btn-report').textContent = state.thisWeekReport ? '重新生成本周周报' : '生成本周周报';
+        }
+
+        function ask(q) {
+          const hit = S.QA_PRESETS.find((x) => x.q === q) ||
+            (/超期/.test(q) ? S.QA_PRESETS[1] : /提升|隐患|进展/.test(q) ? S.QA_PRESETS[2] : /安委会|部署/.test(q) ? S.QA_PRESETS[0] : null);
+          const a = hit ? hit.a : 'Demo 仅预置了 3 个示例问题，请点击上方示例提问。正式环境将基于督办台账与纪要做检索问答。';
+          const log = $('#qa-log');
+          log.innerHTML += '<div class="qa-turn user"><div class="who">您</div><div class="bubble">' + q + '</div></div>';
+          log.innerHTML += '<div class="qa-turn bot"><div class="who">智能问答</div><div class="bubble">' + a + '</div></div>';
+          log.scrollTop = log.scrollHeight;
+        }
+
+        function bind() {
+          $$('#leader-sidebar [data-view]').forEach((el) => {
+            el.addEventListener('click', () => {
+              showView(el.dataset.view);
+              if (el.dataset.view === 'board') renderBoard();
+            });
+          });
+          $('#btn-bell').addEventListener('click', () => showView('msg'));
+          $$('#view-board .stat-item[data-filter-card]').forEach((el) => {
+            el.addEventListener('click', () => applyCardFilter(el.dataset.filterCard));
+          });
+          $$('#view-board .stat-item[data-filter-status]').forEach((el) => {
+            el.addEventListener('click', () => applyStatusFilter(el.dataset.filterStatus));
+          });
+
+          $('#filter-type').addEventListener('change', (e) => {
+            filters.type = e.target.value || '';
+            renderBoard();
+          });
+          $('#filter-time').addEventListener('change', (e) => {
+            filters.time = e.target.value || '';
+            renderBoard();
+          });
+          $('#filter-owner').addEventListener('change', (e) => {
+            filters.owner = e.target.value || '';
+            renderBoard();
+          });
+          $('#tab-status').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-status]');
+            if (!btn) return;
+            filters.status = btn.dataset.status || '';
+            filters.card = '';
+            renderBoard();
+          });
+
+          $('#attention').addEventListener('click', (e) => {
+            const open = e.target.closest('[data-open]');
+            if (open) openDrawer(open.dataset.open);
+          });
+          $('#attn-prev').addEventListener('click', () => goAttnSlide(attnIndex - 1, true));
+          $('#attn-next').addEventListener('click', () => goAttnSlide(attnIndex + 1, true));
+          const rail = $('#attention');
+          rail.addEventListener('mouseenter', stopAttnAuto);
+          rail.addEventListener('mouseleave', () => startAttnAuto());
+
+          $('#todo-cards').addEventListener('click', (e) => {
+            const handle = e.target.closest('[data-handle]');
+            if (handle) { quickHandle(handle.dataset.handle, e); return; }
+            const open = e.target.closest('[data-open]');
+            if (open) openDrawer(open.dataset.open);
+          });
+          $('#todo-cards').addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            const card = e.target.closest('[data-open]');
+            if (card && e.target === card) {
+              e.preventDefault();
+              openDrawer(card.dataset.open);
+            }
+          });
+
+          $('#btn-close').addEventListener('click', closeDrawer);
+          $('#btn-close-2').addEventListener('click', closeDrawer);
+          $('#overlay').addEventListener('click', closeDrawer);
+          $('#d-minutes-link').addEventListener('click', () => {
+            const t = todos().find((x) => x.id === drawerTaskId);
+            openMinutes(t && (t.meetingNo || t.source));
+          });
+          $('#btn-close-minutes').addEventListener('click', closeMinutes);
+          $('#minutes-modal').addEventListener('click', (e) => {
+            if (e.target === $('#minutes-modal')) closeMinutes();
+          });
+
+          $('#btn-refresh').addEventListener('click', () => { state = S.load(); renderBoard(); S.toast('已刷新', 'info'); });
+          $('#btn-seed').addEventListener('click', () => {
+            state.todos = S.SAMPLE_TODOS.map((t) => Object.assign({}, t));
+            state.pushed = true;
+            state.lastPushAt = new Date().toISOString();
+            state.lastPushLeaders = ['文钊'];
+            S.save(state);
+            renderBoard();
+            S.toast('已载入办公室推送演示数据', 'success');
+          });
+          $('#btn-report').addEventListener('click', () => {
+            const source = (state.todos && state.todos.length) ? state.todos : S.SAMPLE_TODOS;
+            state.thisWeekReport = S.buildWeeklyReport(source, S.WEEKLY_CURRENT_META);
+            state.reportGenerated = true;
+            state.activeReportId = 'w33';
+            S.save(state);
+            renderReportView();
+            S.toast('第33周周报已自动汇总并推送集团领导', 'success');
+          });
+          $('#report-hist').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-report]');
+            if (!btn) return;
+            state.activeReportId = btn.dataset.report;
+            S.save(state);
+            renderReportView();
+          });
+          $('#qa-log').innerHTML = '<div class="qa-turn bot"><div class="who">智能问答</div><div class="bubble">您好，文钊。我可以按会议查任务、按月查超期事项，或查看某项最新进展。点上方示例即可提问。</div></div>';
+          $('#qa-chips').innerHTML = S.QA_PRESETS.map((x, i) =>
+            '<button class="filter-chip" type="button" data-qi="' + i + '">' + x.q + '</button>'
+          ).join('');
+          $$('#qa-chips .filter-chip').forEach((el) => {
+            el.addEventListener('click', () => {
+              setQaOpen(true);
+              ask(S.QA_PRESETS[Number(el.dataset.qi)].q);
+            });
+          });
+          $('#btn-qa').addEventListener('click', () => {
+            const q = $('#qa-input').value.trim();
+            if (!q) return;
+            ask(q);
+            $('#qa-input').value = '';
+          });
+          $('#qa-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#btn-qa').click(); });
+          $('#btn-qa-fab').addEventListener('click', toggleQa);
+          $('#btn-qa-close').addEventListener('click', () => setQaOpen(false));
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !$('#qa-panel').hidden) setQaOpen(false);
+          });
+        }
+
+        function enter(view, openQa) {
+          if (view === 'qa') { view = 'board'; openQa = true; }
+          renderReportView();
+          showView(view || 'board');
+          if ((view || 'board') === 'board') renderBoard();
+          if (openQa) setQaOpen(true);
+        }
+
+        bind();
+        return { enter };
+      })();
+
+      $$('[data-go]').forEach((el) => {
+        el.addEventListener('click', () => showRole(el.dataset.go));
+      });
+      window.addEventListener('hashchange', () => {
+        const loc = parseHash();
+        showRole(loc.role, loc.view, loc);
+      });
+
+      const start = parseHash();
+      showRole(start.role, start.view, start);
+    })();
+  </script>
+</body>
+</html>
